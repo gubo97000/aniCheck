@@ -2,7 +2,7 @@
 export type globalStateType = {
     cy: cytoscape.Core;
     seriesSelected?: cytoscape.CollectionReturnValue,
-    seriesList?: { seriesPrime: (((cytoscape.SingularElementArgument & cytoscape.EdgeSingular) & cytoscape.NodeSingular) & cytoscape.EdgeSingular) & cytoscape.NodeSingular; series: cytoscape.CollectionReturnValue }[],
+    seriesList?: { seriesPrime: cytoscape.NodeSingular; series: cytoscape.CollectionReturnValue }[],
     cyViz?:cytoscape.Core;
 
 };

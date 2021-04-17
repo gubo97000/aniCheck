@@ -38,8 +38,67 @@ function Viz() {
           data: { id: 'ab', source: 'a', target: 'b' }
         }
       ],
-      // style: { "width": '100%', "height": '1vh' } as cytoscape.Stylesheet[],
-      layout:{name:"cose"},
+      style: [
+        {
+          selector: 'node[status="NO"]',
+          style: {
+            'background-color': 'red'
+          }
+        },
+        {
+          selector: 'node[status="COMPLETED"]',
+          style: {
+            'background-color': 'green'
+          }
+        },
+        {
+          selector: 'edge',
+          style: {
+            'curve-style': 'bezier',
+            'width': 6,
+            'target-arrow-shape': 'triangle',
+            'line-color': '#ffaaaa',
+            'target-arrow-color': '#ffaaaa'
+          }
+        },
+        {
+          selector: 'edge[relation= "SEQUEL"]',
+          style: {
+            "label":"Sequel",
+          }
+        },
+        {
+          selector: 'edge[relation= "SIDE_STORY"]',
+          style: {
+            "label":"Side Story",
+          }
+        },
+        {
+          selector: 'edge[relation= "OTHER"]',
+          style: {
+            "label":"Other",
+          }
+        },
+        {
+          selector: 'edge[relation= "ADAPTATION"]',
+          style: {
+            "label":"Adapted from",
+          }
+        },
+        {
+          selector: 'node[format="MANGA"]',
+          style: {
+            'shape': "rhomboid",
+          }
+        },
+        {
+          selector: 'node[format="NOVEL"]',
+          style: {
+            'shape': "triangle",
+          }
+        },
+      ],
+      layout: { name: "cose" },
     })
     setState({ ...state, cyViz: cy })
   }, [])
@@ -49,7 +108,7 @@ function Viz() {
     setState({ ...state, cyViz: cy })
   }
 
-  const layout = { name: 'cose' };
+  const layout = { name: 'breadthfirst' };
   return (
     <Grid item xs={9}>
       <div ref={cyRef} style={{ width: '100%', height: '100%' }} ></div>

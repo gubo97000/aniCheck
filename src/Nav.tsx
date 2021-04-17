@@ -51,12 +51,17 @@ export default function Nav() {
     // state.cyViz?.layout.stop(); 
     state.cyViz?.elements().remove()
     state.cyViz?.add(checkBoxes[key].series)
-    state.cyViz?.elements().makeLayout({ name: "cose" }).run();
+    state.cyViz?.elements().makeLayout({
+      name: "breadthfirst",
+      roots: [checked],
+      // directed: true,
+      // padding: 10
+    }).run();
     state.cyViz?.center();
 
   };
-  
-  function itemKey(index:number) {
+
+  function itemKey(index: number) {
     // Find the item at the specified index.
     // In this case "data" is an Array that was passed to List as "itemData".
     const key = state.seriesList?.[index].seriesPrime.data("id") ?? "1";
@@ -68,29 +73,29 @@ export default function Nav() {
     <Grid sx={{ height: "100vh" }} item xs={3}>
       <Loader></Loader>
       <p>{checked} {Object.keys(checkBoxes).length}</p>
-      <Box sx={{height:"80vh"}}>
-      {state.seriesList ? (
-        <AutoSizer>
-          {({ height, width }) => (
-            <FixedSizeList
-              height={height}
-              itemSize={70}
-              width={width}
-              itemCount={state.seriesList?.length??0}
-              itemData={{
-                addState: addState,
-                handleToggle: handleToggle,
-                seriesList: state.seriesList
-              }}
-            itemKey= {itemKey}
-            >
-              {SeriesListItem}
-            </FixedSizeList>
-          )
-          }
+      <Box sx={{ height: "80vh" }}>
+        {state.seriesList ? (
+          <AutoSizer>
+            {({ height, width }) => (
+              <FixedSizeList
+                height={height}
+                itemSize={70}
+                width={width}
+                itemCount={state.seriesList?.length ?? 0}
+                itemData={{
+                  addState: addState,
+                  handleToggle: handleToggle,
+                  seriesList: state.seriesList
+                }}
+                itemKey={itemKey}
+              >
+                {SeriesListItem}
+              </FixedSizeList>
+            )
+            }
           </AutoSizer>
-          ) : <p>None</p>}
-          </Box>
+        ) : <p>None</p>}
+      </Box>
     </Grid>
-      )
+  )
 }

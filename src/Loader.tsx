@@ -88,7 +88,7 @@ function Loader() {
             cy.add(Array.from(nodes.values()).concat(Array.from(edges.values())))
             let components = cy.elements().components()
             let seriesList = components.map((series) => {
-                let prime = series.nodes().sort((item1, item2) => {
+                let serieSorted = series.sort((item1, item2) => {
                     // let num1 = parseInt(item1.data("id"))
                     // let num2 = parseInt(item2.data("id"))
                     let num1= Date.parse(item1.data("startDate"))
@@ -99,8 +99,8 @@ function Loader() {
                         return -1
                     }
                     return num1-num2
-                })[0]
-                return { seriesPrime: prime, series: series }
+                })
+                return { seriesPrime: serieSorted.nodes()[0], series: serieSorted }
             })
             console.log(seriesList)
             setState({ ...state, seriesList: seriesList})
