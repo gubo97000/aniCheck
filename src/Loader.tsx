@@ -14,7 +14,7 @@ import { globalStateType } from './Types';
 
 
 function Loader() {
-    const [state, setState]: [globalStateType, React.Dispatch<React.SetStateAction<globalStateType>>] = useContext(Context);
+    const [state, setState] = useContext(Context);
 
     let [usr, setUsr] = useStateWithLocalStorage("usr")
     const handleTextInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,7 +103,7 @@ function Loader() {
                 return { seriesPrime: prime, series: series }
             })
             console.log(seriesList)
-            setState({ ...state, seriesList: seriesList })
+            setState({ ...state, seriesList: seriesList})
             console.log(state)
         }
     }

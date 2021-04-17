@@ -47,7 +47,7 @@ const GET_LISTS = gql`
 }
 `;
 
-function LoaderRes({ user }) {
+function LoaderRes({ user }:{user:string}) {
   const graphBox = useRef(null)
   const [state, setState] = useContext(Context);
   const { loading, error, data, refetch, networkStatus, variables, } = useQuery(GET_LISTS, {
@@ -97,7 +97,7 @@ function LoaderRes({ user }) {
     }
     console.log(nodes, edges)
 
-    setState({ ...state, data: Array.from(nodes.values()).concat(Array.from(edges.values())) })
+    // setState({ ...state, data: Array.from(nodes.values()).concat(Array.from(edges.values())) })
     console.log(state)
   }
 

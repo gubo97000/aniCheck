@@ -10,7 +10,7 @@ import { globalStateType } from './Types';
 
 function Viz() {
   // const graphBox = useRef(null)
-  const [state, setState]: [globalStateType, React.Dispatch<React.SetStateAction<globalStateType>>] = useContext(Context);
+  const [state, setState] = useContext(Context);
   let cyRef = useRef(null)
   // let cy:cytoscape.Core;
   // useEffec( ()=>{
@@ -38,7 +38,7 @@ function Viz() {
           data: { id: 'ab', source: 'a', target: 'b' }
         }
       ],
-      style: { "width": '100%', "height": '1vh' },
+      // style: { "width": '100%', "height": '1vh' } as cytoscape.Stylesheet[],
       layout:{name:"cose"},
     })
     setState({ ...state, cyViz: cy })

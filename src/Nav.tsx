@@ -1,5 +1,5 @@
-import { Avatar, IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, RadioGroup } from '@material-ui/core'
-import React, { useState, useRef, useLayoutEffect, useContext, useEffect } from 'react'
+import { Avatar, Box, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, RadioGroup } from '@material-ui/core'
+import React, { useState, useRef, useLayoutEffect, useContext, useEffect, useMemo } from 'react'
 import { render } from 'react-dom'
 import * as vis from "vis-network"
 import cytoscape from 'cytoscape';
@@ -10,15 +10,18 @@ import Loader from './Loader';
 import { keycharm } from 'vis-network';
 import SeriesListItem from './SeriesListItem';
 import { checkBoxStateType, globalStateType } from './Types';
+import { FixedSizeList } from 'react-window';
+import AutoSizer from "react-virtualized-auto-sizer";
+
 
 
 
 export default function Nav() {
-  const [state, setState]: [globalStateType, React.Dispatch<React.SetStateAction<globalStateType>>] = useContext(Context);
-  // let checked: string="";
-  let [checked, setChecked]= useState("")
-  let checkBoxes: { [key: string]: checkBoxStateType } = {};
-
+  const [state, setState] = useContext(Context);
+  // let [checked, setChecked]= useState("")
+  let [stupidFix, setStupidFix] = useState("Very Stupid Fix")
+  let checked: string = useMemo(() => { return "" }, [stupidFix])
+  var checkBoxes: { [key: string]: checkBoxStateType } = useMemo(() => { return {} }, [stupidFix])
   const addState = (chkState: checkBoxStateType) => {
     checkBoxes[chkState.id] = {
       id: chkState.id,
@@ -28,38 +31,66 @@ export default function Nav() {
   }
   const handleToggle = (key: string) => {
     // console.log("called",key, checked)
+    console.log(checked)
     if (checked) {
       console.log("Hello")
       checkBoxes[checked].state[1](false)
     }
-    setChecked(key)
+    checked = key
     checkBoxes[key].state[1](true)
-    setState({ ...state, seriesSelected:checkBoxes[key].series })
+    console.log(checked)
+    // if (checked) {
+    //   console.log("Hello")
+    //   checkBoxes[checked].state[1](false)
+    // }
+    // setChecked(key)
+    // checkBoxes[key].state[1](true)
+
+
+    // setState({ ...state, seriesSelected:checkBoxes[key].series })
     // state.cyViz?.layout.stop(); 
     state.cyViz?.elements().remove()
     state.cyViz?.add(checkBoxes[key].series)
-    state.cyViz?.elements().makeLayout({name:"cose"}).run(); 
-    state.cyViz?.center(); 
+    state.cyViz?.elements().makeLayout({ name: "cose" }).run();
+    state.cyViz?.center();
 
   };
+  
+  function itemKey(index:number) {
+    // Find the item at the specified index.
+    // In this case "data" is an Array that was passed to List as "itemData".
+    const key = state.seriesList?.[index].seriesPrime.data("id") ?? "1";
 
+    // Return a value that uniquely identifies this item.
+    return key;
+  }
   return (
-    <div>
+    <Grid sx={{ height: "100vh" }} item xs={3}>
       <Loader></Loader>
-      <p>{checked}</p>
-      <List>
-        {state.seriesList ? state.seriesList.map((seriesItem) => {
-          return <SeriesListItem {...{
-            // key: 1, 
-            key: seriesItem.seriesPrime.data("id"),
-            addState: addState,
-            handleToggle: handleToggle,
-            seriesPrime: seriesItem.seriesPrime,
-            series: seriesItem.series
-          }} >
-          </SeriesListItem>
-        }) : <p>None</p>}
-      </List>
-    </div>
-  );
+      <p>{checked} {Object.keys(checkBoxes).length}</p>
+      <Box sx={{height:"80vh"}}>
+      {state.seriesList ? (
+        <AutoSizer>
+          {({ height, width }) => (
+            <FixedSizeList
+              height={height}
+              itemSize={70}
+              width={width}
+              itemCount={state.seriesList?.length??0}
+              itemData={{
+                addState: addState,
+                handleToggle: handleToggle,
+                seriesList: state.seriesList
+              }}
+            itemKey= {itemKey}
+            >
+              {SeriesListItem}
+            </FixedSizeList>
+          )
+          }
+          </AutoSizer>
+          ) : <p>None</p>}
+          </Box>
+    </Grid>
+      )
 }

@@ -1,4 +1,5 @@
 
+import { makeStyles } from "@material-ui/core";
 import cytoscape from "cytoscape";
 import React, { createContext, useReducer, useState } from "react";
 import { globalStateType } from "./Types";
@@ -12,16 +13,14 @@ const initialState:globalStateType = {
 
 }
 
-
-const Store = ({ children }: { children: JSX.Element }) => {
+export default function Store({ children }: { children: JSX.Element }){
     // const [state, dispatch] = useReducer(Reducer, initialState);
     const [state, setState] = useState(initialState);
     return (
-        <Context.Provider value={[state, setState]}>
+        <Context.Provider  value={[state, setState]}>
             {children}
         </Context.Provider>
     )
 };
 
-export const Context = createContext(initialState);
-export default Store;
+export const Context = createContext<[globalStateType, React.Dispatch<React.SetStateAction<globalStateType>>]>([initialState,()=>{}]);

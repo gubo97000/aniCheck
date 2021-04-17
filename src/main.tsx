@@ -8,20 +8,18 @@ import Nav from './Nav'
 import Store from './Store'
 import { ApolloProvider } from '@apollo/client/react';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { css, jsx } from '@emotion/react'
 
 const client = new ApolloClient({ uri: 'https://graphql.anilist.co', cache: new InMemoryCache() });
 
 ReactDOM.render(
   <React.StrictMode>
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
     <Store>
       <ApolloProvider client={client}>
-        <Grid container>
-          
-            <Vis />
-          
-          <Grid item xs={3}>
-            <Nav />
-          </Grid>
+        <Grid  container>
+          <Vis />
+          <Nav />
         </Grid>
       </ApolloProvider>
     </Store>
