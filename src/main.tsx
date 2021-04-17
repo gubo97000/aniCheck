@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import App from './App'
 import Vis from './Viz'
 import Grid from '@material-ui/core/Grid';
 import Nav from './Nav'
