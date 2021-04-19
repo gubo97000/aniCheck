@@ -7,6 +7,7 @@ import { Context } from './Store';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { globalStateType } from './Types';
+import { book } from './cytoIcons';
 
 function Viz() {
   // const graphBox = useRef(null)
@@ -29,10 +30,10 @@ function Viz() {
       container: cyRef.current,
       elements: [ // list of graph elements to start with
         { // node a
-          data: { id: 'a' }
+          data: { id: 'a',title:"a" }
         },
         { // node b
-          data: { id: 'b' }
+          data: { id: 'b',title:"a" }
         },
         { // edge ab
           data: { id: 'ab', source: 'a', target: 'b' }
@@ -40,15 +41,21 @@ function Viz() {
       ],
       style: [
         {
+          selector: 'node',
+          style: {
+            "label": 'data(title)'
+          }
+        },
+        {
           selector: 'node[status="NO"]',
           style: {
-            'background-color': 'red'
+            'background-color': 'red',            
           }
         },
         {
           selector: 'node[status="COMPLETED"]',
           style: {
-            'background-color': 'green'
+            'background-color': 'green',
           }
         },
         {
@@ -58,7 +65,8 @@ function Viz() {
             'width': 6,
             'target-arrow-shape': 'triangle',
             'line-color': '#ffaaaa',
-            'target-arrow-color': '#ffaaaa'
+            'target-arrow-color': '#ffaaaa',
+            'label': 'data(relation)'
           }
         },
         {
@@ -86,9 +94,17 @@ function Viz() {
           }
         },
         {
+          selector: 'edge[relation= "SOURCE"]',
+          style: {
+            "label":"Source",
+          }
+        },
+        {
           selector: 'node[format="MANGA"]',
           style: {
-            'shape': "rhomboid",
+            "border-width": "1px",
+            "shape":"polygon",
+            'shape-polygon-points': book
           }
         },
         {
@@ -99,6 +115,13 @@ function Viz() {
         },
       ],
       layout: { name: "cose" },
+    })
+    cy.on("cxttapend","node", (evt)=>{
+      console.log("cxttapend on node")
+      window.open(evt.target.data("siteUrl"),"_blank")
+    })
+    cy.on("tap", (evt)=>{
+      console.log(evt.target.data())
     })
     setState({ ...state, cyViz: cy })
   }, [])
@@ -111,7 +134,7 @@ function Viz() {
   const layout = { name: 'breadthfirst' };
   return (
     <Grid item xs={9}>
-      <div ref={cyRef} style={{ width: '100%', height: '100%' }} ></div>
+      <div ref={cyRef} style={{ width: '100%', height: '100vh' }} ></div>
       {/* <CytoscapeComponent elements={[{data: { id: 'a' }}]} layout={layout}
         style={{ width: '100%', height: '100%' }} cy={receiveCy}
       >

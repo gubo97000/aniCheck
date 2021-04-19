@@ -1,14 +1,15 @@
 import { gql } from '@apollo/client';
 
 export const GET_LISTS = gql`
-query ($user: String!){
-  MediaListCollection(userName: $user, type: ANIME) {
+query ($user: String!, $type: MediaType){
+  MediaListCollection(userName: $user, type: $type) {
     lists {
       entries {
         id
         status
         media {
           id
+          siteUrl
           title {
             userPreferred
           }
@@ -22,6 +23,7 @@ query ($user: String!){
             medium
             color
           }
+          bannerImage 
           relations {
             edges {
               id
@@ -31,6 +33,7 @@ query ($user: String!){
                 title {
                   userPreferred
                 }
+                siteUrl
                 startDate {
                   year
                   month

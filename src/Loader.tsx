@@ -23,16 +23,17 @@ function Loader() {
 
     const startQuery = (event: React.MouseEvent<HTMLButtonElement>) => {
         // console.log(variables)
-        getLists({
-            variables: { user: usr },
+        getAnimeLists({
+            variables: { user: usr, type: "ANIME" },
         })
+
     };
 
     const loadList = (data: any) => {
         let nodes = new Map()
         let edges = new Map()
         console.log(data)
-        for (let list of data.MediaListCollection.lists) {
+        for (let list of data) {
             for (let entry of list.entries) {
                 nodes.set(entry.media.id, {
                     data: {
@@ -40,6 +41,7 @@ function Loader() {
                         status: entry.status,
                         format: entry.media.format,
                         title: entry.media.title.userPreferred,
+                        siteUrl: entry.media.siteUrl,
                         startDate: [
                             entry.media.startDate.year,
                             entry.media.startDate.month,
@@ -66,6 +68,7 @@ function Loader() {
                                 status: "NO",
                                 format: edge.node.format,
                                 title: edge.node.title.userPreferred,
+                                siteUrl: edge.node.siteUrl,
                                 startDate: [
                                     edge.node.startDate.year,
                                     edge.node.startDate.month,
@@ -83,7 +86,8 @@ function Loader() {
     const computeList = () => {
         if (!loading && !error && data) {
             let cy: cytoscape.Core = state.cy
-            const [nodes, edges] = loadList(data)
+            const [nodes, edges] = loadList([].concat(statusAnime.data.MediaListCollection.lists, data.MediaListCollection.lists))
+            
             console.log(nodes, edges)
             cy.add(Array.from(nodes.values()).concat(Array.from(edges.values())))
             let components = cy.elements().components()
@@ -91,24 +95,33 @@ function Loader() {
                 let serieSorted = series.sort((item1, item2) => {
                     // let num1 = parseInt(item1.data("id"))
                     // let num2 = parseInt(item2.data("id"))
-                    let num1= Date.parse(item1.data("startDate"))
-                    let num2= Date.parse(item2.data("startDate"))
+                    let num1 = Date.parse(item1.data("startDate"))
+                    let num2 = Date.parse(item2.data("startDate"))
                     if (isNaN(num1)) {
                         return 999
                     } else if (isNaN(num2)) {
                         return -1
                     }
-                    return num1-num2
+                    return num1 - num2
                 })
                 return { seriesPrime: serieSorted.nodes()[0], series: serieSorted }
             })
             console.log(seriesList)
-            setState({ ...state, seriesList: seriesList})
+            setState({ ...state, seriesList: seriesList })
             console.log(state)
         }
     }
 
-    const [getLists, { loading, error, data, refetch, networkStatus, variables, }] = useLazyQuery(Queries.GET_LISTS, {
+    const [getAnimeLists, statusAnime] = useLazyQuery(Queries.GET_LISTS, {
+        notifyOnNetworkStatusChange: true,
+        onCompleted: () => {
+            getMangaLists({
+                variables: { user: usr, type:"MANGA" },
+            })
+        },
+
+    });
+    const [getMangaLists, { loading, error, data, refetch, networkStatus, variables, }] = useLazyQuery(Queries.GET_LISTS, {
         notifyOnNetworkStatusChange: true,
         onCompleted: computeList,
 

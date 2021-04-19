@@ -23,6 +23,7 @@ export default function Nav() {
   let checked: string = useMemo(() => { return "" }, [stupidFix])
   var checkBoxes: { [key: string]: checkBoxStateType } = useMemo(() => { return {} }, [stupidFix])
   const addState = (chkState: checkBoxStateType) => {
+    console.log("addState")
     checkBoxes[chkState.id] = {
       id: chkState.id,
       state: chkState.state,
@@ -53,6 +54,7 @@ export default function Nav() {
     state.cyViz?.add(checkBoxes[key].series)
     state.cyViz?.elements().makeLayout({
       name: "breadthfirst",
+      // name: "cose",
       roots: [checked],
       // directed: true,
       // padding: 10
@@ -79,7 +81,7 @@ export default function Nav() {
             {({ height, width }) => (
               <FixedSizeList
                 height={height}
-                itemSize={70}
+                itemSize={100}
                 width={width}
                 itemCount={state.seriesList?.length ?? 0}
                 itemData={{

@@ -8,18 +8,28 @@ import Store from './Store'
 import { ApolloProvider } from '@apollo/client/react';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { css, jsx } from '@emotion/react'
+import { createMuiTheme } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/core/styles';
 
 const client = new ApolloClient({ uri: 'https://graphql.anilist.co', cache: new InMemoryCache() });
+
+const theme = createMuiTheme({
+  palette: {
+    mode: 'light',
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>
     <meta name="viewport" content="initial-scale=1, width=device-width" />
     <Store>
       <ApolloProvider client={client}>
-        <Grid  container>
-          <Vis />
-          <Nav />
-        </Grid>
+        <ThemeProvider theme={theme}>
+          <Grid container>
+            <Vis />
+            <Nav />
+          </Grid>
+        </ThemeProvider>
       </ApolloProvider>
     </Store>
   </React.StrictMode>,
