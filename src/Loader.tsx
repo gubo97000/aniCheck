@@ -35,6 +35,10 @@ function Loader() {
         console.log(data)
         for (let list of data) {
             for (let entry of list.entries) {
+                // if(nodes.get(entry.media.id)){
+                //     // console.log(nodes.get(entry.media.id))
+                //     console.log(nodes.get(entry.media.id).data.status)
+                // }
                 nodes.set(entry.media.id, {
                     data: {
                         id: entry.media.id,
@@ -47,10 +51,26 @@ function Loader() {
                             entry.media.startDate.month,
                             entry.media.startDate.day,
                         ].join("-")
-
                     }
                 })
-
+                for (let node of entry.media.relations.nodes) {
+                    if (!nodes.get(node.id)) {
+                        nodes.set(node.id, {
+                            data: {
+                                id: node.id,
+                                status: "NO",
+                                format: node.format,
+                                title: node.title.userPreferred,
+                                siteUrl: node.siteUrl,
+                                startDate: [
+                                    node.startDate.year,
+                                    node.startDate.month,
+                                    node.startDate.day,
+                                ].join("-")
+                            }
+                        })
+                    }
+                }
                 for (let edge of entry.media.relations.edges) {
                     edges.set(edge.id, {
                         data: {
@@ -61,22 +81,7 @@ function Loader() {
                         }
                     })
 
-                    if (!nodes.get(edge.node.id)) {
-                        nodes.set(edge.node.id, {
-                            data: {
-                                id: edge.node.id,
-                                status: "NO",
-                                format: edge.node.format,
-                                title: edge.node.title.userPreferred,
-                                siteUrl: edge.node.siteUrl,
-                                startDate: [
-                                    edge.node.startDate.year,
-                                    edge.node.startDate.month,
-                                    edge.node.startDate.day,
-                                ].join("-")
-                            }
-                        })
-                    }
+                    
                 }
             }
         }

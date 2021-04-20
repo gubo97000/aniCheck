@@ -59,6 +59,12 @@ function Viz() {
           }
         },
         {
+          selector: 'node[status="CURRENT"]',
+          style: {
+            'background-color': 'cyan',
+          }
+        },
+        {
           selector: 'edge',
           style: {
             'curve-style': 'bezier',

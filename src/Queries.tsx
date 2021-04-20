@@ -23,23 +23,31 @@ query ($user: String!, $type: MediaType){
             medium
             color
           }
-          bannerImage 
+          bannerImage
           relations {
+            nodes {
+              id
+              siteUrl
+              title {
+                userPreferred
+              }
+              startDate {
+                year
+                month
+                day
+              }
+              format
+              coverImage {
+                medium
+                color
+              }
+              bannerImage
+            }
             edges {
               id
               relationType
               node {
                 id
-                title {
-                  userPreferred
-                }
-                siteUrl
-                startDate {
-                  year
-                  month
-                  day
-                }
-                format
               }
             }
           }
