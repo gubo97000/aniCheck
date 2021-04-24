@@ -1,5 +1,5 @@
 import { Avatar, Box, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, RadioGroup } from '@material-ui/core'
-import React, { useState, useRef, useLayoutEffect, useContext, useEffect, useMemo } from 'react'
+import React, { useState, useRef, useLayoutEffect, useContext, useEffect, useMemo, FC } from 'react'
 import { render } from 'react-dom'
 import * as vis from "vis-network"
 import cytoscape from 'cytoscape';
@@ -9,17 +9,37 @@ import { Context } from './Store';
 import Loader from './Loader';
 import { keycharm } from 'vis-network';
 import SeriesListItem from './SeriesListItem';
-import { checkBoxStateType, globalStateType } from './Types';
+import { checkBoxStateType, globalStateType, seriesListElementType } from './Types';
 import { FixedSizeList } from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
 import SearchBox from './SearchBox';
-import SeriesList from './SeriesList';
+
+interface props {
+  seriesToRender?: seriesListElementType[]
+}
 
 
-
-
-export default function Nav() {
+const SeriesList: FC<props> = ({ seriesToRender }) => {
+  // console.log(seriesToRender)
+  
   const [state, setState] = useContext(Context);
+  let [seriesList, setSeriesList] = useState<seriesListElementType[]>([])
+
+  useEffect(() => {
+    setSeriesList(seriesToRender ?? state.seriesList ?? [])
+    // console.log("effect")
+    // if (typeof seriesToRender == 'undefined' || seriesToRender.length == 0) {
+    //   console.log(state.seriesList)
+    //   setSeriesList(state.seriesList)
+    // }
+    // else {
+    //   console.log("If" + seriesToRender.length)
+    //   setSeriesList(seriesToRender)
+    // }
+
+  }, [seriesToRender, state.seriesList])
+  // seriesToRender = seriesToRender ? seriesToRender : state.seriesList
+  // console.log(seriesList)
   // let [checked, setChecked]= useState("")
   let [stupidFix, setStupidFix] = useState("Very Stupid Fix")
   let checked: string = useMemo(() => { return "" }, [stupidFix])
@@ -81,12 +101,30 @@ export default function Nav() {
     return key;
   }
   return (
-    <Grid sx={{ height: "100vh" }} item xs={3}>
-      <Loader></Loader>
-      <p>{checked} {Object.keys(checkBoxes).length}</p>
-      <SearchBox>
-        <SeriesList></SeriesList>
-      </SearchBox>
-    </Grid>
+    <Box sx={{ height: "80vh" }}>
+      {state.seriesList ? (
+        <AutoSizer>
+          {({ height, width }) => (
+            <FixedSizeList
+              height={height}
+              itemSize={120}
+              width={width}
+              itemCount={seriesList?.length ?? 0}
+              itemData={{
+                addState: addState,
+                remState: remState,
+                handleToggle: handleToggle,
+                seriesList: seriesList,
+              }}
+              itemKey={itemKey}
+            >
+              {SeriesListItem}
+            </FixedSizeList>
+          )
+          }
+        </AutoSizer>
+      ) : <p>None</p>}
+    </Box>
   )
 }
+export default SeriesList

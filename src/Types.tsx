@@ -2,13 +2,16 @@
 export type globalStateType = {
     cy: cytoscape.Core;
     seriesSelected?: cytoscape.CollectionReturnValue,
-    seriesList?: { seriesPrime: cytoscape.NodeSingular; series: cytoscape.CollectionReturnValue }[],
-    cyViz?:cytoscape.Core;
+    seriesList?: seriesListElementType[],
+    cyViz?: cytoscape.Core;
 
 };
 
-export type checkBoxStateType={
+export type checkBoxStateType = {
     id: string;
     state: [boolean, React.Dispatch<React.SetStateAction<boolean>>],
     series: cytoscape.CollectionReturnValue
-  }
+}
+
+export type seriesListElementType =
+    { seriesPrime: cytoscape.NodeSingular; series: cytoscape.CollectionReturnValue }
