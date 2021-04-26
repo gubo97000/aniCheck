@@ -24,6 +24,7 @@ query ($user: String!, $type: MediaType){
             color
           }
           bannerImage
+          popularity
           relations {
             nodes {
               id
@@ -42,6 +43,7 @@ query ($user: String!, $type: MediaType){
                 color
               }
               bannerImage
+              popularity
             }
             edges {
               id

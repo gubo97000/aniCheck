@@ -1,4 +1,4 @@
-import { Avatar, Box, Checkbox, FormControlLabel, IconButton, List, ListItem, ListItemAvatar, ListItemIcon, ListItemSecondaryAction, ListItemText, Radio } from '@material-ui/core'
+import { Avatar, Box, Checkbox, FormControlLabel, IconButton, List, ListItem, ListItemAvatar, ListItemIcon, ListItemSecondaryAction, ListItemText, Paper, Radio } from '@material-ui/core'
 import React, { useState, useRef, useLayoutEffect, useContext, useEffect, useMemo } from 'react'
 import { render } from 'react-dom'
 import * as vis from "vis-network"
@@ -15,7 +15,7 @@ export default function SeriesListItem({
   index, style, data }: {
     index: number,
     style: any,
-    data:any,
+    data: any,
   }) {
   const [checked, setChecked] = useState(false)
   // console.log(data)
@@ -53,17 +53,16 @@ export default function SeriesListItem({
         width: "calc(100% - 10px)",
         borderRadius: "5px",
         boxShadow: "inset 0 0 0 2000px rgba(0, 0, 0, 0.3)",
-      }} selected={checked} key={key} role={undefined} button onClick={() => { addState({ id: key, state: [checked, setChecked], series: series }); handleToggle(key) }}>
-        {/* <ListItemIcon>
-                <Checkbox
-                    edge="start"
-                    checked={checked}
-                    tabIndex={-1}
-                    disableRipple
-                    hidden
-                    inputProps={{ 'aria-labelledby': key }}
-                />
-            </ListItemIcon> */}
+      }}
+        selected={checked}
+        key={key}
+        // role={undefined}
+        button onClick={() => {
+          addState({ id: key, state: [checked, setChecked], series: series });
+          handleToggle(key)
+        }}
+      >
+
         <ListItemText sx={{
           fontSize: "10px"
         }}
