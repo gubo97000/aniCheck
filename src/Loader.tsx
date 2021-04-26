@@ -5,7 +5,7 @@ import * as vis from "vis-network"
 import cytoscape from 'cytoscape';
 
 import { useLazyQuery } from '@apollo/client';
-import { Context } from './Store';
+import { useSharedState } from './Store';
 import LoaderRes from './LoaderRes';
 import * as Queries from "./Queries"
 import { useStateWithLocalStorage } from './Utils';
@@ -15,7 +15,7 @@ import { EastRounded } from '@material-ui/icons';
 
 
 function Loader() {
-  const [state, setState] = useContext(Context);
+  const [state, setState] = useSharedState();
   let [loading, setLoading] = useState(false);
   let [error, setError] = useState("");
   let [usr, setUsr] = useStateWithLocalStorage("usr")

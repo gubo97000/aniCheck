@@ -5,7 +5,7 @@ import * as vis from "vis-network"
 import cytoscape from 'cytoscape';
 
 import { useQuery, gql } from '@apollo/client';
-import { Context } from './Store';
+import { useSharedState } from './Store';
 import Loader from './Loader';
 import { keycharm } from 'vis-network';
 import SeriesListItem from './SeriesListItem';
@@ -19,7 +19,7 @@ import SeriesList from './SeriesList';
 
 
 export default function Nav() {
-  const [state, setState] = useContext(Context);
+  const [state, setState] = useSharedState();
   // let [checked, setChecked]= useState("")
   let [stupidFix, setStupidFix] = useState("Very Stupid Fix")
   let checked: string = useMemo(() => { return "" }, [stupidFix])

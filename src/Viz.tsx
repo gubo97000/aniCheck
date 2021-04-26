@@ -3,7 +3,7 @@ import { render } from 'react-dom'
 import * as vis from "vis-network"
 import cytoscape from 'cytoscape';
 import CytoscapeComponent from 'react-cytoscapejs';
-import { Context } from './Store';
+import { useSharedState } from './Store';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { globalStateType } from './Types';
@@ -11,7 +11,7 @@ import { book } from './cytoIcons';
 
 function Viz() {
   // const graphBox = useRef(null)
-  const [state, setState] = useContext(Context);
+  const [state, setState] = useSharedState();
   let cyRef = useRef(null)
   // let cy:cytoscape.Core;
   // useEffec( ()=>{

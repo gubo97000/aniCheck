@@ -5,7 +5,7 @@ import * as vis from "vis-network"
 import cytoscape from 'cytoscape';
 
 import { useQuery, gql } from '@apollo/client';
-import { Context } from './Store';
+import { useSharedState } from './Store';
 import Loader from './Loader';
 import { keycharm } from 'vis-network';
 import SeriesListItem from './SeriesListItem';
@@ -22,7 +22,7 @@ interface props {
 const SeriesList: FC<props> = ({ seriesToRender }) => {
   // console.log(seriesToRender)
   
-  const [state, setState] = useContext(Context);
+  const [state, setState] = useSharedState();
   let [seriesList, setSeriesList] = useState<seriesListElementType[]>([])
 
   useEffect(() => {

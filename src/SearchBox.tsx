@@ -6,7 +6,7 @@ import * as vis from "vis-network"
 import cytoscape from 'cytoscape';
 
 import { useQuery, gql } from '@apollo/client';
-import { Context } from './Store';
+import {useSharedState } from './Store';
 import Loader from './Loader';
 import { keycharm } from 'vis-network';
 import SeriesListItem from './SeriesListItem';
@@ -20,7 +20,7 @@ import { matchSorter } from 'match-sorter'
 
 const SearchBox: FC = ({ children }) => {
   // console.log(props.children.props.children.props)
-  const [state, setState] = useContext(Context);
+  const [state, setState] = useSharedState();
   let [query, setQuery] = useState("")
   let [res, setRes] = useState<seriesListElementType[]>([])
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -4,7 +4,7 @@ import './index.css'
 import Vis from './Viz'
 import Grid from '@material-ui/core/Grid';
 import Nav from './Nav'
-import Store from './Store'
+import { SharedStateProvider } from './Store'
 import { ApolloProvider } from '@apollo/client/react';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { css, jsx } from '@emotion/react'
@@ -22,7 +22,7 @@ const theme = createMuiTheme({
 ReactDOM.render(
   <React.StrictMode>
     <meta name="viewport" content="initial-scale=1, width=device-width" />
-    <Store>
+    <SharedStateProvider>
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
           <Grid container>
@@ -31,7 +31,7 @@ ReactDOM.render(
           </Grid>
         </ThemeProvider>
       </ApolloProvider>
-    </Store>
+    </SharedStateProvider>
   </React.StrictMode>,
   document.getElementById('root')
 )

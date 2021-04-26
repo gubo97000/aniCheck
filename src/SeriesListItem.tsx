@@ -5,7 +5,6 @@ import * as vis from "vis-network"
 import cytoscape from 'cytoscape';
 
 import { useQuery, gql } from '@apollo/client';
-import { Context } from './Store';
 import Loader from './Loader';
 import { keycharm } from 'vis-network';
 import { checkBoxStateType } from './Types';
