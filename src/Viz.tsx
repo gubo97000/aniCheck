@@ -30,10 +30,10 @@ function Viz() {
       container: cyRef.current,
       elements: [ // list of graph elements to start with
         { // node a
-          data: { id: 'a',title:"a" }
+          data: { id: 'a',title:"Ani" }
         },
         { // node b
-          data: { id: 'b',title:"a" }
+          data: { id: 'b',title:"Check" }
         },
         { // edge ab
           data: { id: 'ab', source: 'a', target: 'b' }
@@ -126,7 +126,7 @@ function Viz() {
       console.log("cxttapend on node")
       window.open(evt.target.data("siteUrl"),"_blank")
     })
-    cy.on("tap", (evt)=>{
+    cy.on("tap", "node,edge", (evt)=>{
       console.log(evt.target.data())
     })
     setState({ ...state, cyViz: cy })

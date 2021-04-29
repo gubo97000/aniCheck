@@ -16,8 +16,6 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import { matchSorter } from 'match-sorter'
 
 
-
-
 const SearchBox: FC = ({ children }) => {
   // console.log(props.children.props.children.props)
   const [state, setState] = useSharedState();

@@ -27,16 +27,6 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
 
   useEffect(() => {
     setSeriesList(seriesToRender ?? state.seriesList ?? [])
-    // console.log("effect")
-    // if (typeof seriesToRender == 'undefined' || seriesToRender.length == 0) {
-    //   console.log(state.seriesList)
-    //   setSeriesList(state.seriesList)
-    // }
-    // else {
-    //   console.log("If" + seriesToRender.length)
-    //   setSeriesList(seriesToRender)
-    // }
-
   }, [seriesToRender, state.seriesList])
   // seriesToRender = seriesToRender ? seriesToRender : state.seriesList
   // console.log(seriesList)
@@ -45,7 +35,7 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
   let checked: string = useMemo(() => { return "" }, [stupidFix])
   var checkBoxes: { [key: string]: checkBoxStateType } = useMemo(() => { return {} }, [stupidFix])
   const addState = (chkState: checkBoxStateType) => {
-    console.log("addState " + chkState.id)
+    // console.log("addState " + chkState.id)
     checkBoxes[chkState.id] = {
       id: chkState.id,
       state: chkState.state,
@@ -56,19 +46,18 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
     }
   }
   const remState = (id: string) => {
-    console.log("remState " + id)
+    // console.log("remState " + id)
     delete checkBoxes[id]
   }
   const handleToggle = (key: string) => {
     // console.log("called",key, checked)
-    console.log(checked)
     if (checked) {
-      console.log("Hello")
+      // console.log("Hello")
       checkBoxes?.[checked]?.state?.[1](false)
     }
     checked = key
     checkBoxes[key].state[1](true)
-    console.log(checked)
+    // console.log(checked)
     // if (checked) {
     //   console.log("Hello")
     //   checkBoxes[checked].state[1](false)
@@ -79,6 +68,7 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
 
     // setState({ ...state, seriesSelected:checkBoxes[key].series })
     // state.cyViz?.layout.stop(); 
+    console.log(state.seriesDict?.[key] ?? 0)
     state.cyViz?.elements().remove()
     state.cyViz?.add(checkBoxes[key].series)
     state.cyViz?.elements().makeLayout({

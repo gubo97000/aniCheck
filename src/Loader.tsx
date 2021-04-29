@@ -6,11 +6,10 @@ import cytoscape from 'cytoscape';
 
 import { useLazyQuery } from '@apollo/client';
 import { useSharedState } from './Store';
-import LoaderRes from './LoaderRes';
 import * as Queries from "./Queries"
 import { useStateWithLocalStorage } from './Utils';
-import { globalStateType } from './Types';
-import { EastRounded } from '@material-ui/icons';
+import { seriesListElementType, statsType } from './Types';
+// import EastRounded from '@material-ui/icons/esm/EastRounded';
 
 
 
@@ -38,14 +37,11 @@ function Loader() {
     console.log(data)
     for (let list of data) {
       for (let entry of list.entries) {
-        // if(nodes.get(entry.media.id)){
-        //     // console.log(nodes.get(entry.media.id))
-        //     console.log(nodes.get(entry.media.id).data.status)
-        // }
         nodes.set(entry.media.id, {
           data: {
             id: entry.media.id,
             status: entry.status,
+            airStatus: entry.media.status,
             format: entry.media.format,
             title: entry.media.title.userPreferred,
             siteUrl: entry.media.siteUrl,
@@ -64,13 +60,13 @@ function Loader() {
               data: {
                 id: node.id,
                 status: "NO",
+                airStatus: node.status,
                 format: node.format,
                 title: node.title.userPreferred,
                 siteUrl: node.siteUrl,
                 popularity: node.popularity,
-                
                 // bannerImage: entry.media.bannerImage, //BUG: For now is a feature
-                bannerImage: node.bannerImage, //BUG: For now is a feature
+                bannerImage: node.bannerImage,
                 startDate: [
                   node.startDate.year,
                   node.startDate.month,
@@ -83,7 +79,7 @@ function Loader() {
         for (let edge of entry.media.relations.edges) {
           edges.set(edge.id, {
             data: {
-              id: "l"+edge.id,
+              id: "l" + edge.id,
               source: entry.media.id,
               target: edge.node.id,
               relation: edge.relationType,
@@ -97,35 +93,75 @@ function Loader() {
 
   const computeList = () => {
     // if (!loading && !error) {
-      let cy: cytoscape.Core = state.cy
-      const [nodes, edges] = loadList([].concat(statusAnime.data.MediaListCollection.lists, statusManga.data.MediaListCollection.lists))
+    let cy: cytoscape.Core = state.cy
+    const [nodes, edges] = loadList([].concat(statusAnime.data.MediaListCollection.lists, statusManga.data.MediaListCollection.lists))
 
-      console.log(nodes, edges)
-      cy.elements().remove()
-      cy.add(Array.from(nodes.values()).concat(Array.from(edges.values())))
-      cy.remove('edge[relation="CHARACTER"]')
-      let components = cy.elements().components()
-      let seriesList = components.map((series) => {
-        let serieSorted = series.sort((item1, item2) => {
-          // let num1 = parseInt(item1.data("id"))
-          // let num2 = parseInt(item2.data("id"))
-          let num1 = parseInt(item1.data("popularity"))
-          let num2 = parseInt(item2.data("popularity"))
-          // let num1 = Date.parse(item1.data("startDate"))
-          // let num2 = Date.parse(item2.data("startDate"))
-          if (isNaN(num1)) {
-            return 999
-          } else if (isNaN(num2)) {
-            return -1
-          }
-          // return num1 - num2 //id and startDate
-          return num2 - num1 //popularity
-        })
-        return { seriesPrime: serieSorted.nodes()[0], series: serieSorted }
+    console.log(nodes, edges)
+    cy.elements().remove()
+    cy.add(Array.from(nodes.values()).concat(Array.from(edges.values())))
+    let components = cy.elements().components()
+
+    //Split components with problematic connections
+    let cleanedComponents: {
+      series: cytoscape.CollectionReturnValue; serieComplete: cytoscape.CollectionReturnValue;
+    }[] = []
+    components.map((serieComplete) => {
+      serieComplete.filter("edge[relation!='CHARACTER'],node").components().map((seriePart) => {
+        //Avoid unwatched orphan nodes
+        if (seriePart.nodes().length != seriePart.filter("node[status='NO']").length) {
+          cleanedComponents.push({ series: seriePart, serieComplete: serieComplete })
+        }
       })
-      console.log(seriesList)
-      setState({ ...state, seriesList: seriesList })
-      console.log(state)
+    })
+
+    //Create the representative of the serie
+    let seriesListSorted = cleanedComponents.map((series) => {
+      let serieSorted = series.series.sort((item1, item2) => {
+        // let num1 = parseInt(item1.data("id"))
+        // let num2 = parseInt(item2.data("id"))
+        let num1 = parseInt(item1.data("popularity"))
+        let num2 = parseInt(item2.data("popularity"))
+        // let num1 = Date.parse(item1.data("startDate"))
+        // let num2 = Date.parse(item2.data("startDate"))
+        if (isNaN(num1)) {
+          return 999
+        } else if (isNaN(num2)) {
+          return -1
+        }
+        // return num1 - num2 //id and startDate
+        return num2 - num1 //popularity
+      })
+      return { seriesPrime: serieSorted.nodes()[0], series: serieSorted, serieComplete: series.serieComplete }
+    })
+
+    //Compute Stats
+    let seriesList = seriesListSorted.map((serie) => {
+      let manga = serie.series.nodes().filter("node[format='MANGA']")
+      let anime = serie.series.nodes().filter("node[format !='MANGA']").filter("node[format !='NOVEL']")
+      let stat:statsType = {
+        serieTot: serie.series.nodes().length,
+        serieMiss: serie.series.filter("node[status='NO']").length ?? 0,
+        seriePer: Math.round((serie.series.filter("node[status!='NO']").length / serie.series.length) * 100),
+
+        mangaTot: manga.length ?? 0,
+        mangaMiss: manga.filter("node[status='NO']").length ?? 0,
+        mangaPer: Math.round((manga.filter("node[status!='NO']").length / manga.length) * 100),
+
+        animeTot: anime.length ?? 0,
+        animeMiss: anime.filter("node[status='NO']").length ?? 0,
+        animePer: Math.round((anime.filter("node[status!='NO']").length / anime.length) * 100),
+      }
+      return { ...serie, stats: stat }
+    })
+
+    //Creating Dict
+    let seriesDict:{[key:string]: seriesListElementType}={}
+    seriesList.map((serie) => {
+      seriesDict[serie.seriesPrime.data("id")]=serie
+    })
+    console.log(seriesList)
+    setState({ ...state, seriesList: seriesList, seriesDict: seriesDict })
+    console.log(state)
     // }
   }
 
@@ -156,7 +192,7 @@ function Loader() {
     }
     else if (statusManga.error) {
       setError(statusManga.error.message)
-    }else{
+    } else {
       setError(" ")
     }
   }, [statusAnime, statusManga])
@@ -171,7 +207,7 @@ function Loader() {
       <Grid item>
         <Avatar
           // sx={{ bgcolor: green[500] }} 
-          variant="rounded">
+          variant='rounded'>
           {/* <AssignmentIcon /> */}
         </Avatar>
       </Grid>
@@ -183,7 +219,7 @@ function Loader() {
             // type={values.showPassword ? 'text' : 'password'}
             value={usr}
             onChange={handleTextInput}
-            onKeyPress= {(ev)=> {if(ev.key=="Enter"){startQuery()}}}
+            onKeyPress={(ev) => { if (ev.key == "Enter") { startQuery() } }}
             endAdornment={
               <InputAdornment position="end">
                 {loading ?
@@ -192,7 +228,7 @@ function Loader() {
                     aria-label="get user anime"
                     onClick={startQuery}
                   >
-                    <EastRounded />
+                    {/* <EastRounded /> */}
                   </IconButton>)}
               </InputAdornment>
             }

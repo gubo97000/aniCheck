@@ -9,10 +9,12 @@ query ($user: String!, $type: MediaType){
         status
         media {
           id
-          siteUrl
           title {
             userPreferred
+            romaji
+            english
           }
+          synonyms
           startDate {
             year
             month
@@ -25,13 +27,17 @@ query ($user: String!, $type: MediaType){
           }
           bannerImage
           popularity
+          siteUrl
+          status(version: 2)
           relations {
             nodes {
               id
-              siteUrl
               title {
                 userPreferred
+                romaji
+                english
               }
+              synonyms
               startDate {
                 year
                 month
@@ -44,6 +50,8 @@ query ($user: String!, $type: MediaType){
               }
               bannerImage
               popularity
+              siteUrl
+              status(version: 2)
             }
             edges {
               id
