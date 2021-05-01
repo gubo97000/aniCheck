@@ -66,7 +66,7 @@ const SeriesListItem: FC<props> = ({ index, style, data }) => {
         <ListItemText sx={{
           fontSize: "19px"
         }}
-          id={key} primary={seriesPrime.data("title") + seriesList[index].stats.seriePer} />
+          id={key} primary={seriesPrime.data("title") + seriesList[index].stats["selected"].per} />
         {/* <ListItemSecondaryAction>
                 <IconButton edge="end" aria-label="comments">
                     <CommentIcon />

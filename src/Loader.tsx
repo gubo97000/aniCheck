@@ -7,7 +7,7 @@ import cytoscape from 'cytoscape';
 import { useLazyQuery } from '@apollo/client';
 import { useSharedState } from './Store';
 import * as Queries from "./Queries"
-import { useStateWithLocalStorage } from './Utils';
+import { updateCompletition, useStateWithLocalStorage } from './Utils';
 import { seriesListElementType, statsType } from './Types';
 // import EastRounded from '@material-ui/icons/esm/EastRounded';
 
@@ -17,7 +17,7 @@ function Loader() {
   const [state, setState] = useSharedState();
   let [loading, setLoading] = useState(false);
   let [error, setError] = useState("");
-  let [usr, setUsr] = useStateWithLocalStorage<string>("usr","")
+  let [usr, setUsr] = useStateWithLocalStorage<string>("usr", "")
 
   const handleTextInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsr(event.target.value)
@@ -136,32 +136,27 @@ function Loader() {
 
     //Compute Stats
     let seriesList = seriesListSorted.map((serie) => {
-      let completeSerie =serie.series.nodes()
-      let manga = serie.series.nodes().filter("node[format='MANGA']")
-      let anime = serie.series.nodes().filter("node[format !='MANGA']").filter("node[format !='NOVEL']")
-      let stat:statsType = {
-        serieTot: completeSerie.length,
-        serieMiss: completeSerie.filter("node[status='NO']").length ?? 0,
-        seriePer: Math.round((completeSerie.filter("node[status!='NO']").length / completeSerie.length) * 100),
-
-        mangaTot: manga.length ?? 0,
-        mangaMiss: manga.filter("node[status='NO']").length ?? 0,
-        mangaPer: Math.round((manga.filter("node[status!='NO']").length / manga.length) * 100),
-
-        animeTot: anime.length ?? 0,
-        animeMiss: anime.filter("node[status='NO']").length ?? 0,
-        animePer: Math.round((anime.filter("node[status!='NO']").length / anime.length) * 100),
+      let stat: statsType = {};
+      for (let format of ["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC", "MANGA", "NOVEL", "ONE_SHOT"]){
+        let formatEl=serie.series.nodes().filter(`node[format='${format}']`)
+        stat[format] = {
+          tot: formatEl.length ?? 0,
+          miss: formatEl.filter("node[status='NO']").length ?? 0,
+          got: formatEl.filter("node[status!='NO']").length ?? 0,
+          // per: Math.round((formatEl.filter("node[status!='NO']").length / formatEl.length) * 100),
+        }
       }
       return { ...serie, stats: stat }
     })
 
     //Creating Dict
-    let seriesDict:{[key:string]: seriesListElementType}={}
+    let seriesDict: { [key: string]: seriesListElementType } = {}
     seriesList.map((serie) => {
-      seriesDict[serie.seriesPrime.data("id")]=serie
+      seriesDict[serie.seriesPrime.data("id")] = serie
     })
-    console.log(seriesList)
-    setState(state=>{return{ ...state, seriesList: seriesList, seriesDict: seriesDict }})
+    // console.log(seriesDict)
+    setState(state => { return { ...state, seriesList: seriesList, seriesDict: seriesDict } })
+    updateCompletition(setState)
     console.log(state)
     // }
   }

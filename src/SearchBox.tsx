@@ -16,6 +16,7 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import { matchSorter } from 'match-sorter'
 import SortMenu from './SortMenu';
 import { getSortFc } from './Utils';
+import CompletitionMenu from './CompletitionMenu';
 
 
 const SearchBox: FC = ({ children }) => {

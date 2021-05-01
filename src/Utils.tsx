@@ -1,5 +1,6 @@
 import React from "react";
-import { seriesListElementType } from "./Types";
+import { useSharedState } from "./Store";
+import { globalStateType, seriesListElementType, statsType } from "./Types";
 
 // const ReducerData = (state, action) => {
 //     switch (action.type) {
@@ -28,7 +29,7 @@ import { seriesListElementType } from "./Types";
 //     }
 // };
 
-function useStateWithLocalStorage<T>(localStorageKey: string, defaultValue: any = null): [T, React.Dispatch<React.SetStateAction<T>>] {
+export function useStateWithLocalStorage<T>(localStorageKey: string, defaultValue: any = null): [T, React.Dispatch<React.SetStateAction<T>>] {
     const [value, setValue] = React.useState<T>(
         JSON.parse(localStorage.getItem(localStorageKey) ?? JSON.stringify(defaultValue)) as T
     );
@@ -84,4 +85,65 @@ export function getSortFc(tag: string) {
     }
 }
 
-export { useStateWithLocalStorage };
+export function convertBulkTerm(term: string) {
+    switch (term) {
+        case "anime":
+            return ["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC",]
+
+        case "manga":
+            return ["MANGA", "ONE_SHOT"]
+
+        default:
+            return [term]
+    }
+}
+
+export function getBulkStat(formatArr: string[], stats: statsType) {
+    let tot: number = 0
+    let miss: number = 0
+    let got: number = 0
+
+    for (const format of formatArr) {
+        tot += stats[format].tot ?? 0
+        miss += stats[format].miss ?? 0
+        got += stats[format].tot - stats[format].miss ?? 0
+    }
+    return { tot: tot, miss: miss, got: got }
+}
+
+export function updateCompletition(setState:React.Dispatch<React.SetStateAction<globalStateType>>) {
+    setState((state) => {
+        if (state.userOptions.completition[0] == "smart") {
+            for (const [id, value] of Object.entries(state.seriesDict)) {
+                let serieTot: number = 0
+                let serieMiss: number = 0
+                let serieGot: number = 0
+                for (const bulkTerm of ["anime", "manga", "NOVEL"]) {
+                    let { got, miss, tot } = getBulkStat(convertBulkTerm(bulkTerm), value.stats)
+                    if (got != 0) { 
+                        serieTot += tot
+                        serieMiss += miss
+                        serieGot += got
+                    }
+                }
+                state.seriesDict[id].stats["selected"] = {
+                    tot: serieTot,
+                    miss: serieMiss,
+                    got: serieGot,
+                    per: Math.round((serieGot / serieTot)*100),
+                }
+            }
+        } else {
+            for (const [id, value] of Object.entries(state.seriesDict)) {
+                let { got, miss, tot } = getBulkStat(state.userOptions.completition, value.stats)
+                state.seriesDict[id].stats["selected"] = {
+                    tot: tot,
+                    got: got,
+                    miss: miss,
+                    per: Math.round((got / tot)*100),
+                }
+            }
+        }
+        return { ...state }
+    })
+}

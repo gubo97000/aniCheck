@@ -4,7 +4,7 @@ export type globalStateType = {
     userOptions: userOptionType;
     seriesSelected?: cytoscape.CollectionReturnValue;
     seriesList?: seriesListElementType[];
-    seriesDict?: { [key: string]: seriesListElementType };
+    seriesDict: { [key: string]: seriesListElementType };
     cyViz?: cytoscape.Core;
 
 };
@@ -17,22 +17,20 @@ export type checkBoxStateType = {
 
 export type userOptionType = {
     sort: sortType;
+    completition: ("smart" | "anime" | "TV" | "TV_SHORT" | "MOVIE" | "SPECIAL" | "OVA" | "ONA" | "MUSIC" | "MANGA" | "NOVEL" | "ONE_SHOT")[];
 }
 export type sortType = {
-    type: "complete%"|"alphabetical"|"size";
+    type: "complete%" | "alphabetical" | "size";
     inverted: boolean;
 }
 
 export type statsType = {
-    serieTot: number;
-    serieMiss: number;
-    seriePer: number;
-    mangaTot: number;
-    mangaMiss: number;
-    mangaPer: number;
-    animeTot: number;
-    animeMiss: number;
-    animePer: number;
+    [key: string]: {
+        tot: number;
+        miss: number;
+        got:number;
+        per?: number;
+    }
 }
 
 export type seriesListElementType =

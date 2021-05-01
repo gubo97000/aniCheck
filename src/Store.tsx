@@ -14,8 +14,10 @@ const initialState: globalStateType = {
     sort: {
       type: "alphabetical",
       inverted: false,
-    }
+    },
+    completition:["smart"]
   },
+  seriesDict:{},
   // seriesSelected: ,
   // seriesList: { seriesPrime: cytoscape({ headless: true }).elements(), series: cytoscape({ headless: true }).elements() },
 }
