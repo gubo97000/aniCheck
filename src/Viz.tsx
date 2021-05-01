@@ -13,18 +13,6 @@ function Viz() {
   // const graphBox = useRef(null)
   const [state, setState] = useSharedState();
   let cyRef = useRef(null)
-  // let cy:cytoscape.Core;
-  // useEffec( ()=>{
-  //   console.log(cyRef)
-  //   let cy:cytoscape.Core=cyRef
-  //   if (cy){
-  //     console.log("called")
-  //     console.log(cy)
-  //     console.log()
-  //     setState({...state, cy: cy.elements().components()})
-  //   }
-
-  // })
   useEffect(() => {
     let cy = cytoscape({
       container: cyRef.current,
@@ -129,12 +117,13 @@ function Viz() {
     cy.on("tap", "node,edge", (evt)=>{
       console.log(evt.target.data())
     })
-    setState({ ...state, cyViz: cy })
+    setState(state => {return{ ...state, cyViz: cy }})
   }, [])
+
   const receiveCy = (cy: cytoscape.Core) => {
     console.log(cy)
     // console.log("reCy")
-    setState({ ...state, cyViz: cy })
+    setState(state => {return{ ...state, cyViz: cy }})
   }
 
   const layout = { name: 'breadthfirst' };

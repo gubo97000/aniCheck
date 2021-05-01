@@ -28,6 +28,8 @@ query ($user: String!, $type: MediaType){
           bannerImage
           popularity
           siteUrl
+          episodes
+          duration
           status(version: 2)
           relations {
             nodes {
@@ -51,6 +53,8 @@ query ($user: String!, $type: MediaType){
               bannerImage
               popularity
               siteUrl
+              episodes
+              duration
               status(version: 2)
             }
             edges {

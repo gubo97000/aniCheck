@@ -68,6 +68,7 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
 
     // setState({ ...state, seriesSelected:checkBoxes[key].series })
     // state.cyViz?.layout.stop(); 
+    console.log(state.cyViz)
     console.log(state.seriesDict?.[key] ?? 0)
     state.cyViz?.elements().remove()
     state.cyViz?.add(checkBoxes[key].series)
@@ -97,7 +98,7 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
           {({ height, width }) => (
             <FixedSizeList
               height={height}
-              itemSize={120}
+              itemSize={140}
               width={width}
               itemCount={seriesList?.length ?? 0}
               itemData={{

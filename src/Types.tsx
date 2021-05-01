@@ -1,9 +1,10 @@
 
 export type globalStateType = {
     cy: cytoscape.Core;
-    seriesSelected?: cytoscape.CollectionReturnValue,
-    seriesList?: seriesListElementType[],
-    seriesDict?: { [key: string]: seriesListElementType },
+    userOptions: userOptionType;
+    seriesSelected?: cytoscape.CollectionReturnValue;
+    seriesList?: seriesListElementType[];
+    seriesDict?: { [key: string]: seriesListElementType };
     cyViz?: cytoscape.Core;
 
 };
@@ -14,10 +15,18 @@ export type checkBoxStateType = {
     series: cytoscape.CollectionReturnValue
 }
 
+export type userOptionType = {
+    sort: sortType;
+}
+export type sortType = {
+    type: "complete%"|"alphabetical"|"size";
+    inverted: boolean;
+}
+
 export type statsType = {
-    serieTot:number;
-    serieMiss:number;
-    seriePer:number;
+    serieTot: number;
+    serieMiss: number;
+    seriePer: number;
     mangaTot: number;
     mangaMiss: number;
     mangaPer: number;

@@ -17,7 +17,7 @@ function Loader() {
   const [state, setState] = useSharedState();
   let [loading, setLoading] = useState(false);
   let [error, setError] = useState("");
-  let [usr, setUsr] = useStateWithLocalStorage("usr")
+  let [usr, setUsr] = useStateWithLocalStorage<string>("usr","")
 
   const handleTextInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsr(event.target.value)
@@ -136,12 +136,13 @@ function Loader() {
 
     //Compute Stats
     let seriesList = seriesListSorted.map((serie) => {
+      let completeSerie =serie.series.nodes()
       let manga = serie.series.nodes().filter("node[format='MANGA']")
       let anime = serie.series.nodes().filter("node[format !='MANGA']").filter("node[format !='NOVEL']")
       let stat:statsType = {
-        serieTot: serie.series.nodes().length,
-        serieMiss: serie.series.filter("node[status='NO']").length ?? 0,
-        seriePer: Math.round((serie.series.filter("node[status!='NO']").length / serie.series.length) * 100),
+        serieTot: completeSerie.length,
+        serieMiss: completeSerie.filter("node[status='NO']").length ?? 0,
+        seriePer: Math.round((completeSerie.filter("node[status!='NO']").length / completeSerie.length) * 100),
 
         mangaTot: manga.length ?? 0,
         mangaMiss: manga.filter("node[status='NO']").length ?? 0,
@@ -160,7 +161,7 @@ function Loader() {
       seriesDict[serie.seriesPrime.data("id")]=serie
     })
     console.log(seriesList)
-    setState({ ...state, seriesList: seriesList, seriesDict: seriesDict })
+    setState(state=>{return{ ...state, seriesList: seriesList, seriesDict: seriesDict }})
     console.log(state)
     // }
   }

@@ -6,7 +6,7 @@ import * as vis from "vis-network"
 import cytoscape from 'cytoscape';
 
 import { useQuery, gql } from '@apollo/client';
-import {useSharedState } from './Store';
+import { useSharedState } from './Store';
 import Loader from './Loader';
 import { keycharm } from 'vis-network';
 import SeriesListItem from './SeriesListItem';
@@ -14,6 +14,8 @@ import { checkBoxStateType, globalStateType, seriesListElementType } from './Typ
 import { FixedSizeList } from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
 import { matchSorter } from 'match-sorter'
+import SortMenu from './SortMenu';
+import { getSortFc } from './Utils';
 
 
 const SearchBox: FC = ({ children }) => {
@@ -25,21 +27,32 @@ const SearchBox: FC = ({ children }) => {
     setQuery(event.target.value)
     // console.log(state.seriesList.map(({ series }) => series)[0])
     setRes(matchSorter(
-      state.seriesList ?? [],
+      Object.values(state.seriesDict ?? []),
       event.target.value,
-      { keys: [item => item.series.map(serie => serie.data("title"))] })
+      {
+        keys: [item => item.series.map(serie => serie.data("title"))]
+      })
     )
   }
-  useEffect(()=>{setRes(matchSorter(
-    state.seriesList??[],
-    "",
-    { keys: [item => item.series.map(serie => serie.data("title"))] })
-  )},[state])
+  useEffect(() => {
+    console.log(state.userOptions)
+    setRes(matchSorter(
+      Object.values(state.seriesDict ?? []),
+      "",
+      {
+        keys: [item => item.series.map(serie => serie.data("title"))],
+        sorter: (rankedItems) => { console.log(rankedItems); return getSortFc(state.userOptions.sort.type)(rankedItems, state.userOptions.sort.inverted) }
+
+      })
+    )
+  }, [state.seriesList, state.userOptions.sort])
   return (
     <Box>
-      <TextField value={query} onChange={handleChange}/>
+      <CompletitionMenu/>
+      <TextField value={query} onChange={handleChange} />
+      <SortMenu />
       {
-        isValidElement(children) ? React.cloneElement(children, { seriesToRender:res }):<p>Shouldn't display</p>
+        isValidElement(children) ? React.cloneElement(children, { seriesToRender: res }) : <p>Shouldn't display</p>
       }
     </Box>
   )
