@@ -15,10 +15,16 @@ export type checkBoxStateType = {
     series: cytoscape.CollectionReturnValue
 }
 
+export type formatsType="TV" | "TV_SHORT" | "MOVIE" | "SPECIAL" | "OVA" | "ONA" | "MUSIC" | "MANGA" | "NOVEL" | "ONE_SHOT"
+
 export type userOptionType = {
     sort: sortType;
-    completition: ("smart" | "anime" | "TV" | "TV_SHORT" | "MOVIE" | "SPECIAL" | "OVA" | "ONA" | "MUSIC" | "MANGA" | "NOVEL" | "ONE_SHOT")[];
+    smartCompletition: boolean;
+    animeComposition: formatsType[];
+    mangaComposition: formatsType[];
+    completition: formatsType[];
 }
+
 export type sortType = {
     type: "complete%" | "alphabetical" | "size";
     inverted: boolean;

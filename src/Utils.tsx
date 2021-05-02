@@ -1,33 +1,6 @@
 import React from "react";
 import { useSharedState } from "./Store";
-import { globalStateType, seriesListElementType, statsType } from "./Types";
-
-// const ReducerData = (state, action) => {
-//     switch (action.type) {
-//         case 'SET_POSTS':
-//             return {
-//                 ...state,
-//                 posts: action.payload
-//             };
-//         case 'ADD_POST':
-//             return {
-//                 ...state,
-//                 posts: state.posts.concat(action.payload)
-//             };
-//         case 'REMOVE_POST':
-//             return {
-//                 ...state,
-//                 posts: state.posts.filter(post => post.id !== action.payload)
-//             };
-//         case 'SET_ERROR':
-//             return {
-//                 ...state,
-//                 error: action.payload
-//             };
-//         default:
-//             return state;
-//     }
-// };
+import { formatsType, globalStateType, seriesListElementType, statsType, userOptionType } from "./Types";
 
 export function useStateWithLocalStorage<T>(localStorageKey: string, defaultValue: any = null): [T, React.Dispatch<React.SetStateAction<T>>] {
     const [value, setValue] = React.useState<T>(
@@ -41,13 +14,12 @@ export function useStateWithLocalStorage<T>(localStorageKey: string, defaultValu
     return [value, setValue];
 };
 
-
-
+//Sort Functions
 export function sortComplete(rankedItems: any[], invert: boolean) {
     return rankedItems.sort((itm1, itm2) => {
         return invert ?
-            itm1.item.stats.seriePer - itm2.item.stats.seriePer :
-            itm2.item.stats.seriePer - itm1.item.stats.seriePer
+            itm1.item.stats["selected"].per - itm2.item.stats["selected"].per :
+            itm2.item.stats["selected"].per - itm1.item.stats["selected"].per
     })
 }
 
@@ -85,13 +57,28 @@ export function getSortFc(tag: string) {
     }
 }
 
-export function convertBulkTerm(term: string) {
+//Completition Calculations
+export const FORMATS_IDS: formatsType[] = ["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC", "MANGA", "NOVEL", "ONE_SHOT"]
+export const FORMATS = [
+    { id: "TV", label: "TV", tooltip: "Anime broadcast on television" },
+    { id: "TV_SHORT", label: "TV Short", tooltip: "Anime which are under 15 minutes in length and broadcast on television" },
+    { id: "MOVIE", label: "Movie", tooltip: "Anime movies with a theatrical release" },
+    { id: "SPECIAL", label: "Special", tooltip: "Special episodes that have been included in DVD/Blu-ray releases, picture dramas, pilots, etc" },
+    { id: "OVA", label: "OVA", tooltip: "(Original Video Animation) Anime that have been released directly on DVD/Blu-ray without originally going through a theatrical release or television broadcast" },
+    { id: "ONA", label: "ONA", tooltip: "(Original Net Animation) Anime that have been originally released online or are only available through streaming services." },
+    { id: "MUSIC", label: "Music", tooltip: "Short anime released as a music video" },
+    { id: "MANGA", label: "Manga", tooltip: "Professionally published manga with more than one chapter" },
+    { id: "NOVEL", label: "Novel", tooltip: "Written books released as a series of light novels" },
+    { id: "ONE_SHOT", label: "One Shot", tooltip: "Manga with just one chapter" }
+]
+
+export function convertBulkTerm(term: string, userOptions: userOptionType) {
     switch (term) {
         case "anime":
-            return ["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC",]
+            return userOptions.animeComposition
 
         case "manga":
-            return ["MANGA", "ONE_SHOT"]
+            return userOptions.mangaComposition
 
         default:
             return [term]
@@ -111,16 +98,16 @@ export function getBulkStat(formatArr: string[], stats: statsType) {
     return { tot: tot, miss: miss, got: got }
 }
 
-export function updateCompletition(setState:React.Dispatch<React.SetStateAction<globalStateType>>) {
+export function updateCompletition(setState: React.Dispatch<React.SetStateAction<globalStateType>>) {
     setState((state) => {
-        if (state.userOptions.completition[0] == "smart") {
+        if (state.userOptions.smartCompletition) {
             for (const [id, value] of Object.entries(state.seriesDict)) {
                 let serieTot: number = 0
                 let serieMiss: number = 0
                 let serieGot: number = 0
                 for (const bulkTerm of ["anime", "manga", "NOVEL"]) {
-                    let { got, miss, tot } = getBulkStat(convertBulkTerm(bulkTerm), value.stats)
-                    if (got != 0) { 
+                    let { got, miss, tot } = getBulkStat(convertBulkTerm(bulkTerm, state.userOptions), value.stats)
+                    if (got != 0) {
                         serieTot += tot
                         serieMiss += miss
                         serieGot += got
@@ -130,7 +117,7 @@ export function updateCompletition(setState:React.Dispatch<React.SetStateAction<
                     tot: serieTot,
                     miss: serieMiss,
                     got: serieGot,
-                    per: Math.round((serieGot / serieTot)*100),
+                    per: Math.round((serieGot / serieTot) * 100),
                 }
             }
         } else {
@@ -140,7 +127,7 @@ export function updateCompletition(setState:React.Dispatch<React.SetStateAction<
                     tot: tot,
                     got: got,
                     miss: miss,
-                    per: Math.round((got / tot)*100),
+                    per: Math.round((got / tot) * 100),
                 }
             }
         }

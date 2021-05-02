@@ -59,7 +59,7 @@ query ($user: String!, $type: MediaType){
             }
             edges {
               id
-              relationType
+              relationType(version:2)
               node {
                 id
               }

@@ -84,7 +84,7 @@ function Viz() {
         {
           selector: 'edge[relation= "ADAPTATION"]',
           style: {
-            "label":"Adapted from",
+            "label":"Adaptation",
           }
         },
         {

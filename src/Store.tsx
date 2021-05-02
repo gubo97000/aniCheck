@@ -15,7 +15,11 @@ const initialState: globalStateType = {
       type: "alphabetical",
       inverted: false,
     },
-    completition:["smart"]
+    smartCompletition:true,
+    completition:[],
+    animeComposition:["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC",],
+    mangaComposition:["MANGA", "ONE_SHOT"],
+    
   },
   seriesDict:{},
   // seriesSelected: ,

@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Chip, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Menu, MenuItem, RadioGroup, TextField, useAutocomplete } from '@material-ui/core'
+import { Avatar, Box, Button, Chip, FormControlLabel, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Menu, MenuItem, RadioGroup, Switch, TextField, Tooltip, useAutocomplete } from '@material-ui/core'
 import React, { useState, useRef, useLayoutEffect, useContext, useEffect, useMemo, FC, Children, isValidElement } from 'react'
 // import useAutocomplete from '@material-ui/core/useAutocomplete';
 import { render } from 'react-dom'
@@ -10,94 +10,151 @@ import { useSharedState } from './Store';
 import Loader from './Loader';
 import { keycharm } from 'vis-network';
 import SeriesListItem from './SeriesListItem';
-import { checkBoxStateType, globalStateType, seriesListElementType, sortType } from './Types';
+import { checkBoxStateType, formatsType, globalStateType, seriesListElementType, sortType } from './Types';
 import { FixedSizeList } from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
 import { matchSorter } from 'match-sorter'
-import { convertBulkTerm, getBulkStat, sortAlphabetical, sortComplete, updateCompletition, useStateWithLocalStorage } from './Utils';
+import { convertBulkTerm, FORMATS, FORMATS_IDS, getBulkStat, sortAlphabetical, sortComplete, updateCompletition, useStateWithLocalStorage } from './Utils';
 import xor from "lodash/xor"
 import without from 'lodash/without';
-import { get } from 'lodash';
+import { get, zipWith } from 'lodash';
 
 const CompletitionMenu: FC = () => {
     const [state, setState] = useSharedState();
 
     function handleClick(compType: string) {
-        if (compType != "smart") {
-
-        }
-        switch (compType) {
-            case "smart":
-                setState((state) => {
+        setState((state) => {
+            switch (compType) {
+                case "smart":
                     return {
                         ...state, userOptions: {
-                            ...state.userOptions, completition: ["smart"]
+                            ...state.userOptions, smartCompletition: !state.userOptions.smartCompletition
                         }
                     }
-                });
-                break;
-
-            case "all":
-                setState((state) => {
+                case "all":
                     return {
                         ...state, userOptions: {
-                            ...state.userOptions, completition: ["MANGA", "TV", "NOVEL",]
+                            ...state.userOptions, completition: FORMATS_IDS
                         }
                     }
-                });
-                break;
 
-            case "manga":
-                setState((state) => {
+                default:
                     return {
                         ...state, userOptions: {
                             ...state.userOptions,
-                            completition: xor(without(state.userOptions.completition, "smart"), ["MANGA"]) as typeof state.userOptions.completition
+                            completition: xor(state.userOptions.completition, [compType]) as formatsType[]
                         }
                     }
-                });
-                break;
-            case "TV":
-                setState((state) => {
-                    return {
-                        ...state, userOptions: {
-                            ...state.userOptions,
-                            completition: xor(without(state.userOptions.completition, "smart"), ["TV"]) as typeof state.userOptions.completition
-                        }
-                    }
-                });
-                break;
-            case "NOVEL":
-                setState((state) => {
-                    return {
-                        ...state,
-                        userOptions: {
-                            ...state.userOptions,
-                            completition: xor(without(state.userOptions.completition, "smart"), ["NOVEL"]) as typeof state.userOptions.completition
-                        }
-                    }
-                });
-                break;
+            }
 
-            default:
-                break;
-        }
+
+        })
     }
+    function isSelected(compType: typeof state.userOptions.completition[number]) {
+        return (state.userOptions.completition).includes(compType) ? undefined : "outlined"
+    }
+
+    function handleClickAnime(compType: string) {
+        setState((state) => {
+            switch (compType) {
+                default:
+                    return {
+                        ...state, userOptions: {
+                            ...state.userOptions,
+                            animeComposition: xor(state.userOptions.animeComposition, [compType]) as formatsType[]
+                        }
+                    }
+            }
+
+
+        })
+    }
+    function isSelectedAnime(compType: typeof state.userOptions.completition[number]) {
+        return (state.userOptions.animeComposition).includes(compType) ? undefined : "outlined"
+    }
+
+    function handleClickManga(compType: string) {
+        setState((state) => {
+            switch (compType) {
+                default:
+                    return {
+                        ...state, userOptions: {
+                            ...state.userOptions,
+                            mangaComposition: xor(state.userOptions.mangaComposition, [compType]) as formatsType[]
+                        }
+                    }
+            }
+
+
+        })
+    }
+    function isSelectedManga(compType: typeof state.userOptions.completition[number]) {
+        return (state.userOptions.mangaComposition).includes(compType) ? undefined : "outlined"
+    }
+
     useEffect(() => {
         updateCompletition(setState)
-    }, [state.userOptions.completition])
-    function isSelected(compType: typeof state.userOptions.completition[number]) {
-        return (state.userOptions.completition ?? []).includes(compType) ? undefined : "outlined"
-    }
+    }, [
+        state.userOptions.completition,
+        state.userOptions.smartCompletition,
+        state.userOptions.mangaComposition,
+        state.userOptions.animeComposition])
+
     return (
         <div>
             Completition Calculator
-            <Chip variant={isSelected("smart")} label="Smart" onClick={() => handleClick("smart")} />
+            <FormControlLabel
+                control={
+                    <Switch checked={state.userOptions.smartCompletition} onClick={() => handleClick("smart")} />
+                } label="Smart" />
+        What is anime? {FORMATS.map((format) => {
+                    if (["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC",].includes(format.id)) {
+                        return (
+                            <Tooltip key={format.label} title={format.tooltip}>
+                                <Chip
+                                    variant={isSelectedAnime(format.id as typeof state.userOptions.completition[number])}
+                                    disabled={!state.userOptions.smartCompletition}
+                                    label={format.label}
+                                    onClick={() => handleClickAnime(format.id)}
+                                />
+                            </Tooltip>
+                        )
+                    }
+                    return
+                })}
+        What is Manga? {FORMATS.map((format) => {
+                    if (["MANGA", "ONE_SHOT"].includes(format.id)) {
+                        return (
+                            <Tooltip key={format.label} title={format.tooltip}>
+                                <Chip
+                                    variant={isSelectedManga(format.id as typeof state.userOptions.completition[number])}
+                                    disabled={!state.userOptions.smartCompletition}
+                                    label={format.label}
+                                    onClick={() => handleClickManga(format.id)}
+                                />
+                            </Tooltip>
+                        )
+                    }
+                    return
+                })}
+        Custom
+            <Button
+                disabled={state.userOptions.smartCompletition}
+                onClick={() => handleClick("all")} >All
+        </Button>
+            {FORMATS.map((format) => {
+                return (
+                    <Tooltip key={format.label} title={format.tooltip}>
+                        <Chip
+                            variant={isSelected(format.id as typeof state.userOptions.completition[number])}
+                            disabled={state.userOptions.smartCompletition}
+                            label={format.label}
+                            onClick={() => handleClick(format.id)}
+                        />
+                    </Tooltip>
+                )
+            })}
 
-        Custom <Button onClick={() => handleClick("all")} >All</Button>
-            <Chip variant={isSelected("MANGA")} label="Manga" onClick={() => handleClick("manga")} />
-            <Chip variant={isSelected("TV")} label="Anime" onClick={() => handleClick("TV")} />
-            <Chip variant={isSelected("NOVEL")} label="Novel" onClick={() => handleClick("NOVEL")} />
         </div>
     );
 }
