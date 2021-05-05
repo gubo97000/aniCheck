@@ -40,9 +40,10 @@ export function sortComplete(rankedItems: any[], invert: boolean) {
 
 export function sortAlphabetical(rankedItems: any[], invert: boolean) {
     return rankedItems.sort((itm1, itm2) => {
+        console.log(itm1)
         return invert ?
-            itm1.rankedValue.localeCompare(itm2.rankedValue) :
-            itm2.rankedValue.localeCompare(itm1.rankedValue)
+            itm1.rankedValue[0].localeCompare(itm2.rankedValue) :
+            itm2.rankedValue[0].localeCompare(itm1.rankedValue)
 
 
     })
@@ -66,7 +67,7 @@ export function getSortFc(tag: string) {
 
         case "size":
             return sortSize
-            
+
         case "missWeight":
             return sortWeight
 
