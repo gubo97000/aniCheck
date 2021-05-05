@@ -4,12 +4,13 @@ import { render } from 'react-dom'
 import * as vis from "vis-network"
 import cytoscape from 'cytoscape';
 
-import { useLazyQuery } from '@apollo/client';
+import { parseAndCheckHttpResponse, useLazyQuery } from '@apollo/client';
 import { useSharedState } from './Store';
 import * as Queries from "./Queries"
 import { updateCompletition, useStateWithLocalStorage } from './Utils';
 import { seriesListElementType, statsType } from './Types';
-// import EastRounded from '@material-ui/icons/esm/EastRounded';
+import EastRounded from '@material-ui/icons/EastRounded';
+import { round } from 'lodash';
 
 
 
@@ -31,6 +32,52 @@ function Loader() {
 
   };
 
+  const parseNode = (node: any,) => {
+    // node.nextAiringEpisode ? console.log(node) : null
+    const compWeight = (node: any) => {
+      if (node.status == "NOT_YET_RELEASED") return 0
+      if (node.chapters) return node.chapters * 5
+      if (node.volumes) return node.volumes * 50
+      if (node.episodes && node.duration) return node.episodes * node.duration
+      //Releasing in List, is a bit useless
+      if (node.nextAiringEpisode?.episode && node.duration) return node.nextAiringEpisode?.episode * node.duration
+
+      //THE APPROXIMATION ZONE
+      //Releasing not in List, API won't let me get nextAiringEpisode
+      let strDate = [
+        node.startDate.year,
+        node.startDate.month,
+        node.startDate.day,
+      ].join("-")
+      let days = (Date.now() - Date.parse(strDate)) / 8.64e+7
+      if (node.format == "MANGA") return round(days / 8.2) * 5
+      if (node.format == "TV") return round(days / 8.2) * 20
+      return round(days / 8.2) * 20
+    }
+
+    return {
+      id: node.id,
+      status: 'NO',
+      airStatus: node.status,
+      format: node.format,
+      title: node.title.userPreferred,
+      titles: [...Object.values(node.title), ...node.synonyms].filter((v) => !["MediaTitle", null].includes(v)),
+      siteUrl: node.siteUrl,
+      bannerImage: node.bannerImage,
+      popularity: node.popularity,
+      // ch: node.chapters,
+      // ep: node.episodes,
+      // ce: node.nextAiringEpisode?.episode,
+      // du: node.duration,
+      compWeight: compWeight(node),
+      startDate: [
+        node.startDate.year,
+        node.startDate.month,
+        node.startDate.day,
+      ].join("-")
+    }
+  }
+
   const loadList = (data: any) => {
     let nodes = new Map()
     let edges = new Map()
@@ -38,41 +85,12 @@ function Loader() {
     for (let list of data) {
       for (let entry of list.entries) {
         nodes.set(entry.media.id, {
-          data: {
-            id: entry.media.id,
-            status: entry.status,
-            airStatus: entry.media.status,
-            format: entry.media.format,
-            title: entry.media.title.userPreferred,
-            siteUrl: entry.media.siteUrl,
-            bannerImage: entry.media.bannerImage,
-            popularity: entry.media.popularity,
-            startDate: [
-              entry.media.startDate.year,
-              entry.media.startDate.month,
-              entry.media.startDate.day,
-            ].join("-")
-          }
+          data: { ...parseNode(entry.media), status: entry.status, }
         })
         for (let node of entry.media.relations.nodes) {
           if (!nodes.get(node.id)) {
             nodes.set(node.id, {
-              data: {
-                id: node.id,
-                status: "NO",
-                airStatus: node.status,
-                format: node.format,
-                title: node.title.userPreferred,
-                siteUrl: node.siteUrl,
-                popularity: node.popularity,
-                // bannerImage: entry.media.bannerImage, //BUG: For now is a feature
-                bannerImage: node.bannerImage,
-                startDate: [
-                  node.startDate.year,
-                  node.startDate.month,
-                  node.startDate.day,
-                ].join("-")
-              }
+              data: { ...parseNode(node), status: 'NO' }
             })
           }
         }
@@ -137,12 +155,20 @@ function Loader() {
     //Compute Stats
     let seriesList = seriesListSorted.map((serie) => {
       let stat: statsType = {};
-      for (let format of ["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC", "MANGA", "NOVEL", "ONE_SHOT"]){
-        let formatEl=serie.series.nodes().filter(`node[format='${format}']`)
+      for (let format of ["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC", "MANGA", "NOVEL", "ONE_SHOT"]) {
+        let formatEl = serie.series.nodes().filter(`node[format='${format}']`)
+        if (serie.seriesPrime.data("id") == 21093) {
+          console.log(format)
+          console.log(formatEl.filter("node[status='NO']"))
+          console.log(formatEl.filter("node[status='NO']").map((e) => { return e.data("compWeight") }))
+        }
         stat[format] = {
           tot: formatEl.length ?? 0,
           miss: formatEl.filter("node[status='NO']").length ?? 0,
           got: formatEl.filter("node[status!='NO']").length ?? 0,
+          totWeight: (formatEl.map((e) => { return e.data("compWeight") }))?.reduce?.((a: number, b: number) => a + b, 0),
+          missWeight: (formatEl.filter("node[status='NO']").map((e) => { return e.data("compWeight") }))?.reduce?.((a: number, b: number) => a + b, 0),
+          gotWeight: (formatEl.filter("node[status!='NO']").map((e) => { return e.data("compWeight") }))?.reduce?.((a: number, b: number) => a + b, 0),
           // per: Math.round((formatEl.filter("node[status!='NO']").length / formatEl.length) * 100),
         }
       }
@@ -224,7 +250,7 @@ function Loader() {
                     aria-label="get user anime"
                     onClick={startQuery}
                   >
-                    {/* <EastRounded /> */}
+                    <EastRounded />
                   </IconButton>)}
               </InputAdornment>
             }

@@ -5,4 +5,12 @@ import reactRefresh from '@vitejs/plugin-react-refresh'
 export default defineConfig({
   plugins: [reactRefresh()],
   base:"/aniCheck/",
+  resolve: {
+    alias: [
+        {
+            find: /^@material-ui\/icons\/(.*)/,
+            replacement: '@material-ui/icons/esm/$1',
+        },
+    ],
+},
 })

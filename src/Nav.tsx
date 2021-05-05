@@ -14,6 +14,7 @@ import { FixedSizeList } from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
 import SearchBox from './SearchBox';
 import SeriesList from './SeriesList';
+import OptionsModal from './OptionsModal';
 
 
 
@@ -84,6 +85,7 @@ export default function Nav() {
     <Grid sx={{ height: "100vh" }} item xs={3}>
       <Loader></Loader>
       <p>{checked} {Object.keys(checkBoxes).length}</p>
+      <OptionsModal/>
       <SearchBox>
         <SeriesList></SeriesList>
       </SearchBox>

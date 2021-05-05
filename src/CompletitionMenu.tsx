@@ -102,11 +102,10 @@ const CompletitionMenu: FC = () => {
 
     return (
         <div>
-            Completition Calculator
             <FormControlLabel
                 control={
                     <Switch checked={state.userOptions.smartCompletition} onClick={() => handleClick("smart")} />
-                } label="Smart" />
+                } label="Smart Completition" />
         What is anime? {FORMATS.map((format) => {
                     if (["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC",].includes(format.id)) {
                         return (
@@ -137,10 +136,14 @@ const CompletitionMenu: FC = () => {
                     }
                     return
                 })}
-        Custom
+        <FormControlLabel
+                control={
+                    <Switch checked={!state.userOptions.smartCompletition} onClick={() => handleClick("smart")} />
+                } label="Custom" />
+        
             <Button
                 disabled={state.userOptions.smartCompletition}
-                onClick={() => handleClick("all")} >All
+                onClick={() => handleClick("all")} >Select All
         </Button>
             {FORMATS.map((format) => {
                 return (

@@ -92,7 +92,7 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
     return key;
   }
   return (
-    <Box sx={{ height: "80vh" }}>
+    <Box sx={{ height: "calc(100vh - 200px)" }}>
       {state.seriesList ? (
         <AutoSizer>
           {({ height, width }) => (

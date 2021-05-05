@@ -55,44 +55,45 @@ function Viz() {
         {
           selector: 'edge',
           style: {
-            'curve-style': 'bezier',
+            // 'curve-style': '',
             'width': 6,
             'target-arrow-shape': 'triangle',
             'line-color': '#ffaaaa',
             'target-arrow-color': '#ffaaaa',
-            'label': 'data(relation)'
+            'target-label': 'data(relation)',
+            'target-text-offset':80,
           }
         },
-        {
-          selector: 'edge[relation= "SEQUEL"]',
-          style: {
-            "label":"Sequel",
-          }
-        },
-        {
-          selector: 'edge[relation= "SIDE_STORY"]',
-          style: {
-            "label":"Side Story",
-          }
-        },
-        {
-          selector: 'edge[relation= "OTHER"]',
-          style: {
-            "label":"Other",
-          }
-        },
-        {
-          selector: 'edge[relation= "ADAPTATION"]',
-          style: {
-            "label":"Adaptation",
-          }
-        },
-        {
-          selector: 'edge[relation= "SOURCE"]',
-          style: {
-            "label":"Source",
-          }
-        },
+        // {
+        //   selector: 'edge[relation= "SEQUEL"]',
+        //   style: {
+        //     "label":"Sequel",
+        //   }
+        // },
+        // {
+        //   selector: 'edge[relation= "SIDE_STORY"]',
+        //   style: {
+        //     "label":"Side Story",
+        //   }
+        // },
+        // {
+        //   selector: 'edge[relation= "OTHER"]',
+        //   style: {
+        //     "label":"Other",
+        //   }
+        // },
+        // {
+        //   selector: 'edge[relation= "ADAPTATION"]',
+        //   style: {
+        //     "label":"Adaptation",
+        //   }
+        // },
+        // {
+        //   selector: 'edge[relation= "SOURCE"]',
+        //   style: {
+        //     "label":"Source",
+        //   }
+        // },
         {
           selector: 'node[format="MANGA"]',
           style: {

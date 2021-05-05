@@ -2,6 +2,7 @@
 export type globalStateType = {
     cy: cytoscape.Core;
     userOptions: userOptionType;
+    modalOpenState?: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
     seriesSelected?: cytoscape.CollectionReturnValue;
     seriesList?: seriesListElementType[];
     seriesDict: { [key: string]: seriesListElementType };
@@ -15,7 +16,7 @@ export type checkBoxStateType = {
     series: cytoscape.CollectionReturnValue
 }
 
-export type formatsType="TV" | "TV_SHORT" | "MOVIE" | "SPECIAL" | "OVA" | "ONA" | "MUSIC" | "MANGA" | "NOVEL" | "ONE_SHOT"
+export type formatsType = "TV" | "TV_SHORT" | "MOVIE" | "SPECIAL" | "OVA" | "ONA" | "MUSIC" | "MANGA" | "NOVEL" | "ONE_SHOT"
 
 export type userOptionType = {
     sort: sortType;
@@ -26,7 +27,7 @@ export type userOptionType = {
 }
 
 export type sortType = {
-    type: "complete%" | "alphabetical" | "size";
+    type: "complete%" | "alphabetical" | "size" | "missWeight";
     inverted: boolean;
 }
 
@@ -34,8 +35,11 @@ export type statsType = {
     [key: string]: {
         tot: number;
         miss: number;
-        got:number;
+        got: number;
         per?: number;
+        totWeight?: number;
+        missWeight?: number;
+        gotWeight?: number;
     }
 }
 

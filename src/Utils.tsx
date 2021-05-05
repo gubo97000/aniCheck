@@ -3,6 +3,13 @@ import { useSharedState } from "./Store";
 import { formatsType, globalStateType, seriesListElementType, statsType, userOptionType } from "./Types";
 
 export function useStateWithLocalStorage<T>(localStorageKey: string, defaultValue: any = null): [T, React.Dispatch<React.SetStateAction<T>>] {
+    try {
+        JSON.parse(localStorage.getItem(localStorageKey) ?? JSON.stringify(defaultValue))
+    } catch (error) {
+        console.log("Old Data found, trying to reset")
+        localStorage.removeItem(localStorageKey)
+    }
+
     const [value, setValue] = React.useState<T>(
         JSON.parse(localStorage.getItem(localStorageKey) ?? JSON.stringify(defaultValue)) as T
     );
@@ -15,6 +22,14 @@ export function useStateWithLocalStorage<T>(localStorageKey: string, defaultValu
 };
 
 //Sort Functions
+export function sortWeight(rankedItems: any[], invert: boolean) {
+    return rankedItems.sort((itm1, itm2) => {
+        return invert ?
+            itm1.item.stats["selected"].missWeight - itm2.item.stats["selected"].missWeight :
+            itm2.item.stats["selected"].missWeight - itm1.item.stats["selected"].missWeight
+    })
+}
+
 export function sortComplete(rankedItems: any[], invert: boolean) {
     return rankedItems.sort((itm1, itm2) => {
         return invert ?
@@ -51,6 +66,9 @@ export function getSortFc(tag: string) {
 
         case "size":
             return sortSize
+            
+        case "missWeight":
+            return sortWeight
 
         default:
             return sortAlphabetical
@@ -89,13 +107,15 @@ export function getBulkStat(formatArr: string[], stats: statsType) {
     let tot: number = 0
     let miss: number = 0
     let got: number = 0
+    let missWeight: number = 0
 
     for (const format of formatArr) {
         tot += stats[format].tot ?? 0
         miss += stats[format].miss ?? 0
         got += stats[format].tot - stats[format].miss ?? 0
+        missWeight += stats[format].missWeight ?? 0
     }
-    return { tot: tot, miss: miss, got: got }
+    return { tot: tot, miss: miss, got: got, missWeight: missWeight }
 }
 
 export function updateCompletition(setState: React.Dispatch<React.SetStateAction<globalStateType>>) {
@@ -105,28 +125,33 @@ export function updateCompletition(setState: React.Dispatch<React.SetStateAction
                 let serieTot: number = 0
                 let serieMiss: number = 0
                 let serieGot: number = 0
+                let serieMissWeight: number = 0
+
                 for (const bulkTerm of ["anime", "manga", "NOVEL"]) {
-                    let { got, miss, tot } = getBulkStat(convertBulkTerm(bulkTerm, state.userOptions), value.stats)
+                    let { got, miss, tot, missWeight } = getBulkStat(convertBulkTerm(bulkTerm, state.userOptions), value.stats)
                     if (got != 0) {
                         serieTot += tot
                         serieMiss += miss
                         serieGot += got
+                        serieMissWeight += missWeight
                     }
                 }
                 state.seriesDict[id].stats["selected"] = {
                     tot: serieTot,
                     miss: serieMiss,
                     got: serieGot,
+                    missWeight: serieMissWeight,
                     per: Math.round((serieGot / serieTot) * 100),
                 }
             }
         } else {
             for (const [id, value] of Object.entries(state.seriesDict)) {
-                let { got, miss, tot } = getBulkStat(state.userOptions.completition, value.stats)
+                let { got, miss, tot, missWeight } = getBulkStat(state.userOptions.completition, value.stats)
                 state.seriesDict[id].stats["selected"] = {
                     tot: tot,
                     got: got,
                     miss: miss,
+                    missWeight: missWeight,
                     per: Math.round((got / tot) * 100),
                 }
             }

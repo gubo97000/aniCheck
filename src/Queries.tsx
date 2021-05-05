@@ -28,8 +28,13 @@ query ($user: String!, $type: MediaType){
           bannerImage
           popularity
           siteUrl
+          chapters
+          volumes
           episodes
           duration
+          nextAiringEpisode {
+            episode
+          }
           status(version: 2)
           relations {
             nodes {
@@ -53,13 +58,18 @@ query ($user: String!, $type: MediaType){
               bannerImage
               popularity
               siteUrl
+              chapters
+              volumes
               episodes
               duration
+              nextAiringEpisode {
+                episode
+              }
               status(version: 2)
             }
             edges {
               id
-              relationType(version:2)
+              relationType(version: 2)
               node {
                 id
               }
@@ -71,6 +81,7 @@ query ($user: String!, $type: MediaType){
       isCustomList
       isSplitCompletedList
     }
+
   }
 }
 `;

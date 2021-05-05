@@ -45,7 +45,7 @@ const SeriesListItem: FC<props> = ({ index, style, data }) => {
         border: "1px solid",
         borderColor: "grey.500",
         // bgcolor: 'background.paper',
-        backgroundImage: `url(${seriesPrime.data("bannerImage")})`,
+        background: `url(${seriesPrime.data("bannerImage")}) no-repeat center center`,
         backgroundSize: "cover",
         color: 'white',
         // boxShadow: 3,
@@ -66,14 +66,10 @@ const SeriesListItem: FC<props> = ({ index, style, data }) => {
         <ListItemText sx={{
           fontSize: "19px"
         }}
-          id={key} primary={seriesPrime.data("title") + seriesList[index].stats["selected"].per} />
-        {/* <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="comments">
-                    <CommentIcon />
-                </IconButton>
-            </ListItemSecondaryAction> */}
+          id={key} primary={seriesPrime.data("title") + seriesList[index].stats["selected"].missWeight} />
+
         <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-          <CircularProgress variant="determinate" color="secondary" value={seriesList[index].stats.mangaPer+20} />
+          <CircularProgress size={80} variant="determinate" color="primary" value={seriesList[index].stats["selected"].per} />
           <Box
             sx={{
               top: 0,
@@ -86,10 +82,11 @@ const SeriesListItem: FC<props> = ({ index, style, data }) => {
               justifyContent: 'center',
             }}
           >
-            <CircularProgress variant="determinate" color="primary" value={seriesList[index].stats.mangaPer} />
+            <Typography>{seriesList[index].stats["selected"].per}</Typography>
+            {/* <CircularProgress variant="determinate" color="primary" value={seriesList[index].stats.mangaPer} /> */}
           </Box>
         </Box>
-        <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+        {/* <Box sx={{ position: 'relative', display: 'inline-flex' }}>
           <CircularProgress variant="determinate" color="secondary" value={seriesList[index].stats.animePer+20} />
           <Box
             sx={{
@@ -105,7 +102,7 @@ const SeriesListItem: FC<props> = ({ index, style, data }) => {
           >
             <CircularProgress variant="determinate" color="primary" value={seriesList[index].stats.animePer} />
           </Box>
-        </Box>
+        </Box> */}
      
       </ListItem>
     </Box>

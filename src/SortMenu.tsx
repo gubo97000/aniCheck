@@ -15,7 +15,9 @@ import { FixedSizeList } from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
 import { matchSorter } from 'match-sorter'
 import { sortAlphabetical, sortComplete, useStateWithLocalStorage } from './Utils';
-
+import Sort from "@material-ui/icons/Sort"
+import NorthRoundedIcon from '@material-ui/icons/NorthRounded';
+import SouthRoundedIcon from '@material-ui/icons/SouthRounded';
 
 const SortMenu: FC = () => {
     const [state, setState] = useSharedState()
@@ -44,16 +46,16 @@ const SortMenu: FC = () => {
     };
 
     return (
-        <div>
-            <Button
+        <span>
+            <IconButton
                 id="sort-button"
                 aria-controls="sort-menu"
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
             >
-                Sort
-        </Button>
+                <Sort />
+            </IconButton>
             <Menu
                 id="sort-menu"
                 anchorEl={anchorEl}
@@ -66,12 +68,21 @@ const SortMenu: FC = () => {
                 <MenuItem
                     selected={sort.type == "complete%"}
                     onClick={() => handleSelection("complete%")}>
-                    {sort.inverted ? "V" : "^"} Complete %</MenuItem>
+                    {sort.inverted ? <NorthRoundedIcon /> : <SouthRoundedIcon />}
+                    Complete %
+                    </MenuItem>
 
                 <MenuItem
                     selected={sort.type == "alphabetical"}
                     onClick={() => handleSelection("alphabetical")}>
-                    {sort.inverted ? "Up" : "Do"} Alphabetical</MenuItem>
+                    {sort.inverted ? <NorthRoundedIcon /> : <SouthRoundedIcon />}
+                    Alphabetical</MenuItem>
+
+                <MenuItem
+                    selected={sort.type == "missWeight"}
+                    onClick={() => handleSelection("missWeight")}>
+                    {sort.inverted ? <NorthRoundedIcon /> : <SouthRoundedIcon />}
+                    Easy Complete</MenuItem>
 
                 <MenuItem onClick={handleClose}>Easy Complete</MenuItem>
                 <MenuItem onClick={handleClose}>Alphabetical</MenuItem>
@@ -81,7 +92,7 @@ const SortMenu: FC = () => {
                     {sort.inverted ? "Up" : "Do"} Size</MenuItem>
 
             </Menu>
-        </div>
+        </span>
     );
 }
 export default SortMenu

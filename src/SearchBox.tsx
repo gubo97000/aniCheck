@@ -17,7 +17,9 @@ import { matchSorter } from 'match-sorter'
 import SortMenu from './SortMenu';
 import { getSortFc } from './Utils';
 import CompletitionMenu from './CompletitionMenu';
-
+import DonutLargeRoundedIcon from '@material-ui/icons/DonutLargeRounded';
+import SortIcon from '@material-ui/icons/Sort';
+import FilterAltRoundedIcon from '@material-ui/icons/FilterAltRounded';
 
 const SearchBox: FC = ({ children }) => {
   // console.log(props.children.props.children.props)
@@ -31,7 +33,7 @@ const SearchBox: FC = ({ children }) => {
       Object.values(state.seriesDict ?? []),
       event.target.value,
       {
-        keys: [item => item.series.map(serie => serie.data("title"))]
+        keys: [item => item.series.map(serie => serie.data("titles"))],
       })
     )
   }
@@ -41,7 +43,7 @@ const SearchBox: FC = ({ children }) => {
       Object.values(state.seriesDict ?? []),
       "",
       {
-        keys: [item => item.series.map(serie => serie.data("title"))],
+        keys: [item => item.series.map(serie => serie.data("titles"))],
         sorter: (rankedItems) => { console.log(rankedItems); return getSortFc(state.userOptions.sort.type)(rankedItems, state.userOptions.sort.inverted) }
 
       })
@@ -49,9 +51,21 @@ const SearchBox: FC = ({ children }) => {
   }, [state.seriesList, state.userOptions.sort])
   return (
     <Box>
-      <CompletitionMenu/>
+      {/* <CompletitionMenu /> */}
+
       <TextField value={query} onChange={handleChange} />
+      <IconButton onClick={() => { state.modalOpenState?.[1](true) }}>
+        <DonutLargeRoundedIcon />
+      </IconButton>
       <SortMenu />
+      <IconButton>
+        <SortIcon/>
+      </IconButton>
+      <IconButton>
+        <FilterAltRoundedIcon/>
+      </IconButton>
+      
+
       {
         isValidElement(children) ? React.cloneElement(children, { seriesToRender: res }) : <p>Shouldn't display</p>
       }
