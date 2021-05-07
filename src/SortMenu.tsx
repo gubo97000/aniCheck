@@ -73,6 +73,13 @@ const SortMenu: FC = () => {
                     </MenuItem>
 
                 <MenuItem
+                    selected={sort.type == "weight%"}
+                    onClick={() => handleSelection("weight%")}>
+                    {sort.inverted ? <NorthRoundedIcon /> : <SouthRoundedIcon />}
+                    Weighted Complete %
+                    </MenuItem>
+
+                <MenuItem
                     selected={sort.type == "alphabetical"}
                     onClick={() => handleSelection("alphabetical")}>
                     {sort.inverted ? <NorthRoundedIcon /> : <SouthRoundedIcon />}
@@ -82,7 +89,7 @@ const SortMenu: FC = () => {
                     selected={sort.type == "missWeight"}
                     onClick={() => handleSelection("missWeight")}>
                     {sort.inverted ? <NorthRoundedIcon /> : <SouthRoundedIcon />}
-                    Easy Complete</MenuItem>
+                    Easy To Complete</MenuItem>
 
                 <MenuItem onClick={handleClose}>Easy Complete</MenuItem>
                 <MenuItem onClick={handleClose}>Alphabetical</MenuItem>

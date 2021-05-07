@@ -21,7 +21,7 @@ interface props {
 
 const SeriesList: FC<props> = ({ seriesToRender }) => {
   // console.log(seriesToRender)
-  
+
   const [state, setState] = useSharedState();
   let [seriesList, setSeriesList] = useState<seriesListElementType[]>([])
 
@@ -66,7 +66,7 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
     // checkBoxes[key].state[1](true)
 
 
-    // setState({ ...state, seriesSelected:checkBoxes[key].series })
+    setState(state => { return { ...state, seriesSelected: checkBoxes[key].series } })
     // state.cyViz?.layout.stop(); 
     console.log(state.cyViz)
     console.log(state.seriesDict?.[key] ?? 0)

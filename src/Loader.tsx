@@ -1,20 +1,20 @@
 import { Avatar, Button, CircularProgress, FormControl, FormHelperText, Grid, IconButton, Input, InputAdornment, InputLabel, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, TextField } from '@material-ui/core'
-import React, { useState, useRef, useLayoutEffect, useContext, useEffect } from 'react'
+import React, { useState, useRef, useLayoutEffect, useContext, useEffect, FC } from 'react'
 import { render } from 'react-dom'
 import * as vis from "vis-network"
-import cytoscape from 'cytoscape';
+import cytoscape, { EdgeCollection } from 'cytoscape';
 
 import { parseAndCheckHttpResponse, useLazyQuery } from '@apollo/client';
 import { useSharedState } from './Store';
 import * as Queries from "./Queries"
-import { updateCompletition, useStateWithLocalStorage } from './Utils';
-import { seriesListElementType, statsType } from './Types';
+import { relationPriority, updateCompletition, useStateWithLocalStorage } from './Utils';
+import { globalStateType, seriesListElementType, statsType } from './Types';
 import EastRounded from '@material-ui/icons/EastRounded';
 import { round } from 'lodash';
 
 
 
-function Loader() {
+const Loader: FC = () => {
   const [state, setState] = useSharedState();
   let [loading, setLoading] = useState(false);
   let [error, setError] = useState("");
@@ -121,15 +121,36 @@ function Loader() {
 
     //Split components with problematic connections
     let cleanedComponents: {
-      series: cytoscape.CollectionReturnValue; serieComplete: cytoscape.CollectionReturnValue;
+      series: seriesListElementType["series"]; serieComplete: seriesListElementType["serieComplete"];
     }[] = []
     components.map((serieComplete) => {
+      //Remove double edges
+      let prunedEdges = serieComplete.edges().map((edge) => {
+        return edge.parallelEdges().sort((ed1,ed2)=>{
+          return relationPriority[ed1.data("relation")] - relationPriority[ed2.data("relation")]
+        })[0]
+        // if (edge.parallelEdges().length > 1) {
+        //   let ed1 = edge.parallelEdges()[0]
+        //   let ed2 = edge.parallelEdges()[0]
+        //   console.log(relationPriority[ed1.data("relation")])
+        //   if (relationPriority[ed1.data("relation")] < relationPriority[ed2.data("relation")]) {
+        //     return ed1
+        //   } else {
+        //     return ed2
+        //   }
+        // }
+        // return edge
+      })
+      serieComplete.edges().remove()
+      prunedEdges.map((e)=>{e.restore()})
+
       serieComplete.filter("edge[relation!='CHARACTER'],node").components().map((seriePart) => {
-        //Avoid unwatched orphan nodes
+        //Avoid unwatched orphan nodes after split
         if (seriePart.nodes().length != seriePart.filter("node[status='NO']").length) {
           cleanedComponents.push({ series: seriePart, serieComplete: serieComplete })
         }
       })
+
     })
 
     //Create the representative of the serie
@@ -152,16 +173,17 @@ function Loader() {
       return { seriesPrime: serieSorted.nodes()[0], series: serieSorted, serieComplete: series.serieComplete }
     })
 
+
     //Compute Stats
-    let seriesList = seriesListSorted.map((serie) => {
+    let seriesList: seriesListElementType[] = seriesListSorted.map((serie) => {
       let stat: statsType = {};
       for (let format of ["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC", "MANGA", "NOVEL", "ONE_SHOT"]) {
         let formatEl = serie.series.nodes().filter(`node[format='${format}']`)
-        if (serie.seriesPrime.data("id") == 21093) {
-          console.log(format)
-          console.log(formatEl.filter("node[status='NO']"))
-          console.log(formatEl.filter("node[status='NO']").map((e) => { return e.data("compWeight") }))
-        }
+        // if (serie.seriesPrime.data("id") == 21093) {
+        //   console.log(format)
+        //   console.log(formatEl.filter("node[status='NO']"))
+        //   console.log(formatEl.filter("node[status='NO']").map((e) => { return e.data("compWeight") }))
+        // }
         stat[format] = {
           tot: formatEl.length ?? 0,
           miss: formatEl.filter("node[status='NO']").length ?? 0,

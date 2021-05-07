@@ -30,6 +30,14 @@ export function sortWeight(rankedItems: any[], invert: boolean) {
     })
 }
 
+export function sortWeightPer(rankedItems: any[], invert: boolean) {
+    return rankedItems.sort((itm1, itm2) => {
+        return invert ?
+            itm1.item.stats["selected"].perWeight - itm2.item.stats["selected"].perWeight :
+            itm2.item.stats["selected"].perWeight - itm1.item.stats["selected"].perWeight
+    })
+}
+
 export function sortComplete(rankedItems: any[], invert: boolean) {
     return rankedItems.sort((itm1, itm2) => {
         return invert ?
@@ -59,6 +67,9 @@ export function sortSize(rankedItems: any[], invert: boolean) {
 
 export function getSortFc(tag: string) {
     switch (tag) {
+        case "weight%":
+            return sortWeightPer
+
         case "complete%":
             return sortComplete
 
@@ -108,15 +119,19 @@ export function getBulkStat(formatArr: string[], stats: statsType) {
     let tot: number = 0
     let miss: number = 0
     let got: number = 0
+    let totWeight: number = 0
     let missWeight: number = 0
+    let gotWeight: number = 0
 
     for (const format of formatArr) {
         tot += stats[format].tot ?? 0
         miss += stats[format].miss ?? 0
         got += stats[format].tot - stats[format].miss ?? 0
+        totWeight += stats[format].totWeight ?? 0
         missWeight += stats[format].missWeight ?? 0
+        gotWeight += stats[format].gotWeight ?? 0
     }
-    return { tot: tot, miss: miss, got: got, missWeight: missWeight }
+    return { tot: tot, miss: miss, got: got, totWeight: totWeight, missWeight: missWeight, gotWeight: gotWeight }
 }
 
 export function updateCompletition(setState: React.Dispatch<React.SetStateAction<globalStateType>>) {
@@ -126,37 +141,72 @@ export function updateCompletition(setState: React.Dispatch<React.SetStateAction
                 let serieTot: number = 0
                 let serieMiss: number = 0
                 let serieGot: number = 0
+                let serieTotWeight: number = 0
                 let serieMissWeight: number = 0
+                let serieGotWeight: number = 0
 
                 for (const bulkTerm of ["anime", "manga", "NOVEL"]) {
-                    let { got, miss, tot, missWeight } = getBulkStat(convertBulkTerm(bulkTerm, state.userOptions), value.stats)
+                    let { got, miss, tot, totWeight, missWeight, gotWeight } = getBulkStat(convertBulkTerm(bulkTerm, state.userOptions), value.stats)
                     if (got != 0) {
                         serieTot += tot
                         serieMiss += miss
                         serieGot += got
+                        serieTotWeight += totWeight
                         serieMissWeight += missWeight
+                        serieGotWeight += gotWeight
                     }
                 }
                 state.seriesDict[id].stats["selected"] = {
                     tot: serieTot,
                     miss: serieMiss,
                     got: serieGot,
+                    per: Math.floor((serieGot / serieTot) * 100),
+                    totWeight: serieTotWeight,
                     missWeight: serieMissWeight,
-                    per: Math.round((serieGot / serieTot) * 100),
+                    gotWeight: serieGotWeight,
+                    perWeight: Math.floor((serieGotWeight / serieTotWeight) * 100),
                 }
             }
         } else {
             for (const [id, value] of Object.entries(state.seriesDict)) {
-                let { got, miss, tot, missWeight } = getBulkStat(state.userOptions.completition, value.stats)
+                let { got, miss, tot, totWeight, missWeight, gotWeight } = getBulkStat(state.userOptions.completition, value.stats)
                 state.seriesDict[id].stats["selected"] = {
                     tot: tot,
                     got: got,
                     miss: miss,
+                    per: Math.floor((got / tot) * 100),
+                    totWeight: totWeight,
+                    gotWeight: gotWeight,
                     missWeight: missWeight,
-                    per: Math.round((got / tot) * 100),
+                    perWeight: Math.floor((gotWeight / totWeight) * 100),
+
                 }
             }
         }
         return { ...state }
     })
+}
+
+//Relations
+export const relationPriority:{ [key: string]: number } = {
+    'CHARACTER': 1,
+    'SEQUEL': 2,
+
+    'SIDE_STORY': 3,
+
+    'SOURCE': 4,
+    'ADAPTATION': 5,
+
+    'ALTERNATIVE': 6,
+
+    'SPIN_OFF': 7,
+    'SUMMARY': 8,
+
+    'COMPILATION': 9,
+    'CONTAINS': 10,
+
+    'PREQUEL': 11,
+    'PARENT': 12,
+    'OTHER': 13,
+
 }

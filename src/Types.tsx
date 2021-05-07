@@ -27,7 +27,7 @@ export type userOptionType = {
 }
 
 export type sortType = {
-    type: "complete%" | "alphabetical" | "size" | "missWeight";
+    type: "complete%" | "weight%" | "alphabetical" | "size" | "missWeight";
     inverted: boolean;
 }
 
@@ -40,6 +40,7 @@ export type statsType = {
         totWeight?: number;
         missWeight?: number;
         gotWeight?: number;
+        perWeight?: number;
     }
 }
 
@@ -48,4 +49,5 @@ export type seriesListElementType =
         seriesPrime: cytoscape.NodeSingular;
         series: cytoscape.CollectionReturnValue;
         stats: statsType;
+        serieComplete: cytoscape.CollectionReturnValue;
     }

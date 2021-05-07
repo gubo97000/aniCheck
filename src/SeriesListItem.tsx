@@ -86,8 +86,8 @@ const SeriesListItem: FC<props> = ({ index, style, data }) => {
             {/* <CircularProgress variant="determinate" color="primary" value={seriesList[index].stats.mangaPer} /> */}
           </Box>
         </Box>
-        {/* <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-          <CircularProgress variant="determinate" color="secondary" value={seriesList[index].stats.animePer+20} />
+        <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+          <CircularProgress variant="determinate" color="secondary" value={seriesList[index].stats["selected"].perWeight} />
           <Box
             sx={{
               top: 0,
@@ -100,9 +100,10 @@ const SeriesListItem: FC<props> = ({ index, style, data }) => {
               justifyContent: 'center',
             }}
           >
-            <CircularProgress variant="determinate" color="primary" value={seriesList[index].stats.animePer} />
+            <Typography>{seriesList[index].stats["selected"].perWeight}</Typography>
+            {/* <CircularProgress variant="determinate" color="primary" value={seriesList[index].stats.animePer} /> */}
           </Box>
-        </Box> */}
+        </Box>
      
       </ListItem>
     </Box>
