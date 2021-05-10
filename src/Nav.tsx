@@ -82,7 +82,7 @@ export default function Nav() {
     return key;
   }
   return (
-    <Grid sx={{ height: "100vh" }} item xs={3}>
+    <Grid sx={{ height: "100vh" }} item xs={12} sm={3}>
       <Loader></Loader>
       <p>{checked} {Object.keys(checkBoxes).length}</p>
       <OptionsModal/>

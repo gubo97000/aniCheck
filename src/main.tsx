@@ -8,12 +8,12 @@ import { SharedStateProvider } from './Store'
 import { ApolloProvider } from '@apollo/client/react';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { css, jsx } from '@emotion/react'
-import { createMuiTheme } from '@material-ui/core';
+import { createTheme } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 
 const client = new ApolloClient({ uri: 'https://graphql.anilist.co', cache: new InMemoryCache() });
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     mode: 'light',
   },

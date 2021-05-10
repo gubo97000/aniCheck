@@ -32,9 +32,14 @@ const Loader: FC = () => {
 
   };
 
+  const parseDate = (date: [],) => {
+    
+  }
+
   const parseNode = (node: any,) => {
     // node.nextAiringEpisode ? console.log(node) : null
     const compWeight = (node: any) => {
+      //Calculating the weight of the element
       if (node.status == "NOT_YET_RELEASED") return 0
       if (node.chapters) return node.chapters * 5
       if (node.volumes) return node.volumes * 50
@@ -44,11 +49,7 @@ const Loader: FC = () => {
 
       //THE APPROXIMATION ZONE
       //Releasing not in List, API won't let me get nextAiringEpisode
-      let strDate = [
-        node.startDate.year,
-        node.startDate.month,
-        node.startDate.day,
-      ].join("-")
+      let strDate = Object.values(node.startDate).filter(e=>{ return e!="FuzzyDate" && e}).join("-")
       let days = (Date.now() - Date.parse(strDate)) / 8.64e+7
       if (node.format == "MANGA") return round(days / 8.2) * 5
       if (node.format == "TV") return round(days / 8.2) * 20
@@ -70,11 +71,12 @@ const Loader: FC = () => {
       // ce: node.nextAiringEpisode?.episode,
       // du: node.duration,
       compWeight: compWeight(node),
-      startDate: [
-        node.startDate.year,
-        node.startDate.month,
-        node.startDate.day,
-      ].join("-")
+      // startDate: [
+      //   node.startDate.year,
+      //   node.startDate.month,
+      //   node.startDate.day,
+      // ].join("-"),
+      startDate: Object.values(node.startDate).filter(e=>{ return e!="FuzzyDate" && e}).join("-"),
     }
   }
 
@@ -124,11 +126,37 @@ const Loader: FC = () => {
       series: seriesListElementType["series"]; serieComplete: seriesListElementType["serieComplete"];
     }[] = []
     components.map((serieComplete) => {
-      //Remove double edges
+      //Remove parallel edges
       let prunedEdges = serieComplete.edges().map((edge) => {
-        return edge.parallelEdges().sort((ed1,ed2)=>{
+        let bestEdge = edge.parallelEdges().sort((ed1, ed2) => {
           return relationPriority[ed1.data("relation")] - relationPriority[ed2.data("relation")]
         })[0]
+        switch (bestEdge.data("relation")) {
+          case "ADAPTATION":
+            bestEdge.move({
+              source: bestEdge.data("target"),
+              target: bestEdge.data("source"),
+            })
+            bestEdge.data({
+              relation: "SOURCE"
+            })
+            break;
+
+          case "PREQUEL":
+            bestEdge.move({
+              source: bestEdge.data("target"),
+              target: bestEdge.data("source"),
+            })
+            bestEdge.data({
+              relation: "SEQUEL"
+            })
+            break;
+
+          default:
+            break;
+        }
+        return bestEdge
+
         // if (edge.parallelEdges().length > 1) {
         //   let ed1 = edge.parallelEdges()[0]
         //   let ed2 = edge.parallelEdges()[0]
@@ -142,7 +170,8 @@ const Loader: FC = () => {
         // return edge
       })
       serieComplete.edges().remove()
-      prunedEdges.map((e)=>{e.restore()})
+      prunedEdges.map((e) => { e.restore() })
+      // prunedEdges.map((e) => { cy.add(e) })
 
       serieComplete.filter("edge[relation!='CHARACTER'],node").components().map((seriePart) => {
         //Avoid unwatched orphan nodes after split
@@ -172,7 +201,6 @@ const Loader: FC = () => {
       })
       return { seriesPrime: serieSorted.nodes()[0], series: serieSorted, serieComplete: series.serieComplete }
     })
-
 
     //Compute Stats
     let seriesList: seriesListElementType[] = seriesListSorted.map((serie) => {

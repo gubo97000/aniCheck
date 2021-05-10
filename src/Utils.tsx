@@ -188,24 +188,25 @@ export function updateCompletition(setState: React.Dispatch<React.SetStateAction
 }
 
 //Relations
-export const relationPriority:{ [key: string]: number } = {
+export const relationPriority: { [key: string]: number } = {
     'CHARACTER': 1,
     'SEQUEL': 2,
 
     'SIDE_STORY': 3,
 
     'SOURCE': 4,
-    'ADAPTATION': 5,
+    
+    'ALTERNATIVE': 5,
+    
+    'SPIN_OFF': 6,
+    'SUMMARY': 7,
+    
+    'COMPILATION': 8,
+    'CONTAINS': 9,
+    
+    'PREQUEL': 10,
 
-    'ALTERNATIVE': 6,
-
-    'SPIN_OFF': 7,
-    'SUMMARY': 8,
-
-    'COMPILATION': 9,
-    'CONTAINS': 10,
-
-    'PREQUEL': 11,
+    'ADAPTATION': 11,
     'PARENT': 12,
     'OTHER': 13,
 

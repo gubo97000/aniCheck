@@ -91,12 +91,10 @@ const SortMenu: FC = () => {
                     {sort.inverted ? <NorthRoundedIcon /> : <SouthRoundedIcon />}
                     Easy To Complete</MenuItem>
 
-                <MenuItem onClick={handleClose}>Easy Complete</MenuItem>
-                <MenuItem onClick={handleClose}>Alphabetical</MenuItem>
-                <MenuItem
+                {/* <MenuItem
                     selected={sort.type == "size"}
                     onClick={() => handleSelection("size")}>
-                    {sort.inverted ? "Up" : "Do"} Size</MenuItem>
+                    {sort.inverted ? "Up" : "Do"} Size</MenuItem> */}
 
             </Menu>
         </span>
