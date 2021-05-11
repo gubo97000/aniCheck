@@ -15,6 +15,7 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import SearchBox from './SearchBox';
 import SeriesList from './SeriesList';
 import OptionsModal from './OptionsModal';
+import StatusFilter from './StatusFilter';
 
 
 
@@ -83,9 +84,10 @@ export default function Nav() {
   }
   return (
     <Grid sx={{ height: "100vh" }} item xs={12} sm={3}>
+      <OptionsModal />
       <Loader></Loader>
-      <p>{checked} {Object.keys(checkBoxes).length}</p>
-      <OptionsModal/>
+      <StatusFilter></StatusFilter>
+
       <SearchBox>
         <SeriesList></SeriesList>
       </SearchBox>

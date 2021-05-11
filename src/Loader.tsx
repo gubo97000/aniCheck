@@ -33,7 +33,7 @@ const Loader: FC = () => {
   };
 
   const parseDate = (date: [],) => {
-    
+
   }
 
   const parseNode = (node: any,) => {
@@ -49,7 +49,7 @@ const Loader: FC = () => {
 
       //THE APPROXIMATION ZONE
       //Releasing not in List, API won't let me get nextAiringEpisode
-      let strDate = Object.values(node.startDate).filter(e=>{ return e!="FuzzyDate" && e}).join("-")
+      let strDate = Object.values(node.startDate).filter(e => { return e != "FuzzyDate" && e }).join("-")
       let days = (Date.now() - Date.parse(strDate)) / 8.64e+7
       if (node.format == "MANGA") return round(days / 8.2) * 5
       if (node.format == "TV") return round(days / 8.2) * 20
@@ -76,7 +76,7 @@ const Loader: FC = () => {
       //   node.startDate.month,
       //   node.startDate.day,
       // ].join("-"),
-      startDate: Object.values(node.startDate).filter(e=>{ return e!="FuzzyDate" && e}).join("-"),
+      startDate: Object.values(node.startDate).filter(e => { return e != "FuzzyDate" && e }).join("-"),
     }
   }
 
@@ -222,7 +222,7 @@ const Loader: FC = () => {
           // per: Math.round((formatEl.filter("node[status!='NO']").length / formatEl.length) * 100),
         }
       }
-      return { ...serie, stats: stat }
+      return { ...serie, stats: stat, status: "ERR" }
     })
 
     //Creating Dict
@@ -231,7 +231,7 @@ const Loader: FC = () => {
       seriesDict[serie.seriesPrime.data("id")] = serie
     })
     // console.log(seriesDict)
-    setState(state => { return { ...state, seriesList: seriesList, seriesDict: seriesDict } })
+    setState(state => { return { ...state, seriesList: seriesList, seriesDict: seriesDict, } })
     updateCompletition(setState)
     console.log(state)
     // }

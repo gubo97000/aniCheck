@@ -60,10 +60,11 @@ function formatToIcon(format: string) {
             return <BookIcon />
 
         default:
-            return "grey.500"
+            return ""
 
     }
 }
+
 const GraphNode: FC<props> = ({ data }) => {
 
     return (

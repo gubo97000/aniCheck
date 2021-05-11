@@ -64,6 +64,14 @@ const SortMenu: FC = () => {
                 MenuListProps={{
                     'aria-labelledby': 'sort-button',
                 }}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }}
             >
                 <MenuItem
                     selected={sort.type == "complete%"}

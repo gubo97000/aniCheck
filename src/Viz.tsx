@@ -44,7 +44,7 @@ function Viz() {
       container: cyRef.current,
       elements: [ // list of graph elements to start with
         { // node a
-          data: { id: 'a', title: "Ani", startDate:"2020-02-01", format: "helo" }
+          data: { id: 'a', title: "Welcome to AniCheck!", startDate:"2020-02-01", format: "helo" }
         },
         { // node b
           data: { id: 'b', title: "Check", startDate:"2020-02-01", format: "HELO" }

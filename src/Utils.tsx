@@ -48,7 +48,6 @@ export function sortComplete(rankedItems: any[], invert: boolean) {
 
 export function sortAlphabetical(rankedItems: any[], invert: boolean) {
     return rankedItems.sort((itm1, itm2) => {
-        console.log(itm1)
         return invert ?
             itm1.rankedValue[0].localeCompare(itm2.rankedValue) :
             itm2.rankedValue[0].localeCompare(itm1.rankedValue)
@@ -134,8 +133,17 @@ export function getBulkStat(formatArr: string[], stats: statsType) {
     return { tot: tot, miss: miss, got: got, totWeight: totWeight, missWeight: missWeight, gotWeight: gotWeight }
 }
 
+/**
+ * Compute completition for each series and global stats with the selected user parameter 
+ * @param setState 
+ */
 export function updateCompletition(setState: React.Dispatch<React.SetStateAction<globalStateType>>) {
     setState((state) => {
+        state.globalStats.tot = Object.keys(state.seriesDict).length
+        state.globalStats.got = 0
+        state.globalStats.miss = 0
+
+        //Smart Completition Mode
         if (state.userOptions.smartCompletition) {
             for (const [id, value] of Object.entries(state.seriesDict)) {
                 let serieTot: number = 0
@@ -147,7 +155,7 @@ export function updateCompletition(setState: React.Dispatch<React.SetStateAction
 
                 for (const bulkTerm of ["anime", "manga", "NOVEL"]) {
                     let { got, miss, tot, totWeight, missWeight, gotWeight } = getBulkStat(convertBulkTerm(bulkTerm, state.userOptions), value.stats)
-                    if (got != 0) {
+                    if (got != 0) { //Add stats only if got at least one for bulk term
                         serieTot += tot
                         serieMiss += miss
                         serieGot += got
@@ -166,8 +174,22 @@ export function updateCompletition(setState: React.Dispatch<React.SetStateAction
                     gotWeight: serieGotWeight,
                     perWeight: Math.floor((serieGotWeight / serieTotWeight) * 100),
                 }
+
+                //Update Global Completition
+                if (serieTot != 0) {
+                    if (serieTot == serieGot) {
+                        state.seriesDict[id].status = "COMPLETE"
+                        state.globalStats.got += 1
+                    } else {
+                        state.seriesDict[id].status = "NOT_COMPLETE"
+                        state.globalStats.miss += 1
+                    }
+                } else {
+                    state.seriesDict[id].status = "ERR"
+                }
             }
         } else {
+            //All selected format Mode
             for (const [id, value] of Object.entries(state.seriesDict)) {
                 let { got, miss, tot, totWeight, missWeight, gotWeight } = getBulkStat(state.userOptions.completition, value.stats)
                 state.seriesDict[id].stats["selected"] = {
@@ -179,7 +201,19 @@ export function updateCompletition(setState: React.Dispatch<React.SetStateAction
                     gotWeight: gotWeight,
                     missWeight: missWeight,
                     perWeight: Math.floor((gotWeight / totWeight) * 100),
+                }
 
+                //Update Global Completition
+                if (tot != 0) {
+                    if (tot == got) {
+                        state.seriesDict[id].status = "COMPLETE"
+                        state.globalStats.got += 1
+                    } else {
+                        state.seriesDict[id].status = "NOT_COMPLETE"
+                        state.globalStats.miss += 1
+                    }
+                } else {
+                    state.seriesDict[id].status = "ERR"
                 }
             }
         }
@@ -195,15 +229,15 @@ export const relationPriority: { [key: string]: number } = {
     'SIDE_STORY': 3,
 
     'SOURCE': 4,
-    
+
     'ALTERNATIVE': 5,
-    
+
     'SPIN_OFF': 6,
     'SUMMARY': 7,
-    
+
     'COMPILATION': 8,
     'CONTAINS': 9,
-    
+
     'PREQUEL': 10,
 
     'ADAPTATION': 11,

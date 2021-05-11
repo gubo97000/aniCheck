@@ -15,13 +15,14 @@ const initialState: globalStateType = {
       type: "alphabetical",
       inverted: false,
     },
-    smartCompletition:true,
-    completition:[],
-    animeComposition:["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC",],
-    mangaComposition:["MANGA", "ONE_SHOT"],
-    
+    smartCompletition: true,
+    completition: [],
+    animeComposition: ["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC",],
+    mangaComposition: ["MANGA", "ONE_SHOT"],
+    statusFilter: ["COMPLETE", "ERR"]
   },
-  seriesDict:{},
+  seriesDict: {},
+  globalStats: { tot: 0, miss: 0, got: 0 }
   // seriesSelected: ,
   // seriesList: { seriesPrime: cytoscape({ headless: true }).elements(), series: cytoscape({ headless: true }).elements() },
 }

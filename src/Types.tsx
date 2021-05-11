@@ -7,6 +7,7 @@ export type globalStateType = {
     seriesList?: seriesListElementType[];
     seriesDict: { [key: string]: seriesListElementType };
     cyViz?: cytoscape.Core;
+    globalStats: statsType[string];
 
 };
 
@@ -17,6 +18,7 @@ export type checkBoxStateType = {
 }
 
 export type formatsType = "TV" | "TV_SHORT" | "MOVIE" | "SPECIAL" | "OVA" | "ONA" | "MUSIC" | "MANGA" | "NOVEL" | "ONE_SHOT"
+export type serieStatusType = "COMPLETE" | "PLAN_TO_COMPLETE" | "NOT_COMPLETE" | "ERR"
 
 export type userOptionType = {
     sort: sortType;
@@ -24,6 +26,7 @@ export type userOptionType = {
     animeComposition: formatsType[];
     mangaComposition: formatsType[];
     completition: formatsType[];
+    statusFilter: serieStatusType[];
 }
 
 export type sortType = {
@@ -49,5 +52,6 @@ export type seriesListElementType =
         seriesPrime: cytoscape.NodeSingular;
         series: cytoscape.CollectionReturnValue;
         stats: statsType;
+        status: serieStatusType;
         serieComplete: cytoscape.CollectionReturnValue;
     }
