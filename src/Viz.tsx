@@ -11,6 +11,7 @@ import { book } from './cytoIcons';
 import Stack from '@material-ui/core/Stack';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+
 import cola from 'cytoscape-cola';
 import klay from 'cytoscape-klay';
 import dagre from 'cytoscape-dagre';
@@ -42,6 +43,7 @@ function Viz() {
 
     let cy = cytoscape({
       container: cyRef.current,
+      wheelSensitivity:0.3,
       elements: [ // list of graph elements to start with
         { // node a
           data: { id: 'a', title: "Welcome to AniCheck!", startDate:"2020-02-01", format: "helo" }
