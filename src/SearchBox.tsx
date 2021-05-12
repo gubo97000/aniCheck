@@ -30,7 +30,7 @@ const SearchBox: FC = ({ children }) => {
     setQuery(event.target.value)
     // console.log(state.seriesList.map(({ series }) => series)[0])
     setRes(matchSorter(
-      Object.values(state.seriesDict ?? []).filter(serie=> {return !state.userOptions.statusFilter.includes(serie.status)}),
+      Object.values(state.seriesDict ?? []).filter(serie => { return !state.userOptions.statusFilter.includes(serie.status) }),
       event.target.value,
       {
         keys: [item => item.series.map(serie => serie.data("titles"))],
@@ -40,7 +40,7 @@ const SearchBox: FC = ({ children }) => {
   useEffect(() => {
     console.log(state.userOptions)
     setRes(matchSorter(
-      Object.values(state.seriesDict ?? []).filter(serie=> {return !state.userOptions.statusFilter.includes(serie.status)}),
+      Object.values(state.seriesDict ?? []).filter(serie => { return !state.userOptions.statusFilter.includes(serie.status) }),
       "",
       {
         keys: [item => item.series.map(serie => serie.data("titles"))],
@@ -48,7 +48,7 @@ const SearchBox: FC = ({ children }) => {
 
       })
     )
-  }, [state.seriesList, state.userOptions.sort, state.userOptions.statusFilter])
+  }, [state.seriesList, state.userOptions.sort, state.userOptions.completition, state.userOptions.statusFilter, state.userOptions.smartCompletition])
   return (
     <Box>
       {/* <CompletitionMenu /> */}
@@ -58,13 +58,13 @@ const SearchBox: FC = ({ children }) => {
         <DonutLargeRoundedIcon />
       </IconButton>
       <SortMenu />
-      <IconButton>
+      {/* <IconButton>
         <SortIcon/>
       </IconButton>
       <IconButton>
         <FilterAltRoundedIcon/>
-      </IconButton>
-      
+      </IconButton> */}
+
 
       {
         isValidElement(children) ? React.cloneElement(children, { seriesToRender: res }) : <p>Shouldn't display</p>

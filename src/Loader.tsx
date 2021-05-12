@@ -11,6 +11,7 @@ import { relationPriority, updateCompletition, useStateWithLocalStorage } from '
 import { globalStateType, seriesListElementType, statsType } from './Types';
 import EastRounded from '@material-ui/icons/EastRounded';
 import { round } from 'lodash';
+import { avoidNodes, problematicNodes } from './ProblematicNodes';
 
 
 
@@ -32,26 +33,22 @@ const Loader: FC = () => {
 
   };
 
-  const parseDate = (date: [],) => {
-
-  }
-
   const parseNode = (node: any,) => {
     // node.nextAiringEpisode ? console.log(node) : null
     const compWeight = (node: any) => {
       //Calculating the weight of the element
-      if (node.status == "NOT_YET_RELEASED") return 0
+      if (node.status == "NOT_YET_RELEASED") return 1 //To avoid 100% weighted completition
       if (node.chapters) return node.chapters * 5
       if (node.volumes) return node.volumes * 50
       if (node.episodes && node.duration) return node.episodes * node.duration
-      //Releasing in List, is a bit useless
+      //Releasing in List, is a bit useless because for now weight is never used
       if (node.nextAiringEpisode?.episode && node.duration) return node.nextAiringEpisode?.episode * node.duration
 
       //THE APPROXIMATION ZONE
       //Releasing not in List, API won't let me get nextAiringEpisode
       let strDate = Object.values(node.startDate).filter(e => { return e != "FuzzyDate" && e }).join("-")
-      let days = (Date.now() - Date.parse(strDate)) / 8.64e+7
-      if (node.format == "MANGA") return round(days / 8.2) * 5
+      let days = (Date.now() - Date.parse(strDate)) / 8.64e+7 //Get days passed from start date
+      if (node.format == "MANGA") return round(days / 8.2) * 5 //8.2 for approximation to One Piece episodes count
       if (node.format == "TV") return round(days / 8.2) * 20
       return round(days / 8.2) * 20
     }
@@ -60,7 +57,7 @@ const Loader: FC = () => {
       id: node.id,
       status: 'NO',
       airStatus: node.status,
-      format: node.format,
+      format: node.format ?? "SPECIAL",
       title: node.title.userPreferred,
       titles: [...Object.values(node.title), ...node.synonyms].filter((v) => !["MediaTitle", null].includes(v)),
       siteUrl: node.siteUrl,
@@ -71,11 +68,6 @@ const Loader: FC = () => {
       // ce: node.nextAiringEpisode?.episode,
       // du: node.duration,
       compWeight: compWeight(node),
-      // startDate: [
-      //   node.startDate.year,
-      //   node.startDate.month,
-      //   node.startDate.day,
-      // ].join("-"),
       startDate: Object.values(node.startDate).filter(e => { return e != "FuzzyDate" && e }).join("-"),
     }
   }
@@ -172,8 +164,7 @@ const Loader: FC = () => {
       serieComplete.edges().remove()
       prunedEdges.map((e) => { e.restore() })
       // prunedEdges.map((e) => { cy.add(e) })
-
-      serieComplete.filter("edge[relation!='CHARACTER'],node").components().map((seriePart) => {
+      serieComplete.filter(`node, edge[relation!='CHARACTER']`).difference(avoidNodes()).components().map((seriePart) => {
         //Avoid unwatched orphan nodes after split
         if (seriePart.nodes().length != seriePart.filter("node[status='NO']").length) {
           cleanedComponents.push({ series: seriePart, serieComplete: serieComplete })
