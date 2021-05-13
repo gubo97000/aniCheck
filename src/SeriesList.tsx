@@ -13,6 +13,7 @@ import { checkBoxStateType, globalStateType, seriesListElementType } from './Typ
 import { FixedSizeList } from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
 import SearchBox from './SearchBox';
+import { dataForCyto } from './Utils';
 
 interface props {
   seriesToRender?: seriesListElementType[]
@@ -26,8 +27,8 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
   let [seriesList, setSeriesList] = useState<seriesListElementType[]>([])
 
   useEffect(() => {
-    setSeriesList(seriesToRender ?? state.seriesList ?? [])
-  }, [seriesToRender, state.seriesList])
+    setSeriesList(seriesToRender ?? Object.values(state.seriesDict) ?? [])
+  }, [seriesToRender, state.seriesDict])
   // seriesToRender = seriesToRender ? seriesToRender : state.seriesList
   // console.log(seriesList)
   // let [checked, setChecked]= useState("")
@@ -66,12 +67,12 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
     // checkBoxes[key].state[1](true)
 
 
-    setState(state => { return { ...state, seriesSelected: checkBoxes[key].series } })
+    // setState(state => { return { ...state, seriesSelected: checkBoxes[key].series } })
     // state.cyViz?.layout.stop(); 
     console.log(state.cyViz)
     console.log(state.seriesDict?.[key] ?? 0)
     state.cyViz?.elements().remove()
-    state.cyViz?.add(checkBoxes[key].series)
+    state.cyViz?.add(dataForCyto(checkBoxes[key].series))
     state.cyViz?.elements().makeLayout({
       name: "breadthfirst",
       // name: "cose",
@@ -86,14 +87,14 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
   function itemKey(index: number) {
     // Find the item at the specified index.
     // In this case "data" is an Array that was passed to List as "itemData".
-    const key = state.seriesList?.[index].seriesPrime.data("id") ?? "1";
+    const key = seriesList[index].seriesPrime.id ?? "1";
 
     // Return a value that uniquely identifies this item.
     return key;
   }
   return (
     <Box sx={{ height: "calc(100vh - 200px)" }}>
-      {state.seriesList ? (
+      {state.seriesDict ? (
         <AutoSizer>
           {({ height, width }) => (
             <FixedSizeList

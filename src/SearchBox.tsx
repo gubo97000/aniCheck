@@ -20,6 +20,7 @@ import CompletitionMenu from './CompletitionMenu';
 import DonutLargeRoundedIcon from '@material-ui/icons/DonutLargeRounded';
 import SortIcon from '@material-ui/icons/Sort';
 import FilterAltRoundedIcon from '@material-ui/icons/FilterAltRounded';
+import { getUntrackedObject } from 'proxy-compare';
 
 const SearchBox: FC = ({ children }) => {
   // console.log(props.children.props.children.props)
@@ -28,27 +29,34 @@ const SearchBox: FC = ({ children }) => {
   let [res, setRes] = useState<seriesListElementType[]>([])
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value)
-    // console.log(state.seriesList.map(({ series }) => series)[0])
     setRes(matchSorter(
       Object.values(state.seriesDict ?? []).filter(serie => { return !state.userOptions.statusFilter.includes(serie.status) }),
+      // list,
       event.target.value,
       {
-        keys: [item => item.series.map(serie => serie.data("titles"))],
+        // keys: [item => item.series.nodes.map(serie => serie.titles)],
+        keys: ["series.nodes.*.titles"],
       })
     )
   }
   useEffect(() => {
-    console.log(state.userOptions)
     setRes(matchSorter(
       Object.values(state.seriesDict ?? []).filter(serie => { return !state.userOptions.statusFilter.includes(serie.status) }),
       "",
       {
-        keys: [item => item.series.map(serie => serie.data("titles"))],
+        // keys: [item => item.series.nodes.map(serie => serie.titles)],
+        keys: ["series.nodes.*.titles"],
         sorter: (rankedItems) => { console.log(rankedItems); return getSortFc(state.userOptions.sort.type)(rankedItems, state.userOptions.sort.inverted) }
 
       })
     )
-  }, [state.seriesList, state.userOptions.sort, state.userOptions.completition, state.userOptions.statusFilter, state.userOptions.smartCompletition])
+  }, [
+    state.seriesDict,
+    state.userOptions.sort,
+    state.userOptions.completition,
+    state.userOptions.statusFilter,
+    state.userOptions.smartCompletition,
+  ])
   return (
     <Box>
       {/* <CompletitionMenu /> */}

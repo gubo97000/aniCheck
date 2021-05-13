@@ -4,7 +4,6 @@ export type globalStateType = {
     userOptions: userOptionType;
     modalOpenState?: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
     seriesSelected?: cytoscape.CollectionReturnValue;
-    seriesList?: seriesListElementType[];
     seriesDict: { [key: string]: seriesListElementType };
     cyViz?: cytoscape.Core;
     globalStats: statsType[string];
@@ -14,7 +13,7 @@ export type globalStateType = {
 export type checkBoxStateType = {
     id: string;
     state: [boolean, React.Dispatch<React.SetStateAction<boolean>>],
-    series: cytoscape.CollectionReturnValue
+    series: seriesListElementType["series"]
 }
 
 export type formatsType = "TV" | "TV_SHORT" | "MOVIE" | "SPECIAL" | "OVA" | "ONA" | "MUSIC" | "MANGA" | "NOVEL" | "ONE_SHOT"
@@ -47,11 +46,39 @@ export type statsType = {
     }
 }
 
+// export type seriesListElementType =
+//     {
+//         seriesPrime: cytoscape.NodeSingular;
+//         series: cytoscape.CollectionReturnValue;
+//         stats: statsType;
+//         status: serieStatusType;
+//         serieComplete: cytoscape.CollectionReturnValue;
+//     }
 export type seriesListElementType =
     {
-        seriesPrime: cytoscape.NodeSingular;
-        series: cytoscape.CollectionReturnValue;
+        seriesPrime: NodeType;
+        series: { nodes: NodeType[], edges: EdgeType[] };
         stats: statsType;
         status: serieStatusType;
-        serieComplete: cytoscape.CollectionReturnValue;
+        serieComplete: { nodes: NodeType[], edges: EdgeType[] };
     }
+
+export type NodeType = {
+    id: any;
+    status: string;
+    airStatus: any;
+    format: any;
+    title: string;
+    titles: string[];
+    siteUrl: any;
+    bannerImage: string;
+    popularity: any;
+    compWeight: number;
+    startDate: string;
+}
+export type EdgeType = {
+    id: any;
+    source: any;
+    target: any;
+    relation: string;
+}

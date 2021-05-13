@@ -21,7 +21,6 @@ const theme = createTheme({
 
 ReactDOM.render(
   <React.StrictMode>
-    <meta name="viewport" content="initial-scale=1, width=device-width" />
     <SharedStateProvider>
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>

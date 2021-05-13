@@ -18,6 +18,7 @@ import { convertBulkTerm, FORMATS, FORMATS_IDS, getBulkStat, sortAlphabetical, s
 import xor from "lodash/xor"
 import without from 'lodash/without';
 import { get, zipWith } from 'lodash';
+import { getUntrackedObject } from 'react-tracked';
 
 const CompletitionMenu: FC = () => {
     const [state, setState] = useSharedState();
@@ -93,12 +94,14 @@ const CompletitionMenu: FC = () => {
     }
 
     useEffect(() => {
-        updateCompletition(setState)
+        // setState(state => { return { ...state, globalStats: { ...state.globalStats, tot: 1 } } })
+        setState(state => updateCompletition(state) )
     }, [
         state.userOptions.completition,
         state.userOptions.smartCompletition,
         state.userOptions.mangaComposition,
-        state.userOptions.animeComposition])
+        state.userOptions.animeComposition,
+    ])
 
     return (
         <div>
@@ -136,11 +139,11 @@ const CompletitionMenu: FC = () => {
                     }
                     return
                 })}
-        <FormControlLabel
+            <FormControlLabel
                 control={
                     <Switch checked={!state.userOptions.smartCompletition} onClick={() => handleClick("smart")} />
                 } label="Custom" />
-        
+
             <Button
                 disabled={state.userOptions.smartCompletition}
                 onClick={() => handleClick("all")} >Select All

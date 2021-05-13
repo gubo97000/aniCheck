@@ -5,4 +5,4 @@ export const problematicNodes = [
     "118940", //Hamefura x Arte | Arte != Hamefura
 ]
 
-export const avoidNodes=()=>{return problematicNodes.map(id=>{return `#${id}`}).join(", ")}
+export const avoidNodes = () => { return problematicNodes.map(id => { return `#${id}` }).join(", ") }

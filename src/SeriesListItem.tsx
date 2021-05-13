@@ -23,7 +23,7 @@ const SeriesListItem: FC<props> = ({ index, style, data }) => {
   let { addState, remState, handleToggle, seriesList, test } = data
   let series: any = seriesList[index]?.series
   let seriesPrime: any = seriesList[index]?.seriesPrime
-  let key = seriesList[index]?.seriesPrime.data("id")
+  let key = seriesList[index]?.seriesPrime.id
   // useMemo(() => {  }, [])
   useLayoutEffect(() => {
     addState({ id: key, state: [checked, setChecked], series: series })
@@ -45,7 +45,7 @@ const SeriesListItem: FC<props> = ({ index, style, data }) => {
         border: "1px solid",
         borderColor: "grey.500",
         // bgcolor: 'background.paper',
-        background: `url(${seriesPrime.data("bannerImage")}) no-repeat center center`,
+        background: `url(${seriesPrime.bannerImage}) no-repeat center center`,
         backgroundSize: "cover",
         color: 'white',
         // boxShadow: 3,
@@ -66,7 +66,7 @@ const SeriesListItem: FC<props> = ({ index, style, data }) => {
         <ListItemText sx={{
           fontSize: "19px"
         }}
-          id={key} primary={seriesPrime.data("title") + seriesList[index].stats["selected"].missWeight} />
+          id={key} primary={seriesPrime.title + " " + seriesList[index].stats["selected"].missWeight} />
 
         <Box sx={{ position: 'relative', display: 'inline-flex' }}>
           <CircularProgress size={80} variant="determinate" color="primary" value={seriesList[index].stats["selected"].per} />
@@ -104,7 +104,7 @@ const SeriesListItem: FC<props> = ({ index, style, data }) => {
             {/* <CircularProgress variant="determinate" color="primary" value={seriesList[index].stats.animePer} /> */}
           </Box>
         </Box>
-     
+
       </ListItem>
     </Box>
   )

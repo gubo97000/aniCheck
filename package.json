@@ -12,6 +12,7 @@
     "@apollo/client": "^3.3.14",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.3.0",
+    "@koale/useworker": "^4.0.1",
     "@material-ui/core": "^5.0.0-alpha.30",
     "@material-ui/icons": "^5.0.0-alpha.28",
     "@material-ui/lab": "^5.0.0-alpha.32",
