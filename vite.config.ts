@@ -13,20 +13,10 @@ export default defineConfig({
             },
         ],
     },
-    // optimizeDeps: {
-    //     keepNames: true,
-    // },
-    // esbuild: {
-    //     // keepNames: true,
-    // },
     build: {
-        // minify: false,
         terserOptions: {
             mangle: {
-                // module: false,
                 reserved: ['cytoscape',"__assign"],
-                // keep_fnames: /cytoscape/g,
-                // keep_classnames: /cytoscape/g,
             }
         }
     }

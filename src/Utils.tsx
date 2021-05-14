@@ -1,6 +1,6 @@
 import * as cytoscape from "cytoscape";
 // import cytoscape from "cytoscape";
-import React from "react";
+import { useEffect, useState } from "react";
 import { avoidNodes } from "./ProblematicNodes";
 import { useSharedState } from "./Store";
 import { formatsType, globalStateType, seriesListElementType, serieStatusType, statsType, userOptionType } from "./Types";
@@ -13,11 +13,11 @@ export function useStateWithLocalStorage<T>(localStorageKey: string, defaultValu
         localStorage.removeItem(localStorageKey)
     }
 
-    const [value, setValue] = React.useState<T>(
+    const [value, setValue] = useState<T>(
         JSON.parse(localStorage.getItem(localStorageKey) ?? JSON.stringify(defaultValue)) as T
     );
 
-    React.useEffect(() => {
+    useEffect(() => {
         localStorage.setItem(localStorageKey, JSON.stringify(value));
     }, [value]);
 
@@ -28,7 +28,7 @@ export function useStateWithLocalStorage<T>(localStorageKey: string, defaultValu
 function useLocalStorage<T>(key: string, initialValue: T) {
     // State to store our value
     // Pass initial state function to useState so logic is only executed once
-    const [storedValue, setStoredValue] = React.useState<T>(() => {
+    const [storedValue, setStoredValue] = useState<T>(() => {
         try {
             // Get from local storage by key
             const item = window.localStorage.getItem(key);
@@ -57,6 +57,27 @@ function useLocalStorage<T>(key: string, initialValue: T) {
         }
     };
     return [storedValue, setValue] as const;
+}
+
+// Debounce Hook
+export function useDebounce<T>(value: T, delay: number): T {
+    // State and setters for debounced value
+    const [debouncedValue, setDebouncedValue] = useState<T>(value);
+    useEffect(
+        () => {
+            // Update debounced value after delay
+            const handler = setTimeout(() => {
+                setDebouncedValue(value);
+            }, delay);
+
+            // Cancel the timeout if value changes (also on delay change or unmount)
+            return () => {
+                clearTimeout(handler);
+            };
+        },
+        [value, delay] // Only re-call effect if value or delay changes
+    );
+    return debouncedValue;
 }
 
 //Sort Functions
@@ -176,10 +197,11 @@ export function getBulkStat(formatArr: string[], stats: statsType) {
  */
 export const updateCompletition = (state: globalStateType) => {
     console.log(JSON.stringify(state.globalStats))
-    let globalStats: globalStateType["globalStats"] = { 
-        tot:Object.keys(state.seriesDict).length, 
-        got: 0, 
-        miss: 0 }
+    let globalStats: globalStateType["globalStats"] = {
+        tot: Object.keys(state.seriesDict).length,
+        got: 0,
+        miss: 0
+    }
 
 
     //Smart Completition Mode
@@ -257,7 +279,7 @@ export const updateCompletition = (state: globalStateType) => {
         }
     }
 
-    return {...state, globalStats:globalStats}
+    return { ...state, globalStats: globalStats }
 
 }
 
@@ -294,7 +316,7 @@ export const relationPriority: { [key: string]: number } = {
  * @param problematicNodes 
  * @returns 
  */
-export const computeData = (data: any[], relationPriority: { [key: string]: number }, problematicNodes: string[]) => { 
+export const computeData = (data: any[], relationPriority: { [key: string]: number }, problematicNodes: string[]) => {
     const cy = cytoscape({ headless: true })
 
     const avoidNodes = () => { return problematicNodes.map(id => { return `#${id}` }).join(", ") }
