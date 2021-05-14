@@ -23,7 +23,8 @@ const Loader: FC = () => {
   let [error, setError] = useState("");
   let [usr, setUsr] = useStateWithLocalStorage<string>("usr", "")
   const [workerFn, { status: statusWorker, kill: killWorker }] = useWorker(computeData, {
-    remoteDependencies: ["https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.18.2/cytoscape.min.js"],
+    remoteDependencies: ["https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.18.2/cytoscape.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/tslib/2.2.0/tslib.min.js"],
   })
   const handleTextInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsr(event.target.value)

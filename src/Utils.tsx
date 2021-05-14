@@ -1,4 +1,5 @@
-import cytoscape from "cytoscape";
+import * as cytoscape from "cytoscape";
+// import cytoscape from "cytoscape";
 import React from "react";
 import { avoidNodes } from "./ProblematicNodes";
 import { useSharedState } from "./Store";
@@ -293,7 +294,9 @@ export const relationPriority: { [key: string]: number } = {
  * @param problematicNodes 
  * @returns 
  */
-export const computeData = (data: any[], relationPriority: { [key: string]: number }, problematicNodes: string[]) => {
+export const computeData = (data: any[], relationPriority: { [key: string]: number }, problematicNodes: string[]) => { 
+    const cy = cytoscape({ headless: true })
+
     const avoidNodes = () => { return problematicNodes.map(id => { return `#${id}` }).join(", ") }
     const parseNode = (node: any,) => {
         // node.nextAiringEpisode ? console.log(node) : null
@@ -365,7 +368,6 @@ export const computeData = (data: any[], relationPriority: { [key: string]: numb
         return [nodes, edges]
     }
 
-    let cy = cytoscape({ headless: true })
     const [nodes, edges] = loadList(data)
 
     console.log(nodes, edges)
