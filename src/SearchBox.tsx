@@ -15,7 +15,7 @@ import { FixedSizeList } from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
 import { matchSorter } from 'match-sorter'
 import SortMenu from './SortMenu';
-import { getSortFc, useDebounce } from './Utils';
+import { getSortFc, useAsync, useDebounce } from './Utils';
 import CompletitionMenu from './CompletitionMenu';
 import DonutLargeRoundedIcon from '@material-ui/icons/DonutLargeRounded';
 import SortIcon from '@material-ui/icons/Sort';
@@ -27,22 +27,42 @@ const SearchBox: FC = ({ children }) => {
   // console.log(props.children.props.children.props)
   const [state, setState] = useSharedState();
   const [query, setQuery] = useState("")
-  const debQuery = useDebounce(query, 500)
+  const debQuery = useDebounce(query, 800)
   const [res, setRes] = useState<seriesListElementType[]>([])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value)
   }
-  useEffect(() => {
+
+  //Completely useless async function, left here as a reminder of my stupidity
+  const aSearch = () => {
+    return new Promise<seriesListElementType[]>((resolve, reject) => {
+      let res = matchSorter(
+        Object.values(state.seriesDict ?? []).filter(serie => { return !state.userOptions.statusFilter.includes(serie.status) }),
+        debQuery,
+        {
+          keys: ["series.nodes.*.titles"],
+          sorter: debQuery ? undefined : (rankedItems) => { console.log(rankedItems); return getSortFc(state.userOptions.sort.type)(rankedItems, state.userOptions.sort.inverted) }
+        })
+      resolve(res)
+    })
+
+  }
+  const { execute, status, value: asyncRes, error } = useAsync(aSearch, false);
+
+  const search = () => {
     setRes(matchSorter(
       Object.values(state.seriesDict ?? []).filter(serie => { return !state.userOptions.statusFilter.includes(serie.status) }),
       debQuery,
       {
-        // keys: [item => item.series.nodes.map(serie => serie.titles)],
         keys: ["series.nodes.*.titles"],
         sorter: debQuery ? undefined : (rankedItems) => { console.log(rankedItems); return getSortFc(state.userOptions.sort.type)(rankedItems, state.userOptions.sort.inverted) }
       })
     )
+  }
+
+  useEffect(() => {
+    search()
   }, [
     debQuery,
     state.seriesDict,
@@ -54,7 +74,6 @@ const SearchBox: FC = ({ children }) => {
   return (
     <Box>
       {/* <CompletitionMenu /> */}
-
       <TextField value={query} onChange={handleChange} />
       <IconButton onClick={() => { state.modalOpenState?.[1](true) }}>
         <DonutLargeRoundedIcon />

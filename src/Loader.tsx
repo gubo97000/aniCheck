@@ -19,19 +19,18 @@ import { getUntrackedObject } from 'react-tracked';
 
 const Loader: FC = () => {
   const [state, setState] = useSharedState();
-  let [loading, setLoading] = useState(false);
-  let [error, setError] = useState("");
   let [usr, setUsr] = useStateWithLocalStorage<string>("usr", "")
   const [workerFn, { status: statusWorker, kill: killWorker }] = useWorker(computeData, {
     remoteDependencies: ["https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.18.2/cytoscape.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/tslib/2.2.0/tslib.min.js"],
+      // "https://cdnjs.cloudflare.com/ajax/libs/tslib/2.2.0/tslib.min.js",
+    ],
   })
   const handleTextInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsr(event.target.value)
   }
 
   const startQuery = () => {
-    // console.log(variables)
+    setState(state=>{return{...state,status:["ok"," "]}})
     getAnimeLists({
       variables: { user: usr, type: "ANIME" },
     })
@@ -73,19 +72,25 @@ const Loader: FC = () => {
   });
 
   useEffect(() => {
-    if (statusAnime.loading || statusManga.loading || statusWorker == "RUNNING") {
-      setLoading(true)
-    } else {
-      setLoading(false)
+    let status: globalStateType["status"][0] = "ok"
+    let log: globalStateType["status"][1] = " "
+    if (statusAnime.loading) {
+      status = "loading"
+      log = "Loading your Anime List"
+    } else if (statusManga.loading) {
+      status = "loading"
+      log = "Loading your Manga List"
+    } else if (statusWorker == "RUNNING") {
+      status = "loading"
+      log = "Computing received data"
+    } else if (statusAnime.error) {
+      status = "error"
+      log = statusAnime.error.message
+    } else if (statusManga.error) {
+      status = "error"
+      log = statusManga.error.message
     }
-    if (statusAnime.error) {
-      setError(statusAnime.error.message)
-    }
-    else if (statusManga.error) {
-      setError(statusManga.error.message)
-    } else {
-      setError(" ")
-    }
+    setState(state => { return { ...state, status: [status, log] } })
   }, [statusAnime, statusManga, statusWorker])
 
   return (<div>
@@ -103,7 +108,7 @@ const Loader: FC = () => {
         </Avatar>
       </Grid>
       <Grid item>
-        <FormControl sx={{ m: 1, width: '100%' }} variant="standard">
+        <FormControl sx={{ m: 1, width: '100%' }} variant="standard" error={state.status[0]=="error"}>
           <Input
             id="standard-adornment-password"
             placeholder="AniList Nick"
@@ -113,7 +118,7 @@ const Loader: FC = () => {
             onKeyPress={(ev) => { if (ev.key == "Enter") { startQuery() } }}
             endAdornment={
               <InputAdornment position="end">
-                {loading ?
+                {state.status[0] == "loading" ?
                   (<CircularProgress />)
                   : (<IconButton
                     aria-label="get user anime"
@@ -124,7 +129,7 @@ const Loader: FC = () => {
               </InputAdornment>
             }
           />
-          <FormHelperText id="standard-weight-helper-text">{error}</FormHelperText>
+          <FormHelperText  error={state.status[0] == "error"} id="standard-weight-helper-text">{state.status[1]}</FormHelperText>
         </FormControl>
       </Grid>
     </Grid>

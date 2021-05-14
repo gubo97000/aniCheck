@@ -7,6 +7,7 @@ export type globalStateType = {
     seriesDict: { [key: string]: seriesListElementType };
     cyViz?: cytoscape.Core;
     globalStats: statsType[string];
+    status:["ok"|"loading"|"error", string]
 
 };
 
