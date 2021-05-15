@@ -85,3 +85,21 @@ query ($user: String!, $type: MediaType){
   }
 }
 `;
+
+export const GET_USER = gql`
+query($user: String!){
+  User(name: $user) {
+   name
+    bannerImage
+    avatar {
+      medium
+    }
+    options {
+      profileColor
+      titleLanguage
+      displayAdultContent
+      airingNotifications 
+    }
+  }
+}
+`;

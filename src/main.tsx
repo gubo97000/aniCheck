@@ -10,25 +10,20 @@ import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { css, jsx } from '@emotion/react'
 import { createTheme } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
+import Theme from './Theme';
 
 const client = new ApolloClient({ uri: 'https://graphql.anilist.co', cache: new InMemoryCache() });
-
-const theme = createTheme({
-  palette: {
-    mode: 'light',
-  },
-});
 
 ReactDOM.render(
   <React.StrictMode>
     <SharedStateProvider>
       <ApolloProvider client={client}>
-        <ThemeProvider theme={theme}>
+        <Theme>
           <Grid container>
             <Vis />
             <Nav />
           </Grid>
-        </ThemeProvider>
+        </Theme>
       </ApolloProvider>
     </SharedStateProvider>
   </React.StrictMode>,

@@ -22,6 +22,7 @@ const initialState: globalStateType = {
     statusFilter: ["COMPLETE", "ERR"]
   },
   seriesDict: {},
+  user:{},
   globalStats: { tot: 0, miss: 0, got: 0 },
   status: ["ok", " "]
   // seriesSelected: ,

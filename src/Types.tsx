@@ -7,7 +7,8 @@ export type globalStateType = {
     seriesDict: { [key: string]: seriesListElementType };
     cyViz?: cytoscape.Core;
     globalStats: statsType[string];
-    status:["ok"|"loading"|"error", string]
+    status: ["ok" | "loading" | "error", string];
+    user: userType;
 
 };
 
@@ -82,4 +83,8 @@ export type EdgeType = {
     source: any;
     target: any;
     relation: string;
+}
+export type userType = {
+    avatar?: string;
+    color?: string;
 }

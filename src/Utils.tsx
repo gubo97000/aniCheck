@@ -547,3 +547,13 @@ export const computeData = (data: any[], relationPriority: { [key: string]: numb
 export const dataForCyto = (serie: seriesListElementType["series"]) => {
     return [...serie.nodes, ...serie.edges].map(el => { return { data: el } })
 }
+
+export const COLOR_CODES:{ [key: string]: string }={
+    "blue": "#3DB4F2",
+    "puple": "#C063FF",
+    "green": "#4CCA51",
+    "orange": "#EF881A",
+    "red": "#E13333",
+    "pink": "#FC9DD6",
+    "gray": "#677B94",
+}
