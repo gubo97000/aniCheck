@@ -20,6 +20,7 @@ import fcose from 'cytoscape-fcose';
 import nodeHtmlLabel from 'cytoscape-node-html-label';
 import { renderToString } from 'react-dom/server';
 import GraphNode from './GraphNode';
+import { dataForCyto } from './Utils';
 
 
 function Viz() {
@@ -40,16 +41,15 @@ function Viz() {
 
     }
 
-
     let cy = cytoscape({
       container: cyRef.current,
-      wheelSensitivity:0.3,
+      wheelSensitivity: 0.3,
       elements: [ // list of graph elements to start with
         { // node a
-          data: { id: 'a', title: "Welcome to AniCheck!", startDate:"2020-02-01", format: "helo" }
+          data: { id: 'a', title: "Welcome to AniCheck!", startDate: "2020-02-01", format: "helo" }
         },
         { // node b
-          data: { id: 'b', title: "Check", startDate:"2020-02-01", format: "HELO" }
+          data: { id: 'b', title: "Check", startDate: "2020-02-01", format: "HELO" }
         },
         { // edge ab
           data: { id: 'ab', source: 'a', target: 'b' }
@@ -162,56 +162,52 @@ function Viz() {
     cy.on("cxttapend", "node", (evt) => {
       console.log("cxttapend on node")
       window.open(evt.target.data("siteUrl"), "_blank")
-    })
+    });
     cy.on("tap", "node,edge", (evt) => {
       console.log(evt.target.data())
-    })
+    });
 
-    // let node : any = cy.nodes().first();
-    // console.log(node)
-
-    // let pop = node.popper({
-    //   content: () => {
-    //     let div = document.createElement('div');
-
-    //     div.innerHTML = 'Sticky Popper content';
-
-    //     document.body.appendChild( div );
-
-    //     return div;
-    //   }
-    // });
-    // let update = () => {
-    //   pop.update();
-    // };  
-    // node.on('position', update);
-    // cy.on('pan zoom resize', update);
-    function fixForNoTypeOfNodeHtmlLabel(cy:any){
-      //Adding Nice Node Layout as Label
-      cy.nodeHtmlLabel([
-        {
-          query: 'node', // cytoscape query selector
-          halign: 'center', // title vertical position. Can be 'left',''center, 'right'
-          valign: 'center', // title vertical position. Can be 'top',''center, 'bottom'
-          halignBox: 'center', // title vertical position. Can be 'left',''center, 'right'
-          valignBox: 'center', // title relative box vertical position. Can be 'top',''center, 'bottom'
-          cssClass: '', // any classes will be as attribute of <div> container for every title
-          tpl(data: any) {
-            return renderToString(<GraphNode data={data} />);
-          }
+    //Adding Nice Node Layout as Label
+    (cy as any).nodeHtmlLabel([
+      {
+        query: 'node', // cytoscape query selector
+        halign: 'center', // title vertical position. Can be 'left',''center, 'right'
+        valign: 'center', // title vertical position. Can be 'top',''center, 'bottom'
+        halignBox: 'center', // title vertical position. Can be 'left',''center, 'right'
+        valignBox: 'center', // title relative box vertical position. Can be 'top',''center, 'bottom'
+        cssClass: '', // any classes will be as attribute of <div> container for every title
+        tpl(data: any) {
+          return renderToString(<GraphNode data={data} />);
         }
-      ]);
-    }
-    fixForNoTypeOfNodeHtmlLabel(cy)
+      }
+    ]);
 
     setState(state => { return { ...state, cyViz: cy } })
   }, [])
 
-  const receiveCy = (cy: cytoscape.Core) => {
-    console.log(cy)
-    // console.log("reCy")
-    setState(state => { return { ...state, cyViz: cy } })
-  }
+  useEffect(() => {
+    setState(
+      state => {
+        if (state.seriesSelected && state.cyViz) {
+          console.log(state.cyViz)
+          console.log(state.seriesSelected)
+          state.cyViz.elements().remove()
+          state.cyViz.add(dataForCyto(state.seriesSelected.series))
+
+          state.cyViz.elements().makeLayout({
+            name: "breadthfirst",
+            roots: [state.seriesSelected.seriesPrime.id],
+            // directed: true,
+            // padding: 10
+          }).run();
+          state.cyViz?.center();
+        }
+
+        return{...state}
+      }
+    )
+
+  }, [state.seriesSelected])
 
   const handleClick = () => {
     state.cyViz?.elements().makeLayout({
@@ -237,11 +233,10 @@ function Viz() {
       // roots: [state.seriesSelected.],
       // directed: true,
       // padding: 10
-    }as any).run();
+    } as any).run();
   }
-
   const handleClickKlay = () => {
-    (state.cyViz?.style() as any).selector("edge").style("curve-style","bezier")
+    (state.cyViz?.style() as any).selector("edge").style("curve-style", "bezier")
     state.cyViz?.elements().makeLayout({
       name: "klay",
       animate: true,
@@ -252,8 +247,8 @@ function Viz() {
         layoutHierarchy: false,
         spacing: 40, // Overall setting for the minimal amount of space to be left between objects
         // nodeLayering:'LONGEST_PATH',
-        nodeLayering:'NETWORK_SIMPLEX',
-      
+        nodeLayering: 'NETWORK_SIMPLEX',
+
         mergeEdges: true,
         thoroughness: 50, // How much effort should be spent to produce a nice layout..
       }
@@ -267,7 +262,7 @@ function Viz() {
     state.cyViz?.elements().makeLayout({
       name: "cola",
       animate: true,
-      nodeSpacing: ()=>{ return 50; }, // extra spacing around nodes
+      nodeSpacing: () => { return 50; }, // extra spacing around nodes
       randomize: true,
       // nodeDimensionsIncludeLabels: true,
       // roots: [state.seriesSelected.],
@@ -276,7 +271,7 @@ function Viz() {
     } as any).run();
   }
   const handleClickDagre = () => {
-    (state.cyViz?.style() as any).selector("edge").style("curve-style","bezier")
+    (state.cyViz?.style() as any).selector("edge").style("curve-style", "bezier")
     state.cyViz?.elements().makeLayout({
       name: "dagre",
       animate: true,
@@ -287,7 +282,7 @@ function Viz() {
       // padding: 10
     } as any).run();
   }
-  // const layout = { name: 'breadthfirst' };
+
   return (
     <Grid sx={{
       position: "relative",

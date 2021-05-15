@@ -333,7 +333,7 @@ export const updateCompletition = (state: globalStateType) => {
             }
         }
     }
-    console.log(state.globalStats)
+    console.log(globalStats)
     return { ...state, globalStats: globalStats }
 
 }
@@ -575,7 +575,7 @@ export const dataForCyto = (serie: seriesListElementType["series"]) => {
 
 export const COLOR_CODES: { [key: string]: string } = {
     "blue": "#3DB4F2",
-    "puple": "#C063FF",
+    "purple": "#C063FF",
     "green": "#4CCA51",
     "orange": "#EF881A",
     "red": "#E13333",

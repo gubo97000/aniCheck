@@ -3,7 +3,7 @@ export type globalStateType = {
     cy: cytoscape.Core;
     userOptions: userOptionType;
     modalOpenState?: [boolean, React.Dispatch<React.SetStateAction<boolean>>]
-    seriesSelected?: cytoscape.CollectionReturnValue;
+    seriesSelected?: seriesListElementType;
     seriesDict: { [key: string]: seriesListElementType };
     cyViz?: cytoscape.Core;
     globalStats: statsType[string];

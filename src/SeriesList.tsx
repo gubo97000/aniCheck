@@ -30,60 +30,6 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
     setSeriesList(seriesToRender ?? Object.values(state.seriesDict) ?? [])
     listRef.current?.scrollTo(0)
   }, [seriesToRender, state.seriesDict])
-  // seriesToRender = seriesToRender ? seriesToRender : state.seriesList
-  // console.log(seriesList)
-  // let [checked, setChecked]= useState("")
-  let [stupidFix, setStupidFix] = useState("Very Stupid Fix")
-  let checked: string = useMemo(() => { return "" }, [stupidFix])
-  var checkBoxes: { [key: string]: checkBoxStateType } = useMemo(() => { return {} }, [stupidFix])
-  const addState = (chkState: checkBoxStateType) => {
-    // console.log("addState " + chkState.id)
-    checkBoxes[chkState.id] = {
-      id: chkState.id,
-      state: chkState.state,
-      series: chkState.series
-    }
-    if (checked == chkState.id) {
-      chkState.state[1](true)
-    }
-  }
-  const remState = (id: string) => {
-    // console.log("remState " + id)
-    delete checkBoxes[id]
-  }
-  const handleToggle = (key: string) => {
-    // console.log("called",key, checked)
-    if (checked) {
-      // console.log("Hello")
-      checkBoxes?.[checked]?.state?.[1](false)
-    }
-    checked = key
-    checkBoxes[key].state[1](true)
-    // console.log(checked)
-    // if (checked) {
-    //   console.log("Hello")
-    //   checkBoxes[checked].state[1](false)
-    // }
-    // setChecked(key)
-    // checkBoxes[key].state[1](true)
-
-
-    // setState(state => { return { ...state, seriesSelected: checkBoxes[key].series } })
-    // state.cyViz?.layout.stop(); 
-    console.log(state.cyViz)
-    console.log(state.seriesDict?.[key] ?? 0)
-    state.cyViz?.elements().remove()
-    state.cyViz?.add(dataForCyto(checkBoxes[key].series))
-    state.cyViz?.elements().makeLayout({
-      name: "breadthfirst",
-      // name: "cose",
-      roots: [checked],
-      // directed: true,
-      // padding: 10
-    }).run();
-    state.cyViz?.center();
-
-  };
 
   function itemKey(index: number) {
     // Find the item at the specified index.
@@ -105,9 +51,6 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
               width={width}
               itemCount={seriesList?.length ?? 0}
               itemData={{
-                addState: addState,
-                remState: remState,
-                handleToggle: handleToggle,
                 seriesList: seriesList,
               }}
               itemKey={itemKey}

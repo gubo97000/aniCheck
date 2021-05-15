@@ -7,28 +7,26 @@ import cytoscape from 'cytoscape';
 import { useQuery, gql } from '@apollo/client';
 import Loader from './Loader';
 import { keycharm } from 'vis-network';
-import { checkBoxStateType } from './Types';
+import { checkBoxStateType, seriesListElementType } from './Types';
 import { useSharedState } from './Store';
 
 interface props {
   index: number,
   style: any,
-  data: any,
+  data: { seriesList: seriesListElementType[] },
 }
 
 const SeriesListItem: FC<props> = ({ index, style, data }) => {
   const [state, setState] = useSharedState();
   const [checked, setChecked] = useState(false)
   // console.log(data)
-  let { addState, remState, handleToggle, seriesList, test } = data
-  let series: any = seriesList[index]?.series
-  let seriesPrime: any = seriesList[index]?.seriesPrime
-  let key = seriesList[index]?.seriesPrime.id
-  // useMemo(() => {  }, [])
+  let serieEl = data.seriesList[index]
+  let { series, seriesPrime } = serieEl
+  let key = seriesPrime.id
+
   useLayoutEffect(() => {
-    addState({ id: key, state: [checked, setChecked], series: series })
-    return () => { remState(key) }
-  }, [])
+    setChecked(state.seriesSelected?.seriesPrime.id == key)
+  }, [state.seriesSelected])
   return (
     <Box
       style={{ ...style }}
@@ -58,18 +56,19 @@ const SeriesListItem: FC<props> = ({ index, style, data }) => {
         key={key}
         // role={undefined}
         button onClick={() => {
-          addState({ id: key, state: [checked, setChecked], series: series });
-          handleToggle(key)
+          // addState({ id: key, state: [checked, setChecked], series: series });
+          // handleToggle(key)
+          setState(state => { return { ...state, seriesSelected: serieEl } })
         }}
       >
 
         <ListItemText sx={{
           fontSize: "19px"
         }}
-          id={key} primary={seriesPrime.title + " " + seriesList[index].stats["selected"].missWeight} />
+          id={key} primary={seriesPrime.title + " " + serieEl.stats["selected"].missWeight + " " + checked} />
 
         <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-          <CircularProgress size={80} variant="determinate" color="primary" value={seriesList[index].stats["selected"].per} />
+          <CircularProgress size={80} variant="determinate" color="primary" value={serieEl.stats["selected"].per} />
           <Box
             sx={{
               top: 0,
@@ -82,12 +81,12 @@ const SeriesListItem: FC<props> = ({ index, style, data }) => {
               justifyContent: 'center',
             }}
           >
-            <Typography>{seriesList[index].stats["selected"].per}</Typography>
-            {/* <CircularProgress variant="determinate" color="primary" value={seriesList[index].stats.mangaPer} /> */}
+            <Typography>{serieEl.stats["selected"].per}</Typography>
+            {/* <CircularProgress variant="determinate" color="primary" value={serieEl.stats.mangaPer} /> */}
           </Box>
         </Box>
         <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-          <CircularProgress variant="determinate" color="secondary" value={seriesList[index].stats["selected"].perWeight} />
+          <CircularProgress variant="determinate" color="secondary" value={serieEl.stats["selected"].perWeight} />
           <Box
             sx={{
               top: 0,
@@ -100,8 +99,8 @@ const SeriesListItem: FC<props> = ({ index, style, data }) => {
               justifyContent: 'center',
             }}
           >
-            <Typography>{seriesList[index].stats["selected"].perWeight}</Typography>
-            {/* <CircularProgress variant="determinate" color="primary" value={seriesList[index].stats.animePer} /> */}
+            <Typography>{serieEl.stats["selected"].perWeight}</Typography>
+            {/* <CircularProgress variant="determinate" color="primary" value={serieEl.stats.animePer} /> */}
           </Box>
         </Box>
 

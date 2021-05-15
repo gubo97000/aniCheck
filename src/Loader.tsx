@@ -90,7 +90,6 @@ const Loader: FC = () => {
   useEffect(() => {
     let status: globalStateType["status"][0] = "ok"
     let log: globalStateType["status"][1] = " "
-
     if (statusUser.loading) {
       status = "loading"
       log = "Loading User Info"
@@ -114,7 +113,7 @@ const Loader: FC = () => {
       log = statusManga.error.message
     }
     setState(state => { return { ...state, status: [status, log] } })
-  }, [statusAnime, statusManga, statusWorker])
+  }, [statusUser, statusAnime, statusManga, statusWorker])
 
   return (<div>
     {/* <TextField id="username" value={usr} onChange={handleTextInput} label="Your AniList nick" /> */}
