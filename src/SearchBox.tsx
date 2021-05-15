@@ -20,7 +20,6 @@ import CompletitionMenu from './CompletitionMenu';
 import DonutLargeRoundedIcon from '@material-ui/icons/DonutLargeRounded';
 import SortIcon from '@material-ui/icons/Sort';
 import FilterAltRoundedIcon from '@material-ui/icons/FilterAltRounded';
-import { getUntrackedObject } from 'proxy-compare';
 import { useWorker } from '@koale/useworker';
 
 const SearchBox: FC = ({ children }) => {

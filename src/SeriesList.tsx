@@ -22,12 +22,13 @@ interface props {
 
 const SeriesList: FC<props> = ({ seriesToRender }) => {
   // console.log(seriesToRender)
-
+  const listRef = React.createRef<FixedSizeList<any>>();
   const [state, setState] = useSharedState();
   let [seriesList, setSeriesList] = useState<seriesListElementType[]>([])
 
   useEffect(() => {
     setSeriesList(seriesToRender ?? Object.values(state.seriesDict) ?? [])
+    listRef.current?.scrollTo(0)
   }, [seriesToRender, state.seriesDict])
   // seriesToRender = seriesToRender ? seriesToRender : state.seriesList
   // console.log(seriesList)
@@ -98,6 +99,7 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
         <AutoSizer>
           {({ height, width }) => (
             <FixedSizeList
+              ref={listRef}
               height={height}
               itemSize={140}
               width={width}
