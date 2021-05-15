@@ -23,7 +23,7 @@ const initialState: globalStateType = {
   },
   seriesDict: {},
   user:{},
-  globalStats: { tot: 0, miss: 0, got: 0 },
+  globalStats: { tot: 0, miss: 0, got: 0, plan: 0 },
   status: ["ok", " "]
   // seriesSelected: ,
   // seriesList: { seriesPrime: cytoscape({ headless: true }).elements(), series: cytoscape({ headless: true }).elements() },

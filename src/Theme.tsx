@@ -29,7 +29,7 @@ const Theme: FC = ({ children }) => {
         palette: {
             mode: 'light',
             primary: {
-                main: state.user.color??"#3f51b5",
+                main: state.user.color ?? "#3f51b5",
             },
         },
     });

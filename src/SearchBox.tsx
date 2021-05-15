@@ -55,7 +55,7 @@ const SearchBox: FC = ({ children }) => {
       debQuery,
       {
         keys: ["series.nodes.*.titles"],
-        sorter: debQuery ? undefined : (rankedItems) => { console.log(rankedItems); return getSortFc(state.userOptions.sort.type)(rankedItems, state.userOptions.sort.inverted) }
+        sorter: debQuery ? undefined : (rankedItems) => { return getSortFc(state.userOptions.sort.type)(rankedItems, state.userOptions.sort.inverted) }
       })
     )
   }

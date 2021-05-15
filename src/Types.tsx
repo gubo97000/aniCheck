@@ -20,6 +20,9 @@ export type checkBoxStateType = {
 
 export type formatsType = "TV" | "TV_SHORT" | "MOVIE" | "SPECIAL" | "OVA" | "ONA" | "MUSIC" | "MANGA" | "NOVEL" | "ONE_SHOT"
 export type serieStatusType = "COMPLETE" | "PLAN_TO_COMPLETE" | "NOT_COMPLETE" | "ERR"
+export type relationsType = 'CHARACTER' | 'SEQUEL' | 'SIDE_STORY' | 'SOURCE' | 'ALTERNATIVE' | 'SPIN_OFF' | 'SUMMARY' | 'COMPILATION' | 'CONTAINS' | 'PREQUEL' | 'ADAPTATION' | 'PARENT' | 'OTHER'
+export type statusType = "CURRENT" | "PLANNING" | "COMPLETED" | "DROPPED" | "PAUSED" | "REPEATING" | "NO"
+
 
 export type userOptionType = {
     sort: sortType;
@@ -40,22 +43,16 @@ export type statsType = {
         tot: number;
         miss: number;
         got: number;
+        plan: number;
         per?: number;
         totWeight?: number;
         missWeight?: number;
         gotWeight?: number;
+        planWeight?: number;
         perWeight?: number;
     }
 }
 
-// export type seriesListElementType =
-//     {
-//         seriesPrime: cytoscape.NodeSingular;
-//         series: cytoscape.CollectionReturnValue;
-//         stats: statsType;
-//         status: serieStatusType;
-//         serieComplete: cytoscape.CollectionReturnValue;
-//     }
 export type seriesListElementType =
     {
         seriesPrime: NodeType;

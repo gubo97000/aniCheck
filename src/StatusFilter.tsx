@@ -21,6 +21,7 @@ import SouthRoundedIcon from '@material-ui/icons/SouthRounded';
 import CheckCircleOutlineRoundedIcon from '@material-ui/icons/CheckCircleOutlineRounded';
 import HighlightOffRoundedIcon from '@material-ui/icons/HighlightOffRounded';
 import AdjustRoundedIcon from '@material-ui/icons/AdjustRounded';
+import CloudCircleIcon from '@material-ui/icons/CloudCircle';
 import Stack from '@material-ui/core/Stack';
 import xor from 'lodash/xor';
 
@@ -63,13 +64,17 @@ const StatusFilter: FC = () => {
                     <CheckCircleOutlineRoundedIcon />
                     {state.globalStats.got}
                 </FilterButton>
+                <FilterButton statusId="PLAN_TO_COMPLETE">
+                    <CloudCircleIcon />
+                    {state.globalStats.plan}
+                </FilterButton>
                 <FilterButton statusId="NOT_COMPLETE">
                     <AdjustRoundedIcon />
                     {state.globalStats.miss}
                 </FilterButton>
                 <FilterButton statusId="ERR">
                     <HighlightOffRoundedIcon />
-                    {state.globalStats.tot - (state.globalStats.got + state.globalStats.miss)}
+                    {state.globalStats.tot - (state.globalStats.got + state.globalStats.miss + state.globalStats.plan)}
                 </FilterButton>
             </Stack>
         </Box>

@@ -3,7 +3,7 @@ import * as cytoscape from "cytoscape";
 import { useCallback, useEffect, useState } from "react";
 import { avoidNodes } from "./ProblematicNodes";
 import { useSharedState } from "./Store";
-import { formatsType, globalStateType, seriesListElementType, serieStatusType, statsType, userOptionType } from "./Types";
+import { formatsType, globalStateType, relationsType, seriesListElementType, serieStatusType, statsType, userOptionType } from "./Types";
 
 export function useStateWithLocalStorage<T>(localStorageKey: string, defaultValue: any = null): [T, React.Dispatch<React.SetStateAction<T>>] {
     try {
@@ -84,9 +84,9 @@ export function useDebounce<T>(value: T, delay: number): T {
 export const useAsync = <T, E = string>(
     asyncFunction: () => Promise<T>,
     immediate = true
-  ) => {
+) => {
     const [status, setStatus] = useState<
-      "idle" | "pending" | "success" | "error"
+        "idle" | "pending" | "success" | "error"
     >("idle");
     const [value, setValue] = useState<T | null>(null);
     const [error, setError] = useState<E | null>(null);
@@ -95,30 +95,30 @@ export const useAsync = <T, E = string>(
     // useCallback ensures the below useEffect is not called
     // on every render, but only if asyncFunction changes.
     const execute = useCallback(() => {
-      setStatus("pending");
-      setValue(null);
-      setError(null);
-      return asyncFunction()
-        .then((response: any) => {
-          setValue(response);
-          setStatus("success");
-        })
-        .catch((error: any) => {
-          setError(error);
-          setStatus("error");
-        });
+        setStatus("pending");
+        setValue(null);
+        setError(null);
+        return asyncFunction()
+            .then((response: any) => {
+                setValue(response);
+                setStatus("success");
+            })
+            .catch((error: any) => {
+                setError(error);
+                setStatus("error");
+            });
     }, [asyncFunction]);
     // Call execute if we want to fire it right away.
     // Otherwise execute can be called later, such as
     // in an onClick handler.
     useEffect(() => {
-      if (immediate) {
-        execute();
-      }
+        if (immediate) {
+            execute();
+        }
     }, [execute, immediate]);
     return { execute, status, value, error };
-  };
-  
+};
+
 //Sort Functions
 export function sortWeight(rankedItems: any[], invert: boolean) {
     return rankedItems.sort((itm1, itm2) => {
@@ -215,19 +215,23 @@ export function getBulkStat(formatArr: string[], stats: statsType) {
     let tot: number = 0
     let miss: number = 0
     let got: number = 0
+    let plan: number = 0
     let totWeight: number = 0
     let missWeight: number = 0
     let gotWeight: number = 0
+    let planWeight: number = 0
 
     for (const format of formatArr) {
         tot += stats[format].tot ?? 0
         miss += stats[format].miss ?? 0
-        got += stats[format].tot - stats[format].miss ?? 0
+        got += stats[format].got ?? 0
+        plan += stats[format].plan ?? 0
         totWeight += stats[format].totWeight ?? 0
         missWeight += stats[format].missWeight ?? 0
         gotWeight += stats[format].gotWeight ?? 0
+        planWeight += stats[format].planWeight ?? 0
     }
-    return { tot: tot, miss: miss, got: got, totWeight: totWeight, missWeight: missWeight, gotWeight: gotWeight }
+    return { tot: tot, miss: miss, got: got, plan: plan, totWeight: totWeight, missWeight: missWeight, gotWeight: gotWeight, planWeight: planWeight }
 }
 
 /**
@@ -235,13 +239,12 @@ export function getBulkStat(formatArr: string[], stats: statsType) {
  * @param setState 
  */
 export const updateCompletition = (state: globalStateType) => {
-    console.log(JSON.stringify(state.globalStats))
     let globalStats: globalStateType["globalStats"] = {
         tot: Object.keys(state.seriesDict).length,
         got: 0,
-        miss: 0
+        miss: 0,
+        plan: 0,
     }
-
 
     //Smart Completition Mode
     if (state.userOptions.smartCompletition) {
@@ -249,16 +252,19 @@ export const updateCompletition = (state: globalStateType) => {
             let serieTot: number = 0
             let serieMiss: number = 0
             let serieGot: number = 0
+            let seriePlan: number = 0
             let serieTotWeight: number = 0
             let serieMissWeight: number = 0
             let serieGotWeight: number = 0
+            let seriePlanWeight: number = 0
 
             for (const bulkTerm of ["anime", "manga", "NOVEL"]) {
-                let { got, miss, tot, totWeight, missWeight, gotWeight } = getBulkStat(convertBulkTerm(bulkTerm, state.userOptions), value.stats)
-                if (got != 0) { //Add stats only if got at least one for bulk term
+                let { got, miss, tot, plan, totWeight, missWeight, gotWeight, planWeight } = getBulkStat(convertBulkTerm(bulkTerm, state.userOptions), value.stats)
+                if (got != 0 || plan != 0) { //Add stats only if got at least one for bulk term
                     serieTot += tot
                     serieMiss += miss
                     serieGot += got
+                    seriePlan += plan
                     serieTotWeight += totWeight
                     serieMissWeight += missWeight
                     serieGotWeight += gotWeight
@@ -268,18 +274,23 @@ export const updateCompletition = (state: globalStateType) => {
                 tot: serieTot,
                 miss: serieMiss,
                 got: serieGot,
+                plan: seriePlan,
                 per: Math.floor((serieGot / serieTot) * 100),
                 totWeight: serieTotWeight,
                 missWeight: serieMissWeight,
                 gotWeight: serieGotWeight,
+                planWeight: seriePlanWeight,
                 perWeight: Math.floor((serieGotWeight / serieTotWeight) * 100),
             }
 
             //Update Global Completition
             if (serieTot != 0) {
-                if (serieTot == serieGot) {
+                if (serieGot == serieTot) {
                     state.seriesDict[id].status = "COMPLETE"
                     globalStats.got += 1
+                } else if (serieGot + seriePlan == serieTot) {
+                    state.seriesDict[id].status = "PLAN_TO_COMPLETE"
+                    globalStats.plan += 1
                 } else {
                     state.seriesDict[id].status = "NOT_COMPLETE"
                     globalStats.miss += 1
@@ -291,23 +302,28 @@ export const updateCompletition = (state: globalStateType) => {
     } else {
         //All selected format Mode
         for (const [id, value] of Object.entries(state.seriesDict)) {
-            let { got, miss, tot, totWeight, missWeight, gotWeight } = getBulkStat(state.userOptions.completition, value.stats)
+            let { got, plan, miss, tot, totWeight, missWeight, gotWeight, planWeight } = getBulkStat(state.userOptions.completition, value.stats)
             state.seriesDict[id].stats["selected"] = {
                 tot: tot,
                 got: got,
                 miss: miss,
+                plan: plan,
                 per: Math.floor((got / tot) * 100),
                 totWeight: totWeight,
                 gotWeight: gotWeight,
+                planWeight: planWeight,
                 missWeight: missWeight,
                 perWeight: Math.floor((gotWeight / totWeight) * 100),
             }
 
             //Update Global Completition
             if (tot != 0) {
-                if (tot == got) {
+                if (got == tot) {
                     state.seriesDict[id].status = "COMPLETE"
                     globalStats.got += 1
+                } else if (got + plan == tot) {
+                    state.seriesDict[id].status = "PLAN_TO_COMPLETE"
+                    globalStats.plan += 1
                 } else {
                     state.seriesDict[id].status = "NOT_COMPLETE"
                     globalStats.miss += 1
@@ -317,35 +333,42 @@ export const updateCompletition = (state: globalStateType) => {
             }
         }
     }
-
+    console.log(state.globalStats)
     return { ...state, globalStats: globalStats }
 
 }
 
-//Relations
-export const relationPriority: { [key: string]: number } = {
-    'CHARACTER': 1,
-    'SEQUEL': 2,
+//Relations Order is important for priority
+export const RELATIONS: relationsType[] = [
+    'CHARACTER',
+    'SEQUEL',
 
-    'SIDE_STORY': 3,
+    'SIDE_STORY',
 
-    'SOURCE': 4,
+    'SOURCE',
 
-    'ALTERNATIVE': 5,
+    'ALTERNATIVE',
 
-    'SPIN_OFF': 6,
-    'SUMMARY': 7,
+    'SPIN_OFF',
+    'SUMMARY',
 
-    'COMPILATION': 8,
-    'CONTAINS': 9,
+    'COMPILATION',
+    'CONTAINS',
 
-    'PREQUEL': 10,
+    'PREQUEL',
 
-    'ADAPTATION': 11,
-    'PARENT': 12,
-    'OTHER': 13,
-
-}
+    'ADAPTATION',
+    'PARENT',
+    'OTHER',
+]
+//use this to quickly get relation Priority
+export const relationPriority = (() => {
+    let dict: { [key: string]: number } = {}
+    RELATIONS.map((v, i) => {
+        dict[v] = i
+    })
+    return dict as { [key in relationsType]: number }
+})()
 
 /**
  * Compute received lists into usable data
@@ -517,10 +540,12 @@ export const computeData = (data: any[], relationPriority: { [key: string]: numb
             stat[format] = {
                 tot: formatEl.length ?? 0,
                 miss: formatEl.filter("node[status='NO']").length ?? 0,
-                got: formatEl.filter("node[status!='NO']").length ?? 0,
+                got: formatEl.filter("node[status='COMPLETED'],node[status='DROPPED'],node[status='REPEATING']").length ?? 0,
+                plan: formatEl.filter("node[status='PLANNING'],node[status='CURRENT'],node[status='PAUSED']").length ?? 0,
                 totWeight: (formatEl.map((e) => { return e.data("compWeight") }))?.reduce?.((a: number, b: number) => a + b, 0),
                 missWeight: (formatEl.filter("node[status='NO']").map((e) => { return e.data("compWeight") }))?.reduce?.((a: number, b: number) => a + b, 0),
-                gotWeight: (formatEl.filter("node[status!='NO']").map((e) => { return e.data("compWeight") }))?.reduce?.((a: number, b: number) => a + b, 0),
+                gotWeight: (formatEl.filter("node[status='COMPLETED'],node[status='DROPPED'],node[status='REPEATING']").map((e) => { return e.data("compWeight") }))?.reduce?.((a: number, b: number) => a + b, 0),
+                planWeight: (formatEl.filter("node[status='PLANNING'],node[status='CURRENT'],node[status='PAUSED']").map((e) => { return e.data("compWeight") }))?.reduce?.((a: number, b: number) => a + b, 0),
                 // per: Math.round((formatEl.filter("node[status!='NO']").length / formatEl.length) * 100),
             }
         }
@@ -542,13 +567,13 @@ export const computeData = (data: any[], relationPriority: { [key: string]: numb
 }
 
 /** 
- * Wrap with {data: _ } each element of array of nodes and edges 
+ * Wrap with {data: <> } each element of array of nodes and edges 
 */
 export const dataForCyto = (serie: seriesListElementType["series"]) => {
     return [...serie.nodes, ...serie.edges].map(el => { return { data: el } })
 }
 
-export const COLOR_CODES:{ [key: string]: string }={
+export const COLOR_CODES: { [key: string]: string } = {
     "blue": "#3DB4F2",
     "puple": "#C063FF",
     "green": "#4CCA51",
