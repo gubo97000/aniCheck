@@ -9,7 +9,7 @@ import { useSharedState } from './Store';
 import Loader from './Loader';
 import { keycharm } from 'vis-network';
 import SeriesListItem from './SeriesListItem';
-import { checkBoxStateType, globalStateType } from './Types';
+import { globalStateType } from './Types';
 import { FixedSizeList } from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
 import SearchBox from './SearchBox';

@@ -10,7 +10,7 @@ import { useSharedState } from './Store';
 import Loader from './Loader';
 import { keycharm } from 'vis-network';
 import SeriesListItem from './SeriesListItem';
-import { checkBoxStateType, globalStateType, seriesListElementType } from './Types';
+import { globalStateType, seriesListElementType } from './Types';
 import { FixedSizeList } from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
 import { matchSorter } from 'match-sorter'
