@@ -1,35 +1,53 @@
-import { Avatar, Box, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, RadioGroup } from '@material-ui/core'
-import React, { useState, useRef, useLayoutEffect, useContext, useEffect, useMemo, FC } from 'react'
-import { render } from 'react-dom'
-import * as vis from "vis-network"
-import cytoscape from 'cytoscape';
+import {
+  Avatar,
+  Box,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemSecondaryAction,
+  ListItemText,
+  RadioGroup,
+} from "@material-ui/core";
+import React, {
+  useState,
+  useRef,
+  useLayoutEffect,
+  useContext,
+  useEffect,
+  useMemo,
+  FC,
+} from "react";
+import { render } from "react-dom";
+import * as vis from "vis-network";
+import cytoscape from "cytoscape";
 
-import { useQuery, gql } from '@apollo/client';
-import { useSharedState } from './Store';
-import Loader from './Loader';
-import { keycharm } from 'vis-network';
-import SeriesListItem from './SeriesListItem';
-import { checkBoxStateType, globalStateType, seriesListElementType } from './Types';
-import { FixedSizeList } from 'react-window';
+import { useQuery, gql } from "@apollo/client";
+import { useSharedState } from "./Store";
+import Loader from "./Loader";
+import { keycharm } from "vis-network";
+import SeriesListItem from "./SeriesListItem";
+import { globalStateType, seriesListElementType } from "./Types";
+import { FixedSizeList } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
-import SearchBox from './SearchBox';
-import { dataForCyto } from './Utils';
+import SearchBox from "./SearchBox";
+import { dataForCyto } from "./Utils";
 
 interface props {
-  seriesToRender?: seriesListElementType[]
+  seriesToRender?: seriesListElementType[];
 }
-
 
 const SeriesList: FC<props> = ({ seriesToRender }) => {
   // console.log(seriesToRender)
   const listRef = React.createRef<FixedSizeList<any>>();
   const [state, setState] = useSharedState();
-  let [seriesList, setSeriesList] = useState<seriesListElementType[]>([])
+  let [seriesList, setSeriesList] = useState<seriesListElementType[]>([]);
 
   useEffect(() => {
-    setSeriesList(seriesToRender ?? Object.values(state.seriesDict) ?? [])
-    listRef.current?.scrollTo(0)
-  }, [seriesToRender, state.seriesDict])
+    setSeriesList(seriesToRender ?? Object.values(state.seriesDict) ?? []);
+    listRef.current?.scrollTo(0);
+  }, [seriesToRender, state.seriesDict]);
 
   function itemKey(index: number) {
     // Find the item at the specified index.
@@ -57,11 +75,12 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
             >
               {SeriesListItem}
             </FixedSizeList>
-          )
-          }
+          )}
         </AutoSizer>
-      ) : <p>None</p>}
+      ) : (
+        <p>None</p>
+      )}
     </Box>
-  )
-}
-export default SeriesList
+  );
+};
+export default SeriesList;

@@ -7,7 +7,7 @@ import cytoscape from 'cytoscape';
 import { useQuery, gql } from '@apollo/client';
 import Loader from './Loader';
 import { keycharm } from 'vis-network';
-import { checkBoxStateType, seriesListElementType } from './Types';
+import { seriesListElementType } from './Types';
 import { useSharedState } from './Store';
 
 interface props {

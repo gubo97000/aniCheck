@@ -10,7 +10,7 @@ import { useSharedState } from './Store';
 import Loader from './Loader';
 import { keycharm } from 'vis-network';
 import SeriesListItem from './SeriesListItem';
-import { checkBoxStateType, formatsType, globalStateType, seriesListElementType, sortType } from './Types';
+import { formatsType, globalStateType, seriesListElementType, sortType } from './Types';
 import { FixedSizeList } from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
 import { matchSorter } from 'match-sorter'
@@ -112,7 +112,7 @@ const CompletitionMenu: FC = () => {
         What is anime? {FORMATS.map((format) => {
                     if (["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC",].includes(format.id)) {
                         return (
-                            <Tooltip key={format.label} title={format.tooltip}>
+                            <Tooltip key={format.label} title={format.tooltip} placement="top" disableInteractive>
                                 <Chip
                                     variant={isSelectedAnime(format.id as typeof state.userOptions.completition[number])}
                                     disabled={!state.userOptions.smartCompletition}
@@ -127,7 +127,7 @@ const CompletitionMenu: FC = () => {
         What is Manga? {FORMATS.map((format) => {
                     if (["MANGA", "ONE_SHOT"].includes(format.id)) {
                         return (
-                            <Tooltip key={format.label} title={format.tooltip}>
+                            <Tooltip key={format.label} title={format.tooltip} placement="top" disableInteractive>
                                 <Chip
                                     variant={isSelectedManga(format.id as typeof state.userOptions.completition[number])}
                                     disabled={!state.userOptions.smartCompletition}
@@ -150,7 +150,7 @@ const CompletitionMenu: FC = () => {
         </Button>
             {FORMATS.map((format) => {
                 return (
-                    <Tooltip key={format.label} title={format.tooltip}>
+                    <Tooltip key={format.label} title={format.tooltip} placement="top" disableInteractive>
                         <Chip
                             variant={isSelected(format.id as typeof state.userOptions.completition[number])}
                             disabled={state.userOptions.smartCompletition}
