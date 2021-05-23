@@ -298,28 +298,28 @@ function Viz() {
           cyViz.filter(".not-counted").remove();
     }
 
-    if (state.userOptions.cyFilter){
+    if (state.userOptions.cyFilter) {
       cyViz
-      .filter((el) => {
-        return Object.values(el.data()).some((e: any) => {
-          return state.userOptions.cyFilter.includes(e);
-        });
-      })
-      .addClass("hidden");
+        .filter((el) => {
+          return Object.values(el.data()).some((e: any) => {
+            return state.userOptions.cyFilter.includes(e);
+          });
+        })
+        .addClass("hidden");
     }
-    
   };
 
   return (
     <Grid
       sx={{
         position: "relative",
+        height: { xs: "50vh", md: "100vh" },
       }}
       item
       xs={12}
       sm={9}
     >
-      <div ref={cyRef} style={{ width: "100%", height: "100vh" }}></div>
+      <div ref={cyRef} style={{ width: "100%", height: "100%" }}></div>
       {/* <CytoscapeComponent elements={[{data: { id: 'a' }}]} layout={layout}
         style={{ width: '100%', height: '100%' }} cy={receiveCy}
       >

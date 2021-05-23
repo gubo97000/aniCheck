@@ -3,6 +3,7 @@ import React, { useState, useRef, useLayoutEffect, useContext, useEffect, FC } f
 import { render } from 'react-dom'
 import * as vis from "vis-network"
 import cytoscape, { EdgeCollection } from 'cytoscape';
+import siteIcon from './favicon.png'
 
 import { parseAndCheckHttpResponse, useLazyQuery } from '@apollo/client';
 import { useSharedState } from './Store';
@@ -125,7 +126,7 @@ const Loader: FC = () => {
       <Grid item>
         <Avatar
           // sx={{ bgcolor: green[500] }} 
-          src={state.user.avatar}
+          src={state.user.avatar ?? siteIcon }
           variant='rounded'>
           {/* <AssignmentIcon /> */}
         </Avatar>

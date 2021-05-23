@@ -69,6 +69,8 @@ const SearchBox: FC = ({ children }) => {
     state.userOptions.completition,
     state.userOptions.statusFilter,
     state.userOptions.smartCompletition,
+    state.userOptions.animeComposition,
+    state.userOptions.mangaComposition,
   ])
   return (
     <Box>

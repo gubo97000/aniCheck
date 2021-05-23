@@ -1,4 +1,5 @@
 import * as cytoscape from "cytoscape";
+import React from "react";
 // import cytoscape from "cytoscape";
 import { useCallback, useEffect, useState } from "react";
 import { avoidNodes } from "./ProblematicNodes";
@@ -12,6 +13,13 @@ import {
   statsType,
   userOptionType,
 } from "./Types";
+import MenuBookIcon from "@material-ui/icons/MenuBook";
+import TvIcon from "@material-ui/icons/Tv";
+import MusicVideoIcon from "@material-ui/icons/MusicVideo";
+import BookIcon from "@material-ui/icons/Book";
+import TheatersIcon from "@material-ui/icons/Theaters";
+import AlbumRoundedIcon from "@material-ui/icons/AlbumRounded";
+import LanguageRoundedIcon from "@material-ui/icons/LanguageRounded";
 
 /// CONSTANTS
 export const FORMATS_IDS: formatsType[] = [
@@ -23,8 +31,8 @@ export const FORMATS_IDS: formatsType[] = [
   "ONA",
   "MUSIC",
   "MANGA",
-  "NOVEL",
   "ONE_SHOT",
+  "NOVEL",
 ];
 export const FORMATS: { id: formatsType; label: string; tooltip: string }[] = [
   { id: "TV", label: "TV", tooltip: "Anime broadcast on television" },
@@ -114,6 +122,33 @@ export const relationPriority = (() => {
   });
   return dict as { [key in relationsType]: number };
 })();
+
+export function formatToIcon(format: string) {
+  switch (format) {
+    case "TV":
+      return <TvIcon />;
+    case "TV_SHORT":
+      return <TvIcon />;
+    case "MOVIE":
+      return <TheatersIcon />;
+    case "SPECIAL":
+      return <TvIcon />;
+    case "OVA":
+      return <AlbumRoundedIcon />;
+    case "ONA":
+      return <LanguageRoundedIcon />;
+    case "MUSIC":
+      return <MusicVideoIcon />;
+    case "MANGA":
+      return <MenuBookIcon />;
+    case "ONE_SHOT":
+      return <MenuBookIcon />;
+    case "NOVEL":
+      return <BookIcon />;
+    default:
+      return "";
+  }
+}
 
 /// HOOKS
 //Local storage hook
@@ -250,19 +285,30 @@ export function sortWeight(rankedItems: any[], invert: boolean) {
 
 export function sortWeightPer(rankedItems: any[], invert: boolean) {
   return rankedItems.sort((itm1, itm2) => {
-    return invert
-      ? itm1.item.stats["selected"].perWeight -
-          itm2.item.stats["selected"].perWeight
-      : itm2.item.stats["selected"].perWeight -
-          itm1.item.stats["selected"].perWeight;
+    let weight1 =
+      itm1.item.stats["selected"].perWeight +
+      Math.floor(
+        ((itm1.item.stats["selected"].planWeight ?? 0) /
+          (itm1.item.stats["selected"].totWeight ?? 0)) *
+          100
+      );
+    let weight2 =
+      itm2.item.stats["selected"].perWeight +
+      Math.floor(
+        ((itm2.item.stats["selected"].planWeight ?? 0) /
+          (itm2.item.stats["selected"].totWeight ?? 0)) *
+          100
+      );
+    return (invert ? -1 : 1) * (weight1 - weight2);
   });
 }
 
 export function sortComplete(rankedItems: any[], invert: boolean) {
   return rankedItems.sort((itm1, itm2) => {
-    return invert
-      ? itm1.item.stats["selected"].per - itm2.item.stats["selected"].per
-      : itm2.item.stats["selected"].per - itm1.item.stats["selected"].per;
+    return (
+      (invert ? -1 : 1) *
+      (itm1.item.stats["selected"].per - itm2.item.stats["selected"].per)
+    );
   });
 }
 
@@ -277,13 +323,9 @@ export function sortAlphabetical(rankedItems: any[], invert: boolean) {
 
 export function sortSize(rankedItems: any[], invert: boolean) {
   return rankedItems.sort((itm1, itm2) => {
-    return invert
-      ? itm1.item.stats.serieMiss +
-          itm1.item.stats.serieTot -
-          (itm2.item.stats.serieMiss + itm2.item.stats.serieTot)
-      : itm2.item.stats.serieMiss +
-          itm2.item.stats.serieTot -
-          (itm1.item.stats.serieMiss + itm1.item.stats.serieTot);
+    return (
+      (invert ? -1 : 1) * (itm1.item.stats.serieTot - itm2.item.stats.serieTot)
+    );
   });
 }
 
@@ -310,6 +352,12 @@ export function getSortFc(tag: string) {
 }
 
 ///Completition Calculations
+/**
+ * Return array of formats based on used preference.
+ * @param term
+ * @param userOptions
+ * @returns
+ */
 export function convertBulkTerm(term: string, userOptions: userOptionType) {
   switch (term) {
     case "anime":
@@ -403,6 +451,7 @@ export const updateCompletition = (state: globalStateType) => {
           serieTotWeight += totWeight;
           serieMissWeight += missWeight;
           serieGotWeight += gotWeight;
+          seriePlanWeight += planWeight;
         }
       }
       state.seriesDict[id].stats["selected"] = {
@@ -410,12 +459,12 @@ export const updateCompletition = (state: globalStateType) => {
         miss: serieMiss,
         got: serieGot,
         plan: seriePlan,
-        per: Math.floor((serieGot / serieTot) * 100),
+        per: Math.floor((serieGot / serieTot) * 100) || 0,
         totWeight: serieTotWeight,
         missWeight: serieMissWeight,
         gotWeight: serieGotWeight,
         planWeight: seriePlanWeight,
-        perWeight: Math.floor((serieGotWeight / serieTotWeight) * 100),
+        perWeight: Math.floor((serieGotWeight / serieTotWeight) * 100) || 0,
       };
 
       //Update Global Completition
@@ -478,7 +527,7 @@ export const updateCompletition = (state: globalStateType) => {
     }
   }
   console.log(globalStats);
-  return { ...state, globalStats: globalStats };
+  return { ...state, seriesDict: state.seriesDict, globalStats: globalStats };
 };
 
 /// Data Manipulations
@@ -488,7 +537,7 @@ export const updateCompletition = (state: globalStateType) => {
  * @param data a list of the received lists
  * @param relationPriority
  * @param problematicNodes
- * @returns serieDict
+ * @returns seriesDict
  */
 export const computeData = (
   data: any[],
@@ -801,7 +850,7 @@ export const getCyLayout = (state: globalStateType) => {
           .style("curve-style", "bezier");
         return {
           name: "klay",
-          animate: true,
+          // animate: true,
           nodeDimensionsIncludeLabels: true,
           klay: {
             // addUnnecessaryBendpoints: true,
@@ -822,7 +871,7 @@ export const getCyLayout = (state: globalStateType) => {
           .style("curve-style", "bezier");
         return {
           name: "dagre",
-          animate: true,
+          // animate: true,
           nodeDimensionsIncludeLabels: true,
 
           // roots: [state.seriesSelected.],

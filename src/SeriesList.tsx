@@ -18,6 +18,7 @@ import React, {
   useEffect,
   useMemo,
   FC,
+  useCallback,
 } from "react";
 import { render } from "react-dom";
 import * as vis from "vis-network";
@@ -33,14 +34,50 @@ import { FixedSizeList } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import SearchBox from "./SearchBox";
 import { dataForCyto } from "./Utils";
+import SeriesListItemB from "./SeriesListItemB";
+import { Scrollbars } from "react-custom-scrollbars-2";
 
 interface props {
   seriesToRender?: seriesListElementType[];
 }
+interface scrollProps {
+  onScroll?: any;
+  forwardedRef?:any;
+  style?:any;
+}
+
+const CustomScrollbars:FC<scrollProps> = ({ onScroll, forwardedRef, style, children }) => {
+  const refSetter = useCallback(
+    (scrollbarsRef) => {
+      if (scrollbarsRef) {
+        forwardedRef(scrollbarsRef.view);
+      } else {
+        forwardedRef(null);
+      }
+    },
+    [forwardedRef]
+  );
+
+  return (
+    <Scrollbars
+      ref={refSetter}
+      style={{ ...style, overflow: "hidden" }}
+      onScroll={onScroll}
+    >
+      {children}
+    </Scrollbars>
+  );
+};
+
+const CustomScrollbarsVirtualList = React.forwardRef((props, ref) => (
+  <CustomScrollbars {...props} forwardedRef={ref} />
+));
+
 
 const SeriesList: FC<props> = ({ seriesToRender }) => {
   // console.log(seriesToRender)
   const listRef = React.createRef<FixedSizeList<any>>();
+  const outerRef = React.createRef();
   const [state, setState] = useSharedState();
   let [seriesList, setSeriesList] = useState<seriesListElementType[]>([]);
 
@@ -58,11 +95,15 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
     return key;
   }
   return (
-    <Box sx={{ height: "calc(100vh - 200px)" }}>
+    <Box
+      sx={{
+        height: "calc(100vh - 200px)",
+      }}
+    >
       {state.seriesDict ? (
         <AutoSizer>
           {({ height, width }) => (
-            <FixedSizeList
+            <FixedSizeList<{seriesList:seriesListElementType[]}>
               ref={listRef}
               height={height}
               itemSize={140}
@@ -71,9 +112,12 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
               itemData={{
                 seriesList: seriesList,
               }}
+              useIsScrolling
               itemKey={itemKey}
+              // outerElementType={CustomScrollbarsVirtualList}
+              outerRef={outerRef}
             >
-              {SeriesListItem}
+              {SeriesListItemB}
             </FixedSizeList>
           )}
         </AutoSizer>

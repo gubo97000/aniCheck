@@ -40,6 +40,7 @@ import TvIcon from "@material-ui/icons/Tv";
 import MusicVideoIcon from "@material-ui/icons/MusicVideo";
 import BookIcon from "@material-ui/icons/Book";
 import TheatersIcon from "@material-ui/icons/Theaters";
+import { formatToIcon } from "./Utils";
 
 interface props {
   data: any;
@@ -55,36 +56,6 @@ function statusToColor(status: string) {
 
     default:
       return "grey.500";
-  }
-}
-
-function formatToIcon(format: string) {
-  switch (format) {
-    case "TV":
-      return <TvIcon />;
-    case "TV_SHORT":
-      return <TvIcon />;
-    case "MOVIE":
-      return <TheatersIcon />;
-    case "SPECIAL":
-      return <TvIcon />;
-    case "OVA":
-      return <TvIcon />;
-    case "ONA":
-      return <TvIcon />;
-    case "MUSIC":
-      return <MusicVideoIcon />;
-
-    case "MANGA":
-      return <MenuBookIcon />;
-    case "ONE_SHOT":
-      return <MenuBookIcon />;
-
-    case "NOVEL":
-      return <BookIcon />;
-
-    default:
-      return "";
   }
 }
 
