@@ -74,7 +74,7 @@ const CustomScrollbarsVirtualList = React.forwardRef((props, ref) => (
 ));
 
 
-const SeriesList: FC<props> = ({ seriesToRender }) => {
+const SeriesList: FC<props> = ({  }) => {
   // console.log(seriesToRender)
   const listRef = React.createRef<FixedSizeList<any>>();
   const outerRef = React.createRef();
@@ -82,9 +82,9 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
   let [seriesList, setSeriesList] = useState<seriesListElementType[]>([]);
 
   useEffect(() => {
-    setSeriesList(seriesToRender ?? Object.values(state.seriesDict) ?? []);
+    setSeriesList(state.seriesToRender ?? Object.values(state.seriesDict) ?? []);
     listRef.current?.scrollTo(0);
-  }, [seriesToRender, state.seriesDict]);
+  }, [state.seriesToRender, state.seriesDict]);
 
   function itemKey(index: number) {
     // Find the item at the specified index.
@@ -97,7 +97,8 @@ const SeriesList: FC<props> = ({ seriesToRender }) => {
   return (
     <Box
       sx={{
-        height: "calc(100vh - 200px)",
+        height: "calc(100vh - 300px)",
+        // height: "100%",
       }}
     >
       {state.seriesDict ? (

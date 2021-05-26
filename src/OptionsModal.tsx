@@ -5,7 +5,7 @@ import Modal from "@material-ui/core/Modal";
 import React, { FC, useEffect, useState } from "react";
 import { useSharedState } from "./Store";
 import SortMenu from "./SortMenu";
-import CompletitionMenu from "./CompletitionMenu";
+import CompletionMenu from "./CompletionMenu";
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -58,13 +58,13 @@ export default function OptionsModal() {
           <TabContext value={page}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList onChange={handleChange} aria-label="options">
-                <Tab label="Completition Options" value="1" />
+                <Tab label="Completion" value="1" />
                 <Tab label="Sort" value="2" />
                 <Tab label="Filter" value="3" />
               </TabList>
             </Box>
             <TabPanel value="1">
-              <CompletitionMenu />
+              <CompletionMenu />
             </TabPanel>
             <TabPanel value="2">
               <CyFilterMenu />

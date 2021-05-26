@@ -34,54 +34,60 @@ export const FORMATS_IDS: formatsType[] = [
   "ONE_SHOT",
   "NOVEL",
 ];
-export const FORMATS: { id: formatsType; label: string; tooltip: string }[] = [
-  { id: "TV", label: "TV", tooltip: "Anime broadcast on television" },
-  {
+export const FORMATS: {
+  [key in formatsType]: { id: formatsType; label: string; tooltip: string };
+} = {
+  TV: { id: "TV", label: "TV", tooltip: "Anime broadcast on television" },
+  TV_SHORT: {
     id: "TV_SHORT",
     label: "TV Short",
     tooltip:
       "Anime which are under 15 minutes in length and broadcast on television",
   },
-  {
+  MOVIE: {
     id: "MOVIE",
     label: "Movie",
     tooltip: "Anime movies with a theatrical release",
   },
-  {
+  SPECIAL: {
     id: "SPECIAL",
     label: "Special",
     tooltip:
       "Special episodes that have been included in DVD/Blu-ray releases, picture dramas, pilots, etc",
   },
-  {
+  OVA: {
     id: "OVA",
     label: "OVA",
     tooltip:
       "(Original Video Animation) Anime that have been released directly on DVD/Blu-ray without originally going through a theatrical release or television broadcast",
   },
-  {
+  ONA: {
     id: "ONA",
     label: "ONA",
     tooltip:
       "(Original Net Animation) Anime that have been originally released online or are only available through streaming services.",
   },
-  {
+  MUSIC: {
     id: "MUSIC",
     label: "Music",
     tooltip: "Short anime released as a music video",
   },
-  {
+  MANGA: {
     id: "MANGA",
     label: "Manga",
     tooltip: "Professionally published manga with more than one chapter",
   },
-  {
+  NOVEL: {
     id: "NOVEL",
     label: "Novel",
     tooltip: "Written books released as a series of light novels",
   },
-  { id: "ONE_SHOT", label: "One Shot", tooltip: "Manga with just one chapter" },
-];
+  ONE_SHOT: {
+    id: "ONE_SHOT",
+    label: "One Shot",
+    tooltip: "Manga with just one chapter",
+  },
+};
 export const COLOR_CODES: { [key: string]: string } = {
   blue: "#3DB4F2",
   purple: "#C063FF",
@@ -351,7 +357,7 @@ export function getSortFc(tag: string) {
   }
 }
 
-///Completition Calculations
+///Completion Calculations
 /**
  * Return array of formats based on used preference.
  * @param term
@@ -365,6 +371,9 @@ export function convertBulkTerm(term: string, userOptions: userOptionType) {
 
     case "manga":
       return userOptions.mangaComposition;
+
+    case "novel":
+      return userOptions.novelComposition;
 
     default:
       return [term];
@@ -404,11 +413,11 @@ export function getBulkStat(formatArr: string[], stats: statsType) {
 }
 
 /**
- * Compute completition for each series and global stats with the selected user parameter
+ * Compute completion for each series and global stats with the selected user parameter
  * @param state
  * @returns A state to set
  */
-export const updateCompletition = (state: globalStateType) => {
+export const updateCompletion = (state: globalStateType) => {
   let globalStats: globalStateType["globalStats"] = {
     tot: Object.keys(state.seriesDict).length,
     got: 0,
@@ -416,8 +425,8 @@ export const updateCompletition = (state: globalStateType) => {
     plan: 0,
   };
 
-  //Smart Completition Mode
-  if (state.userOptions.smartCompletition) {
+  //Smart Completion Mode
+  if (state.userOptions.smartCompletion) {
     for (const [id, value] of Object.entries(state.seriesDict)) {
       let serieTot: number = 0;
       let serieMiss: number = 0;
@@ -428,7 +437,7 @@ export const updateCompletition = (state: globalStateType) => {
       let serieGotWeight: number = 0;
       let seriePlanWeight: number = 0;
 
-      for (const bulkTerm of ["anime", "manga", "NOVEL"]) {
+      for (const bulkTerm of ["anime", "manga", "novel"]) {
         let {
           got,
           miss,
@@ -467,7 +476,7 @@ export const updateCompletition = (state: globalStateType) => {
         perWeight: Math.floor((serieGotWeight / serieTotWeight) * 100) || 0,
       };
 
-      //Update Global Completition
+      //Update Global Completion
       if (serieTot != 0) {
         if (serieGot == serieTot) {
           state.seriesDict[id].status = "COMPLETE";
@@ -495,7 +504,7 @@ export const updateCompletition = (state: globalStateType) => {
         missWeight,
         gotWeight,
         planWeight,
-      } = getBulkStat(state.userOptions.completition, value.stats);
+      } = getBulkStat(state.userOptions.completion, value.stats);
       state.seriesDict[id].stats["selected"] = {
         tot: tot,
         got: got,
@@ -509,7 +518,7 @@ export const updateCompletition = (state: globalStateType) => {
         perWeight: Math.floor((gotWeight / totWeight) * 100),
       };
 
-      //Update Global Completition
+      //Update Global Completion
       if (tot != 0) {
         if (got == tot) {
           state.seriesDict[id].status = "COMPLETE";
@@ -557,7 +566,7 @@ export const computeData = (
     // node.nextAiringEpisode ? console.log(node) : null
     const compWeight = (node: any) => {
       //Calculating the weight of the element
-      if (node.status == "NOT_YET_RELEASED") return 1; //To avoid 100% weighted completition
+      if (node.status == "NOT_YET_RELEASED") return 1; //To avoid 100% weighted completion
       if (node.chapters) return node.chapters * 5;
       if (node.volumes) return node.volumes * 50;
       if (node.episodes && node.duration) return node.episodes * node.duration;
@@ -590,6 +599,7 @@ export const computeData = (
       siteUrl: node.siteUrl,
       bannerImage: node.bannerImage,
       popularity: node.popularity,
+      cover: node.coverImage.extraLarge,
       // ch: node.chapters,
       // ep: node.episodes,
       // ce: node.nextAiringEpisode?.episode,

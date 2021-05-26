@@ -56,7 +56,7 @@ import {
   getBulkStat,
   sortAlphabetical,
   sortComplete,
-  updateCompletition,
+  updateCompletion,
   useStateWithLocalStorage,
 } from "./Utils";
 import xor from "lodash/xor";
@@ -84,7 +84,7 @@ const CyFilterMenu: FC = () => {
 
   // useEffect(() => {
   //     // setState(state => { return { ...state, globalStats: { ...state.globalStats, tot: 1 } } })
-  //     setState(state => updateCompletition(state))
+  //     setState(state => updateCompletion(state))
   // }, [
   //     state.userOptions.cyFilter,
   // ])

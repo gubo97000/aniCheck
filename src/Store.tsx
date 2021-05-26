@@ -1,12 +1,16 @@
-
 import { makeStyles } from "@material-ui/core";
 import cytoscape from "cytoscape";
-import React, { createContext, FC, useContext, useReducer, useState } from "react";
+import React, {
+  createContext,
+  FC,
+  useContext,
+  useReducer,
+  useState,
+} from "react";
 import { createContainer } from "react-tracked";
 import { globalStateType, userOptionType } from "./Types";
 import { sortAlphabetical, useStateWithLocalStorage } from "./Utils";
 // import Reducer from './Reducer'
-
 
 const initialState: globalStateType = {
   cy: cytoscape({ headless: true }),
@@ -15,11 +19,20 @@ const initialState: globalStateType = {
       type: "alphabetical",
       inverted: false,
     },
-    smartCompletition: true,
-    completition: [],
-    animeComposition: ["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC",],
+    smartCompletion: true,
+    completion: [],
+    animeComposition: [
+      "TV",
+      "TV_SHORT",
+      "MOVIE",
+      "SPECIAL",
+      "OVA",
+      "ONA",
+      "MUSIC",
+    ],
     mangaComposition: ["MANGA", "ONE_SHOT"],
-    statusFilter: ["COMPLETE", "ERR"],
+    novelComposition: ["NOVEL"],
+    statusFilter: ["COMPLETE", "PLAN_TO_COMPLETE", "ERR"],
     cyShowHidden: false,
     cyFormatFilter: [],
     cyLayout: "klay",
@@ -28,20 +41,17 @@ const initialState: globalStateType = {
   seriesDict: {},
   user: {},
   globalStats: { tot: 0, miss: 0, got: 0, plan: 0 },
-  status: ["ok", " "]
+  status: ["ok", " "],
   // seriesSelected: ,
   // seriesList: { seriesPrime: cytoscape({ headless: true }).elements(), series: cytoscape({ headless: true }).elements() },
-}
+};
 
 const useGlobalState = () => useState(initialState);
 
-export const {
-  Provider: SharedStateProvider,
-  useTracked: useSharedState,
-} = createContainer(useGlobalState);
+export const { Provider: SharedStateProvider, useTracked: useSharedState } =
+  createContainer(useGlobalState);
 
 // const Context = createContext<ReturnType<typeof useGlobalState>>([initialState,()=>{}]);
-
 
 // export const Store: FC= ({ children })=>{
 //     // const [state, dispatch] = useReducer(Reducer, initialState);
@@ -52,4 +62,3 @@ export const {
 //         </Context.Provider>
 //     )
 // };
-

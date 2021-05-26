@@ -1,15 +1,3 @@
-import {
-  Avatar,
-  Box,
-  Grid,
-  IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
-  RadioGroup,
-} from "@material-ui/core";
 import React, {
   useState,
   useRef,
@@ -17,6 +5,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  FC,
 } from "react";
 import { render } from "react-dom";
 import * as vis from "vis-network";
@@ -34,19 +23,24 @@ import SearchBox from "./SearchBox";
 import SeriesList from "./SeriesList";
 import OptionsModal from "./OptionsModal";
 import StatusFilter from "./StatusFilter";
+import { BoxProps } from "@material-ui/core/Box";
+import Box from "@material-ui/core/Box";
 
-export default function Nav() {
+const Nav: FC<BoxProps> = (boxProps) => {
   return (
-    <Grid sx={{ height: { xs: "50vh", md: "100vh" } }} item xs={12} sm={3}>
+    <Box {...boxProps} 
+    // sx={{ height: { xs: "50vh", md: "100vh" } 
+  // }} 
+    // xs={12} sm={3}
+    >
       <OptionsModal />
-      <Loader></Loader>
-      <StatusFilter></StatusFilter>
+      <Loader />
+      <StatusFilter />
 
-      <Box sx={{ height: "100%" }}>
-        <SearchBox>
-          <SeriesList></SeriesList>
-        </SearchBox>
-      </Box>
-    </Grid>
+      <SearchBox />
+      <SeriesList />
+    </Box>
   );
-}
+};
+
+export default Nav;

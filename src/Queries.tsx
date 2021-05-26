@@ -22,6 +22,7 @@ query ($user: String!, $type: MediaType){
           }
           format
           coverImage {
+            extraLarge
             medium
             color
           }
@@ -52,6 +53,7 @@ query ($user: String!, $type: MediaType){
               }
               format
               coverImage {
+                extraLarge
                 medium
                 color
               }

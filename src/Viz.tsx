@@ -4,6 +4,7 @@ import React, {
   useLayoutEffect,
   useContext,
   useEffect,
+  FC,
 } from "react";
 import { render } from "react-dom";
 import * as vis from "vis-network";
@@ -28,8 +29,10 @@ import { renderToString } from "react-dom/server";
 import GraphNode from "./GraphNode";
 import { dataForCyto, getCyLayout, getCyStyle } from "./Utils";
 import Badge from "@material-ui/core/Badge";
+import { BoxProps } from "@material-ui/core/Box";
+import Box from "@material-ui/core/Box";
 
-function Viz() {
+const Viz: FC<BoxProps> = (boxProps) => {
   // const graphBox = useRef(null)
   const [state, setState] = useSharedState();
   const [badge, setBadge] = useState(0);
@@ -310,16 +313,18 @@ function Viz() {
   };
 
   return (
-    <Grid
+    <Box
+      {...boxProps}
       sx={{
         position: "relative",
-        height: { xs: "50vh", md: "100vh" },
+        // height: { xs: "50vh", sm: "100vh" },
+        // height: "100%",
+        display: { xs: "none", sm: "block" },
       }}
-      item
-      xs={12}
-      sm={9}
+      // xs={12}
+      // sm={9}
     >
-      <div ref={cyRef} style={{ width: "100%", height: "100%" }}></div>
+      <Box ref={cyRef} style={{ width: "100%", height: "100vh", overflow:"hidden" }} />
       {/* <CytoscapeComponent elements={[{data: { id: 'a' }}]} layout={layout}
         style={{ width: '100%', height: '100%' }} cy={receiveCy}
       >
@@ -358,7 +363,7 @@ function Viz() {
           </Button>
         </Badge>
       </Stack>
-    </Grid>
+    </Box>
   );
-}
+};
 export default Viz;

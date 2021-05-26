@@ -47,14 +47,16 @@ export type globalStateType = {
   globalStats: statsType[string];
   status: ["ok" | "loading" | "error", string];
   user: userType;
+  seriesToRender?: seriesListElementType[];
 };
 
 export type userOptionType = {
   sort: sortType;
-  smartCompletition: boolean;
+  smartCompletion: boolean;
   animeComposition: formatsType[];
   mangaComposition: formatsType[];
-  completition: formatsType[];
+  novelComposition: formatsType[];
+  completion: formatsType[];
   statusFilter: serieStatusType[];
   cyShowHidden: boolean;
   cyFormatFilter: formatsType[];
@@ -99,6 +101,7 @@ export type NodeType = {
   titles: string[];
   siteUrl: any;
   bannerImage: string;
+  cover: string;
   popularity: any;
   compWeight: number;
   startDate: string;
@@ -113,4 +116,5 @@ export type EdgeType = {
 export type userType = {
   avatar?: string;
   color?: string;
+  cover?: string;
 };
