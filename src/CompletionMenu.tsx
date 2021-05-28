@@ -87,21 +87,21 @@ const CompletionMenu: FC = () => {
         }
       />
       <FilterGroup
-        name={"Elements to consider Anime"}
+        name={"Formats to consider Anime"}
         chips={["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC"]}
         stateArray="animeComposition"
         dataset={FORMATS}
         disabled={!state.userOptions.smartCompletion}
       />
       <FilterGroup
-        name={"Elements to consider Manga"}
+        name={"Formats to consider Manga"}
         chips={["MANGA", "ONE_SHOT"]}
         stateArray="mangaComposition"
         dataset={FORMATS}
         disabled={!state.userOptions.smartCompletion}
       />
       <FilterGroup
-        name={"Elements to consider Novel"}
+        name={"Formats to consider Novel"}
         chips={["NOVEL"]}
         stateArray="novelComposition"
         dataset={FORMATS}
@@ -112,7 +112,7 @@ const CompletionMenu: FC = () => {
       }} />
       <ButtonInputRow
         name="Custom Completion"
-        helperText="Choose what elements to consider for completion in all series"
+        helperText="Choose what formats to consider for completion in all series"
         onClick={() => handleClick("smart")}
         control={
           <Switch
@@ -123,7 +123,7 @@ const CompletionMenu: FC = () => {
       />
 
       <FilterGroup
-        name={"Elements to consider"}
+        name={"Formats to consider"}
         chips={FORMATS_IDS}
         stateArray="completion"
         dataset={FORMATS}

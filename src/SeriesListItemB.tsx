@@ -52,8 +52,7 @@ const SeriesListItem: FC<
   return (
     <Box style={{ ...style }} key={key}>
       {
-      // isScrolling ? seriesPrime.title : 
-      (
+        // isScrolling ? seriesPrime.title :
         <ButtonBase
           sx={{
             display: "grid",
@@ -68,12 +67,14 @@ const SeriesListItem: FC<
 
             border: checked ? "3px solid" : "1px solid",
             borderColor: checked ? "primary.main" : `grey.500`,
-            // bgcolor: 'background.paper',
-            background: isScrolling
-              ? undefined
-              : `url(${
-                  seriesPrime.bannerImage ?? seriesPrime.cover
-                }) no-repeat center center`,
+            // background: isScrolling
+            //   ? undefined
+            //   : `url(${
+            //       seriesPrime.bannerImage ?? seriesPrime.cover
+            //     }) no-repeat center center`,
+            background: `url(${
+              seriesPrime.bannerImage ?? seriesPrime.cover
+            }) no-repeat center center`,
             backgroundSize: "cover",
             color: "white",
             // boxShadow: 3,
@@ -244,7 +245,7 @@ const SeriesListItem: FC<
             </Box>
           </Box>
         </ButtonBase>
-      )}
+      }
     </Box>
   );
 };

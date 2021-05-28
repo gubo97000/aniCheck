@@ -1,5 +1,6 @@
 import {
   Box,
+  BoxProps,
   Button,
   Chip,
   IconButton,
@@ -9,11 +10,7 @@ import {
   Typography,
   useAutocomplete,
 } from "@material-ui/core";
-import React, {
-  FC,
-  Children,
-  isValidElement,
-} from "react";
+import React, { FC, Children, isValidElement, ReactNode } from "react";
 // import useAutocomplete from '@material-ui/core/useAutocomplete';
 import { render } from "react-dom";
 import * as vis from "vis-network";
@@ -59,22 +56,29 @@ import Divider from "@material-ui/core/Divider";
 interface props<T = formatsType | statusType> {
   name: string;
   dataset: {
-    [key: string]: { id: T; label: string; tooltip: string };
+    [key: string]: {
+      id: T;
+      label: string;
+      tooltip: string;
+      icon?: React.ReactElement;
+    };
   };
   chips: T[];
   stateArray:
     | "animeComposition"
     | "mangaComposition"
     | "completion"
-    | "novelComposition";
-  disabled: boolean;
+    | "novelComposition"
+    | "cyFilter";
+  disabled?: boolean;
 }
-export const FilterGroup: FC<props> = ({
+export const FilterGroup: FC<props & BoxProps> = ({
   name,
   dataset,
   chips,
   stateArray,
   disabled,
+  ...boxProps
 }) => {
   const [state, setState] = useSharedState();
   function handleClick(compType: string) {
@@ -129,30 +133,56 @@ export const FilterGroup: FC<props> = ({
         gridTemplateRows: "40px auto",
         gridTemplateAreas: "'name all none' 'chips chips chips'",
         placeItems: "center",
-        m: "5px 0px",
+        mt: 1,
+        ...boxProps.sx
       }}
     >
-      <Typography sx={{ gridArea: "name", placeSelf: "center start" }}>
+      <Typography
+        sx={{
+          gridArea: "name",
+          placeSelf: "center start",
+          ...(disabled
+            ? {
+                color: "text.disabled",
+                pointerEvents: "none",
+              }
+            : undefined),
+        }}
+      >
         {name}
       </Typography>
-      <IconButton
-        sx={{
-          gridArea: "all",
-        }}
-        onClick={handleSelectAll}
-        disabled={disabled}
+      <Tooltip
+        key={"all"}
+        title={"Select All"}
+        placement="top"
+        disableInteractive
       >
-        <SelectAllRoundedIcon />
-      </IconButton>
-      <IconButton
-        sx={{
-          gridArea: "none",
-        }}
-        onClick={handleDeselectAll}
-        disabled={disabled}
+        <IconButton
+          sx={{
+            gridArea: "all",
+          }}
+          onClick={handleSelectAll}
+          disabled={disabled}
+        >
+          <SelectAllRoundedIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip
+        key={"none"}
+        title={"Unselect All"}
+        placement="top"
+        disableInteractive
       >
-        <HighlightOffRoundedIcon />
-      </IconButton>
+        <IconButton
+          sx={{
+            gridArea: "none",
+          }}
+          onClick={handleDeselectAll}
+          disabled={disabled}
+        >
+          <HighlightOffRoundedIcon />
+        </IconButton>
+      </Tooltip>
       <Box
         sx={{
           gridArea: "chips",
@@ -163,6 +193,12 @@ export const FilterGroup: FC<props> = ({
           flexWrap: "wrap",
           p: "10px",
           placeSelf: "stretch",
+          ...(disabled
+            ? {
+                borderColor: "grey.400",
+                pointerEvents: "none",
+              }
+            : undefined),
         }}
       >
         {chips.map((chip) => {
@@ -178,6 +214,7 @@ export const FilterGroup: FC<props> = ({
                 variant="outlined"
                 disabled={disabled}
                 label={dataset[chip].label}
+                icon={dataset[chip]?.icon}
                 onClick={() => handleClick(dataset[chip].id)}
                 sx={{
                   mx: 0.5,

@@ -1,6 +1,7 @@
 import {
   Avatar,
   Box,
+  BoxProps,
   Grid,
   IconButton,
   List,
@@ -37,16 +38,18 @@ import { dataForCyto } from "./Utils";
 import SeriesListItemB from "./SeriesListItemB";
 import { Scrollbars } from "react-custom-scrollbars-2";
 
-interface props {
-  seriesToRender?: seriesListElementType[];
-}
 interface scrollProps {
   onScroll?: any;
-  forwardedRef?:any;
-  style?:any;
+  forwardedRef?: any;
+  style?: any;
 }
 
-const CustomScrollbars:FC<scrollProps> = ({ onScroll, forwardedRef, style, children }) => {
+const CustomScrollbars: FC<scrollProps> = ({
+  onScroll,
+  forwardedRef,
+  style,
+  children,
+}) => {
   const refSetter = useCallback(
     (scrollbarsRef) => {
       if (scrollbarsRef) {
@@ -73,8 +76,7 @@ const CustomScrollbarsVirtualList = React.forwardRef((props, ref) => (
   <CustomScrollbars {...props} forwardedRef={ref} />
 ));
 
-
-const SeriesList: FC<props> = ({  }) => {
+const SeriesList: FC<BoxProps> = (boxProps) => {
   // console.log(seriesToRender)
   const listRef = React.createRef<FixedSizeList<any>>();
   const outerRef = React.createRef();
@@ -82,7 +84,9 @@ const SeriesList: FC<props> = ({  }) => {
   let [seriesList, setSeriesList] = useState<seriesListElementType[]>([]);
 
   useEffect(() => {
-    setSeriesList(state.seriesToRender ?? Object.values(state.seriesDict) ?? []);
+    setSeriesList(
+      state.seriesToRender ?? Object.values(state.seriesDict) ?? []
+    );
     listRef.current?.scrollTo(0);
   }, [state.seriesToRender, state.seriesDict]);
 
@@ -96,15 +100,17 @@ const SeriesList: FC<props> = ({  }) => {
   }
   return (
     <Box
+      {...boxProps}
       sx={{
-        height: "calc(100vh - 300px)",
+        ...boxProps.sx,
+        height: "100%",
         // height: "100%",
       }}
     >
       {state.seriesDict ? (
         <AutoSizer>
           {({ height, width }) => (
-            <FixedSizeList<{seriesList:seriesListElementType[]}>
+            <FixedSizeList<{ seriesList: seriesListElementType[] }>
               ref={listRef}
               height={height}
               itemSize={140}

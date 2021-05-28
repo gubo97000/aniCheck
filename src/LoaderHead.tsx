@@ -98,6 +98,9 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
             bgcolor: "rgba(255,255,255,0.3)",
           },
         }}
+        onClick={() => {
+          state.modalInfoOpenState?.[1](true);
+        }}
       >
         <HelpOutlineRoundedIcon />
       </IconButton>

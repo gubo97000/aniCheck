@@ -138,7 +138,7 @@ const SortMenu: FC<BoxProps> = (boxProps) => {
           onClick={() => handleSelection("missWeight")}
         >
           {sort.inverted ? <NorthRoundedIcon /> : <SouthRoundedIcon />}
-          Easy To Complete
+          Time To Complete
         </MenuItem>
 
         {/* <MenuItem

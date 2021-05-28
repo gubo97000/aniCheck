@@ -2,7 +2,7 @@ import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Modal from "@material-ui/core/Modal";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { useSharedState } from "./Store";
 import SortMenu from "./SortMenu";
 import CompletionMenu from "./CompletionMenu";
@@ -13,8 +13,11 @@ import TabContext from "@material-ui/lab/TabContext";
 import TabList from "@material-ui/lab/TabList";
 import TabPanel from "@material-ui/lab/TabPanel";
 import CyFilterMenu from "./CyFilterMenu";
+import ReactMarkdown from "react-markdown";
+import infoText from "./info.md?raw"
+import gfm from 'remark-gfm'
 
-export default function OptionsModal() {
+export default function InfoModal() {
   const [state, setState] = useSharedState();
   const [page, setPage] = useState("1");
   const [open, setOpen] = useState(false);
@@ -22,13 +25,12 @@ export default function OptionsModal() {
     setState((state) => {
       return {
         ...state,
-        modalOpenState: [open, setOpen],
+        modalInfoOpenState: [open, setOpen],
       };
     });
   }, []);
-
-  const handleOpen = () => state.modalOpenState?.[1](true);
-  const handleClose = () => state.modalOpenState?.[1](false);
+  const handleOpen = () => state.modalInfoOpenState?.[1](true);
+  const handleClose = () => state.modalInfoOpenState?.[1](false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setPage(newValue);
@@ -47,33 +49,19 @@ export default function OptionsModal() {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 400,
+          width: 600,
           bgcolor: "background.paper",
           // border: '2px solid #000',
           boxShadow: 24,
           p: 4,
+          maxHeight:"90%",
 
-          height:"90%",
           borderRadius: "10px",
-          overflow: "auto auto",
+          overflow: "auto",
         }}
       >
-        <TabContext value={page}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleChange} aria-label="options">
-              <Tab label="Completion" value="1" />
-              <Tab label="Sort" value="2" />
-              <Tab label="Filter" value="3" />
-            </TabList>
-          </Box>
-          <TabPanel value="1">
-            <CompletionMenu />
-          </TabPanel>
-          <TabPanel value="2">
-            <CyFilterMenu />
-          </TabPanel>
-          <TabPanel value="3">Item Three</TabPanel>
-        </TabContext>
+        <ReactMarkdown remarkPlugins={[gfm]} children={`${infoText}`} />
+
       </Box>
     </Modal>
   );

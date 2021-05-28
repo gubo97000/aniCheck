@@ -61,8 +61,9 @@ import {
 } from "./Utils";
 import xor from "lodash/xor";
 import without from "lodash/without";
-import { get, zipWith } from "lodash";
+import { get, map, zipWith } from "lodash";
 import { getUntrackedObject } from "react-tracked";
+import { FilterGroup } from "./FilterGroup";
 
 const CyFilterMenu: FC = () => {
   const [state, setState] = useSharedState();
@@ -90,27 +91,21 @@ const CyFilterMenu: FC = () => {
   // ])
 
   return (
-    <div>
-      Formats{" "}
-      {FORMATS.map((format) => {
-        return (
-          <Tooltip
-            key={format.label}
-            title={format.tooltip}
-            placement="top"
-            disableInteractive
-          >
-            <Chip
-              variant={isSelected(
-                format.id as typeof state.userOptions.cyFilter[number]
-              )}
-              label={format.label}
-              onClick={() => handleClick(format.id)}
-            />
-          </Tooltip>
-        );
-      })}
-    </div>
+    <FilterGroup
+      name={"Formats to hide"}
+      chips={[
+        ...new Set(
+          [...(state.seriesSelected?.series.nodes.map((n) => n.format)??[]),
+          ...(state.userOptions.cyShowHidden
+            ? state.seriesSelected?.serieComplete.nodes.map((n) => n.format)??[]
+            : [])]
+        ),
+      ]}
+      stateArray="cyFilter"
+      dataset={FORMATS}
+      sx={{ mt: 0 }}
+      // disabled={state.userOptions.smartCompletion}
+    />
   );
 };
 export default CyFilterMenu;

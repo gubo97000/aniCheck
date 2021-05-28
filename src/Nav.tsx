@@ -25,20 +25,34 @@ import OptionsModal from "./OptionsModal";
 import StatusFilter from "./StatusFilter";
 import { BoxProps } from "@material-ui/core/Box";
 import Box from "@material-ui/core/Box";
+import InfoModal from "./InfoModal";
 
 const Nav: FC<BoxProps> = (boxProps) => {
+  const [state, setState] = useSharedState();
+  
   return (
-    <Box {...boxProps} 
-    // sx={{ height: { xs: "50vh", md: "100vh" } 
-  // }} 
-    // xs={12} sm={3}
+    <Box
+      {...boxProps}
+      sx={{
+        gridTemplateRows: "auto 1fr",
+        gridTemplateAreas: "'top' 'content'",
+        display: state.userOptions.cyShowNav
+          ? "grid"
+          : { xs: "grid", sm: "none" },
+        ...boxProps.sx,
+      }}
+      // xs={12} sm={3}
     >
       <OptionsModal />
-      <Loader />
-      <StatusFilter />
-
-      <SearchBox />
-      <SeriesList />
+      <InfoModal />
+      <Box sx={{ gridArea: "top" }}>
+        <Loader />
+        <StatusFilter />
+        <SearchBox />
+      </Box>
+      <Box sx={{ gridArea: "content" }}>
+        <SeriesList />
+      </Box>
     </Box>
   );
 };

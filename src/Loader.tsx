@@ -253,6 +253,7 @@ const Loader: FC = () => {
             <FormHelperText
               error={state.status[0] == "error"}
               id="standard-weight-helper-text"
+              sx={{color:"white"}}
             >
               {state.status[1]}
             </FormHelperText>

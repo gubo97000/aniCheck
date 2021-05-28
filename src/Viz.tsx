@@ -31,11 +31,11 @@ import { dataForCyto, getCyLayout, getCyStyle } from "./Utils";
 import Badge from "@material-ui/core/Badge";
 import { BoxProps } from "@material-ui/core/Box";
 import Box from "@material-ui/core/Box";
+import CyToolbar from "./CyToolbar";
 
 const Viz: FC<BoxProps> = (boxProps) => {
   // const graphBox = useRef(null)
   const [state, setState] = useSharedState();
-  const [badge, setBadge] = useState(0);
 
   let cyRef = useRef(null);
   useEffect(() => {
@@ -220,8 +220,6 @@ const Viz: FC<BoxProps> = (boxProps) => {
     setState((state) => {
       if (state.seriesSelected && state.cyViz) {
         console.log(state.seriesSelected);
-
-        updateBadge();
         state.cyViz.elements().remove();
 
         // state.cyViz.style(getCyStyle(state))
@@ -237,7 +235,8 @@ const Viz: FC<BoxProps> = (boxProps) => {
         state.cyViz?.center();
       }
 
-      return { ...state };
+      return { ...state,
+        userOptions: { ...state.userOptions, cyShowHidden: false }, };
     });
   }, [state.seriesSelected]);
 
@@ -255,7 +254,6 @@ const Viz: FC<BoxProps> = (boxProps) => {
   useEffect(() => {
     setState((state) => {
       if (state.seriesSelected && state.cyViz) {
-        updateBadge();
 
         applyFilter(state.cyViz);
         state.cyViz?.center();
@@ -264,7 +262,7 @@ const Viz: FC<BoxProps> = (boxProps) => {
         state.cyViz?.center();
       }
 
-      return { ...state };
+      return { ...state};
     });
   }, [state.userOptions.cyFilter, state.userOptions.cyShowHidden]);
 
@@ -280,19 +278,10 @@ const Viz: FC<BoxProps> = (boxProps) => {
     });
   };
 
-  const updateBadge = () => {
-    if (!state.userOptions.cyShowHidden && state.seriesSelected) {
-      if (state.seriesSelected?.serieComplete.nodes.length) {
-        setBadge(state.seriesSelected?.serieComplete.nodes.length);
-        return;
-      }
-    }
-    setBadge(0);
-    return;
-  };
-
   const applyFilter = (cyViz: cytoscape.Core) => {
+    //Restore all hidden nodes
     cyViz.elements().removeClass("hidden");
+    //Add or Not Extra Elements
     if (state.seriesSelected?.serieComplete) {
       state.userOptions.cyShowHidden
         ? // ? cyViz.filter(".not-counted").removeClass("hidden")
@@ -300,8 +289,9 @@ const Viz: FC<BoxProps> = (boxProps) => {
         : // : cyViz.filter(".not-counted").addClass("hidden");
           cyViz.filter(".not-counted").remove();
     }
-
+    //Apply filters
     if (state.userOptions.cyFilter) {
+      //Iterate all nodes and edges and add class hidden if inside cyFilter Array
       cyViz
         .filter((el) => {
           return Object.values(el.data()).some((e: any) => {
@@ -317,52 +307,11 @@ const Viz: FC<BoxProps> = (boxProps) => {
       {...boxProps}
       sx={{
         position: "relative",
-        // height: { xs: "50vh", sm: "100vh" },
-        // height: "100%",
         display: { xs: "none", sm: "block" },
       }}
-      // xs={12}
-      // sm={9}
     >
       <Box ref={cyRef} style={{ width: "100%", height: "100vh", overflow:"hidden" }} />
-      {/* <CytoscapeComponent elements={[{data: { id: 'a' }}]} layout={layout}
-        style={{ width: '100%', height: '100%' }} cy={receiveCy}
-      >
-      </CytoscapeComponent> */}
-      {/* <div ref={graphBox}></div> */}
-      <Stack
-        sx={{
-          position: "absolute",
-          top: "20%",
-          right: "3%",
-        }}
-        spacing={2}
-      >
-        <Button onClick={() => handleClickLayout("breathfirst")}>
-          Breathfirst
-        </Button>
-        <Button onClick={() => handleClickLayout("klay")}>Klay</Button>
-        <Button onClick={() => handleClickLayout("dagre")}>Dagre</Button>
-        <Button onClick={() => handleClickLayout("cola")}>Cola</Button>
-        <Button onClick={() => handleClickLayout("fcose")}>Cose</Button>
-        <Badge badgeContent={badge} color="primary">
-          <Button
-            onClick={() => {
-              setState((state) => {
-                return {
-                  ...state,
-                  userOptions: {
-                    ...state.userOptions,
-                    cyShowHidden: !state.userOptions.cyShowHidden,
-                  },
-                };
-              });
-            }}
-          >
-            hidden
-          </Button>
-        </Badge>
-      </Stack>
+      <CyToolbar/>
     </Box>
   );
 };

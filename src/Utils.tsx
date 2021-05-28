@@ -1,5 +1,5 @@
 import * as cytoscape from "cytoscape";
-import React from "react";
+import React, { ReactNode } from "react";
 // import cytoscape from "cytoscape";
 import { useCallback, useEffect, useState } from "react";
 import { avoidNodes } from "./ProblematicNodes";
@@ -35,56 +35,75 @@ export const FORMATS_IDS: formatsType[] = [
   "NOVEL",
 ];
 export const FORMATS: {
-  [key in formatsType]: { id: formatsType; label: string; tooltip: string };
+  [key in formatsType]: {
+    id: formatsType;
+    label: string;
+    icon: React.ReactElement;
+    tooltip: string;
+  };
 } = {
-  TV: { id: "TV", label: "TV", tooltip: "Anime broadcast on television" },
+  TV: {
+    id: "TV",
+    label: "TV",
+    icon: <TvIcon />,
+    tooltip: "Anime broadcast on television",
+  },
   TV_SHORT: {
     id: "TV_SHORT",
     label: "TV Short",
+    icon: <TvIcon />,
     tooltip:
       "Anime which are under 15 minutes in length and broadcast on television",
   },
   MOVIE: {
     id: "MOVIE",
     label: "Movie",
+    icon: <TheatersIcon />,
     tooltip: "Anime movies with a theatrical release",
   },
   SPECIAL: {
     id: "SPECIAL",
     label: "Special",
+    icon: <TvIcon />,
     tooltip:
       "Special episodes that have been included in DVD/Blu-ray releases, picture dramas, pilots, etc",
   },
   OVA: {
     id: "OVA",
     label: "OVA",
+    icon: <AlbumRoundedIcon />,
     tooltip:
       "(Original Video Animation) Anime that have been released directly on DVD/Blu-ray without originally going through a theatrical release or television broadcast",
   },
   ONA: {
     id: "ONA",
     label: "ONA",
+    icon: <LanguageRoundedIcon />,
     tooltip:
       "(Original Net Animation) Anime that have been originally released online or are only available through streaming services.",
   },
   MUSIC: {
     id: "MUSIC",
     label: "Music",
+    icon: <MusicVideoIcon />,
     tooltip: "Short anime released as a music video",
   },
   MANGA: {
     id: "MANGA",
     label: "Manga",
+    icon: <MenuBookIcon />,
     tooltip: "Professionally published manga with more than one chapter",
   },
   NOVEL: {
     id: "NOVEL",
     label: "Novel",
+    icon: <BookIcon />,
     tooltip: "Written books released as a series of light novels",
   },
   ONE_SHOT: {
     id: "ONE_SHOT",
     label: "One Shot",
+    icon: <MenuBookIcon />,
     tooltip: "Manga with just one chapter",
   },
 };
@@ -101,21 +120,14 @@ export const COLOR_CODES: { [key: string]: string } = {
 export const RELATIONS: relationsType[] = [
   "CHARACTER",
   "SEQUEL",
-
   "SIDE_STORY",
-
   "SOURCE",
-
   "ALTERNATIVE",
-
   "SPIN_OFF",
   "SUMMARY",
-
   "COMPILATION",
   "CONTAINS",
-
   "PREQUEL",
-
   "ADAPTATION",
   "PARENT",
   "OTHER",

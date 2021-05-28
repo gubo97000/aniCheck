@@ -41,6 +41,7 @@ export type globalStateType = {
   cy: cytoscape.Core;
   userOptions: userOptionType;
   modalOpenState?: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+  modalInfoOpenState?: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
   seriesSelected?: seriesListElementType;
   seriesDict: { [key: string]: seriesListElementType };
   cyViz?: cytoscape.Core;
@@ -59,6 +60,7 @@ export type userOptionType = {
   completion: formatsType[];
   statusFilter: serieStatusType[];
   cyShowHidden: boolean;
+  cyShowNav: boolean;
   cyFormatFilter: formatsType[];
   cyLayout: string;
   cyFilter: (formatsType | serieStatusType | statusType)[];

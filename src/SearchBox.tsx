@@ -43,6 +43,8 @@ import DonutLargeRoundedIcon from "@material-ui/icons/DonutLargeRounded";
 import SortIcon from "@material-ui/icons/Sort";
 import FilterAltRoundedIcon from "@material-ui/icons/FilterAltRounded";
 import { useWorker } from "@koale/useworker";
+import SearchRoundedIcon from "@material-ui/icons/SearchRounded";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 const SearchBox: FC = ({ children }) => {
   // console.log(props.children.props.children.props)
@@ -139,6 +141,7 @@ const SearchBox: FC = ({ children }) => {
           // bgcolor:"lightpink",
         }}
         size="small"
+        // size="normal"
         // variant="filled"
         // margin="normal"
         value={query}
@@ -150,6 +153,11 @@ const SearchBox: FC = ({ children }) => {
             borderRadius: "5px",
             border: "0px solid",
           },
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchRoundedIcon />
+            </InputAdornment>
+          ),
         }}
       />
       <IconButton

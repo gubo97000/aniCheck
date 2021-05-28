@@ -34,6 +34,7 @@ const initialState: globalStateType = {
     novelComposition: ["NOVEL"],
     statusFilter: ["COMPLETE", "PLAN_TO_COMPLETE", "ERR"],
     cyShowHidden: false,
+    cyShowNav: true,
     cyFormatFilter: [],
     cyLayout: "klay",
     cyFilter: [],
