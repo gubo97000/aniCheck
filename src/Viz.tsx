@@ -68,7 +68,7 @@ const Viz: FC<BoxProps> = (boxProps) => {
           // node b
           data: {
             id: "b",
-            title: "Check",
+            title: "Insert the user id you need to check on the upper right",
             startDate: "2020-02-01",
             format: "HELO",
           },
@@ -118,7 +118,7 @@ const Viz: FC<BoxProps> = (boxProps) => {
             // 'line-color': '#ffaaaa',
             // 'target-arrow-color': '#ffaaaa',
             "target-label": "data(relation)",
-            "target-text-offset": 80,
+            "target-text-offset": 35,
           },
         },
         {
@@ -211,7 +211,9 @@ const Viz: FC<BoxProps> = (boxProps) => {
         query: "node:hidden",
         tpl: () => "",
       },
-    ]);
+    ], {
+      enablePointerEvents: true
+    });
 
     setState((state) => {
       return { ...state, cyViz: cy };

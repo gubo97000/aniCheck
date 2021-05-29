@@ -30,16 +30,9 @@ import React, {
 import { render } from "react-dom";
 import * as vis from "vis-network";
 import cytoscape from "cytoscape";
-
 import { useQuery, gql } from "@apollo/client";
 import { useSharedState } from "./Store";
-import Loader from "./Loader";
-import { keycharm } from "vis-network";
-import SeriesListItem from "./SeriesListItem";
 import { globalStateType, seriesListElementType, sortType } from "./Types";
-import { FixedSizeList } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { matchSorter } from "match-sorter";
 import {
   sortAlphabetical,
   sortComplete,

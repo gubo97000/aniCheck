@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { createContainer } from "react-tracked";
 import { globalStateType, userOptionType } from "./Types";
-import { sortAlphabetical, useStateWithLocalStorage } from "./Utils";
+import { FORMATS_IDS, sortAlphabetical, useStateWithLocalStorage } from "./Utils";
 // import Reducer from './Reducer'
 
 const initialState: globalStateType = {
@@ -20,7 +20,7 @@ const initialState: globalStateType = {
       inverted: false,
     },
     smartCompletion: true,
-    completion: [],
+    completion: FORMATS_IDS,
     animeComposition: [
       "TV",
       "TV_SHORT",
@@ -41,6 +41,7 @@ const initialState: globalStateType = {
   },
   seriesDict: {},
   user: {},
+  usersHist:[],
   globalStats: { tot: 0, miss: 0, got: 0, plan: 0 },
   status: ["ok", " "],
   // seriesSelected: ,

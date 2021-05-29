@@ -49,127 +49,10 @@ import { CheckBoxOutlineBlank } from "@material-ui/icons";
 import Box from "@material-ui/core/Box";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import LoaderHead from "./LoaderHead";
+import Typography from "@material-ui/core/Typography";
 
 const Loader: FC = () => {
   const [state, setState] = useSharedState();
-  const [usr, setUsr] = useStateWithLocalStorage<string>("usr", "");
-  const [workerFn, { status: statusWorker, kill: killWorker }] = useWorker(
-    computeData,
-    {
-      remoteDependencies: [
-        "https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.18.2/cytoscape.min.js",
-        "https://cdnjs.cloudflare.com/ajax/libs/tslib/2.2.0/tslib.min.js",
-      ],
-    }
-  );
-
-  const startQuery = () => {
-    setState((state) => {
-      return { ...state, status: ["ok", " "] };
-    });
-    getUser({ variables: { user: usr } });
-  };
-
-  const asyncCompute = async () => {
-    let seriesDict = await workerFn(
-      [
-        ...statusAnime.data.MediaListCollection.lists,
-        ...statusManga.data.MediaListCollection.lists,
-      ],
-      relationPriority,
-      problematicNodes
-    );
-    // setState(state => { return { ...state, seriesDict: seriesDict, } })
-    setState((state) =>
-      updateCompletion({ ...state, seriesDict: seriesDict })
-    );
-  };
-
-  const syncCompute = () => {
-    let seriesDict = computeData(
-      [
-        ...statusAnime.data.MediaListCollection.lists,
-        ...statusManga.data.MediaListCollection.lists,
-      ],
-      relationPriority,
-      problematicNodes
-    );
-    // setState(state => { return updateCompletion({ ...state, seriesDict: seriesDict, }) })
-    setState((state) => {
-      return { ...updateCompletion({ ...state, seriesDict: seriesDict }) };
-    });
-    // setState(state => { return { ...state, seriesDict: seriesDict, } })
-  };
-
-  const computeUser = () => {
-    setState((state) => {
-      return {
-        ...state,
-        user: {
-          color:
-            COLOR_CODES[statusUser.data.User.options.profileColor] ??
-            statusUser.data.User.options.profileColor,
-          avatar: statusUser.data.User.avatar.medium,
-          cover: statusUser.data.User.bannerImage,
-        },
-      };
-    });
-  };
-
-  //Apollo queries creation
-  const [getUser, statusUser] = useLazyQuery(Queries.GET_USER, {
-    notifyOnNetworkStatusChange: true,
-    onCompleted: () => {
-      computeUser();
-      getAnimeLists({
-        variables: { user: usr, type: "ANIME" },
-      });
-    },
-  });
-  const [getAnimeLists, statusAnime] = useLazyQuery(Queries.GET_LISTS, {
-    notifyOnNetworkStatusChange: true,
-    onCompleted: () => {
-      getMangaLists({
-        variables: { user: usr, type: "MANGA" },
-      });
-    },
-  });
-  const [getMangaLists, statusManga] = useLazyQuery(Queries.GET_LISTS, {
-    notifyOnNetworkStatusChange: true,
-    onCompleted: asyncCompute,
-    // onCompleted: syncCompute,
-  });
-
-  useEffect(() => {
-    let status: globalStateType["status"][0] = "ok";
-    let log: globalStateType["status"][1] = " ";
-    if (statusUser.loading) {
-      status = "loading";
-      log = "Loading User Info";
-    } else if (statusAnime.loading) {
-      status = "loading";
-      log = "Loading your Anime List";
-    } else if (statusManga.loading) {
-      status = "loading";
-      log = "Loading your Manga List";
-    } else if (statusWorker == "RUNNING") {
-      status = "loading";
-      log = "Computing received data";
-    } else if (statusUser.error) {
-      status = "error";
-      log = statusUser.error.message;
-    } else if (statusAnime.error) {
-      status = "error";
-      log = statusAnime.error.message;
-    } else if (statusManga.error) {
-      status = "error";
-      log = statusManga.error.message;
-    }
-    setState((state) => {
-      return { ...state, status: [status, log] };
-    });
-  }, [statusUser, statusAnime, statusManga, statusWorker]);
-
   return (
     <Box>
       <Box
@@ -195,11 +78,14 @@ const Loader: FC = () => {
               "linear-gradient(180deg,rgba(6,13,34,0) 40%,rgba(6,13,34,.6))",
             width: "100%",
             height: "100%",
+            zIndex: "0",
           }}
         />
-        <LoaderHead sx={{
-          gridArea:"head"
-        }}/>
+        <LoaderHead
+          sx={{
+            gridArea: "head",
+          }}
+        />
         <Box
           sx={{
             gridArea: "avatar",
@@ -215,49 +101,17 @@ const Loader: FC = () => {
             {/* <AssignmentIcon /> */}
           </Avatar>
         </Box>
-        <Box sx={{ gridArea: "username" }}>
-          <FormControl
-            sx={{ m: 1, width: "100%" }}
-            variant="standard"
-            error={state.status[0] == "error"}
-          >
-            <Input
-              sx={{ color: "white", fontSize: "20px" }}
-              id="standard-adornment-password"
-              placeholder="AniList Nick"
-              // type={values.showPassword ? 'text' : 'password'}
-              value={usr}
-              onChange={(event) => {
-                setUsr(event.target.value);
-              }}
-              onKeyPress={(ev) => {
-                if (ev.key == "Enter" && state.status[0] != "loading") {
-                  startQuery();
-                }
-              }}
-              endAdornment={
-                <InputAdornment position="end">
-                  {state.status[0] == "loading" ? (
-                    <CircularProgress />
-                  ) : (
-                    <IconButton
-                      aria-label="get user anime"
-                      onClick={startQuery}
-                    >
-                      <EastRounded />
-                    </IconButton>
-                  )}
-                </InputAdornment>
-              }
-            />
-            <FormHelperText
-              error={state.status[0] == "error"}
-              id="standard-weight-helper-text"
-              sx={{color:"white"}}
-            >
-              {state.status[1]}
-            </FormHelperText>
-          </FormControl>
+        <Box
+          sx={{
+            gridArea: "username",
+            placeSelf: "center start",
+            ml: "2%",
+            zIndex: "1",
+          }}
+        >
+          <Typography color="white" variant="h5">
+            {state.user.name ?? "AniCheck"}
+          </Typography>
         </Box>
       </Box>
       {state.status[0] == "loading" ? <LinearProgress /> : undefined}

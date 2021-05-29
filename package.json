@@ -20,6 +20,7 @@
     "cytoscape": "^3.18.2",
     "cytoscape-cola": "^2.4.0",
     "cytoscape-dagre": "^2.3.2",
+    "cytoscape-elk": "^2.0.2",
     "cytoscape-fcose": "^2.0.0",
     "cytoscape-klay": "^3.1.4",
     "cytoscape-node-html-label": "^1.2.2",
@@ -40,7 +41,8 @@
     "react-virtualized-auto-sizer": "^1.0.5",
     "react-window": "^1.8.6",
     "remark-gfm": "^1.0.0",
-    "vis-network": "^9.0.4"
+    "vis-network": "^9.0.4",
+    "web-worker": "^1.0.0"
   },
   "devDependencies": {
     "@types/cytoscape": "^3.14.12",

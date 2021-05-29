@@ -48,6 +48,7 @@ export type globalStateType = {
   globalStats: statsType[string];
   status: ["ok" | "loading" | "error", string];
   user: userType;
+  usersHist: string[];
   seriesToRender?: seriesListElementType[];
 };
 
@@ -77,12 +78,14 @@ export type statsType = {
     miss: number;
     got: number;
     plan: number;
-    per?: number;
+    gotPer?: number;
+    planPer?: number;
     totWeight?: number;
     missWeight?: number;
     gotWeight?: number;
     planWeight?: number;
-    perWeight?: number;
+    gotPerWeight?: number;
+    planPerWeight?: number;
   };
 };
 
@@ -116,6 +119,7 @@ export type EdgeType = {
 };
 
 export type userType = {
+  name?: string;
   avatar?: string;
   color?: string;
   cover?: string;

@@ -1,4 +1,4 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box, Tooltip, Typography } from "@material-ui/core";
 import React, {
   useState,
   useRef,
@@ -28,7 +28,7 @@ const SeriesListItem: FC<
 > = ({ index, style, isScrolling, data }) => {
   const [state, setState] = useSharedState();
   const [checked, setChecked] = useState(false);
-  // let isScrolling = false
+  isScrolling = true;
   let serieEl = data.seriesList[index];
   let { series, seriesPrime } = serieEl;
   let key = seriesPrime.id;
@@ -77,6 +77,7 @@ const SeriesListItem: FC<
             }) no-repeat center center`,
             backgroundSize: "cover",
             color: "white",
+            
             // boxShadow: 3,
 
             borderRadius: "10px",
@@ -209,12 +210,8 @@ const SeriesListItem: FC<
             }}
           >
             <DoubleProgressWithContent
-              value1={serieEl.stats["selected"].perWeight ?? 0}
-              value2={Math.floor(
-                ((serieEl.stats["selected"].planWeight ?? 0) /
-                  (serieEl.stats["selected"].totWeight ?? 0)) *
-                  100
-              )}
+              value1={serieEl.stats["selected"].gotPerWeight ?? 0}
+              value2={serieEl.stats["selected"].planPerWeight ?? 0}
               size={80}
               sx={{
                 bgcolor: "rgba(0,2,2,0.2)",
@@ -224,25 +221,38 @@ const SeriesListItem: FC<
                 p: "5px",
               }}
             >
-              <Typography>{serieEl.stats["selected"].perWeight}</Typography>
+              <Typography>
+                {(serieEl.stats["selected"].gotPerWeight ?? 0) +
+                  (serieEl.stats["selected"].planPerWeight ?? 0)}
+              </Typography>
             </DoubleProgressWithContent>
-            <Box
-              sx={{
-                bgcolor: "rgba(0,2,2,0.2)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-
-                color: "primary.main",
-                backdropFilter: "blur(10px)",
-                p: "2px 8px",
-                borderRadius: "10px",
-                fontWeight: 600,
-              }}
+            <Tooltip
+              placement="right"
+              title={
+                serieEl.stats["selected"].missWeight
+                  ? `${serieEl.stats["selected"].missWeight} minutes to complete`
+                  : "You did it!"
+              }
+              disableInteractive
             >
-              <AccessTimeIcon sx={{ mr: "3px" }} />
-              {serieEl.stats["selected"].missWeight}
-            </Box>
+              <Box
+                sx={{
+                  bgcolor: "rgba(0,2,2,0.2)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+
+                  color: "primary.main",
+                  backdropFilter: "blur(10px)",
+                  p: "2px 8px",
+                  borderRadius: "10px",
+                  fontWeight: 600,
+                }}
+              >
+                <AccessTimeIcon sx={{ mr: "3px" }} />
+                {serieEl.stats["selected"].missWeight}
+              </Box>
+            </Tooltip>
           </Box>
         </ButtonBase>
       }

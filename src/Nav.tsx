@@ -15,7 +15,6 @@ import { useQuery, gql } from "@apollo/client";
 import { useSharedState } from "./Store";
 import Loader from "./Loader";
 import { keycharm } from "vis-network";
-import SeriesListItem from "./SeriesListItem";
 import { globalStateType } from "./Types";
 import { FixedSizeList } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
@@ -26,10 +25,11 @@ import StatusFilter from "./StatusFilter";
 import { BoxProps } from "@material-ui/core/Box";
 import Box from "@material-ui/core/Box";
 import InfoModal from "./InfoModal";
+import AniChika from "./AniChika";
 
 const Nav: FC<BoxProps> = (boxProps) => {
   const [state, setState] = useSharedState();
-  
+
   return (
     <Box
       {...boxProps}
@@ -39,6 +39,7 @@ const Nav: FC<BoxProps> = (boxProps) => {
         display: state.userOptions.cyShowNav
           ? "grid"
           : { xs: "grid", sm: "none" },
+        boxShadow: 1,
         ...boxProps.sx,
       }}
       // xs={12} sm={3}
@@ -48,10 +49,10 @@ const Nav: FC<BoxProps> = (boxProps) => {
       <Box sx={{ gridArea: "top" }}>
         <Loader />
         <StatusFilter />
-        <SearchBox />
+        {Object.keys(state.seriesDict).length ? <SearchBox /> : undefined}
       </Box>
       <Box sx={{ gridArea: "content" }}>
-        <SeriesList />
+        {Object.keys(state.seriesDict).length ? <SeriesList /> : <AniChika />}
       </Box>
     </Box>
   );

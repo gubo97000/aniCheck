@@ -9,5 +9,4 @@ The site is still in active development and presents various rough edges, for no
 ## Useful tips
 
 * Right click a node in the graph to open the relative AniList page
-* The best layouts are Klay and Dagre
 * Weighted Percentage counts the completition based on the time each element of the series takes

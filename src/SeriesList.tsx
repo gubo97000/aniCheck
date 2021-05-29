@@ -29,7 +29,6 @@ import { useQuery, gql } from "@apollo/client";
 import { useSharedState } from "./Store";
 import Loader from "./Loader";
 import { keycharm } from "vis-network";
-import SeriesListItem from "./SeriesListItem";
 import { globalStateType, seriesListElementType } from "./Types";
 import { FixedSizeList } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";

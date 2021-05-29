@@ -16,6 +16,7 @@ import Popper from "@material-ui/core/Popper";
 import CyFilterMenu from "./CyFilterMenu";
 import ArrowBackIosRoundedIcon from "@material-ui/icons/ArrowBackIosRounded";
 import ArrowForwardIosRoundedIcon from "@material-ui/icons/ArrowForwardIosRounded";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 
 type props = {
   // badge: number;
@@ -217,71 +218,82 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
           </Tooltip>
         </Box>
         <Divider />
-        <Tooltip
-          title={filterBadge ? `Hiding ${filterBadge} Nodes` : "Filter Nodes"}
-          placement="left"
-          disableInteractive
-        >
-          <Badge badgeContent={filterBadge} color="primary">
-            <IconButton
-              onClick={handleClickFilter}
-              color={
-                state.userOptions.cyFilter.length != 0 ? "primary" : "default"
-              }
-            >
-              <FilterAltRoundedIcon />
-            </IconButton>
-          </Badge>
-        </Tooltip>
-      </Stack>
-
-      <Popper
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        placement="left"
-        disablePortal={false}
-        modifiers={[
-          {
-            name: "flip",
-            enabled: true,
-            options: {
-              altBoundary: true,
-              rootBoundary: "viewport",
-              padding: 8,
-            },
-          },
-          {
-            name: "preventOverflow",
-            enabled: true,
-            options: {
-              altAxis: true,
-              altBoundary: true,
-              tether: true,
-              rootBoundary: document,
-              padding: 8,
-            },
-          },
-          {
-            name: "arrow",
-            enabled: true,
-            options: {
-              element: anchorEl,
-            },
-          },
-        ]}
-      >
-        <Box
-          sx={{
-            bgcolor: "white",
-            p: 2,
-            borderRadius: "10px",
-            width: "300px",
-            boxShadow: 1,
+        <ClickAwayListener
+          onClickAway={() => {
+            setAnchorEl(null);
           }}
         >
-          <CyFilterMenu />
-        </Box>
-      </Popper>
+          <Box>
+            <Tooltip
+              title={
+                filterBadge ? `Hiding ${filterBadge} Nodes` : "Filter Nodes"
+              }
+              placement="left"
+              disableInteractive
+            >
+              <Badge badgeContent={filterBadge} color="primary">
+                <IconButton
+                  onClick={handleClickFilter}
+                  color={
+                    state.userOptions.cyFilter.length != 0
+                      ? "primary"
+                      : "default"
+                  }
+                >
+                  <FilterAltRoundedIcon />
+                </IconButton>
+              </Badge>
+            </Tooltip>
+            <Popper
+              open={Boolean(anchorEl)}
+              anchorEl={anchorEl}
+              placement="left"
+              disablePortal={false}
+              modifiers={[
+                {
+                  name: "flip",
+                  enabled: true,
+                  options: {
+                    altBoundary: true,
+                    rootBoundary: "viewport",
+                    padding: 8,
+                  },
+                },
+                {
+                  name: "preventOverflow",
+                  enabled: true,
+                  options: {
+                    altAxis: true,
+                    altBoundary: true,
+                    tether: true,
+                    rootBoundary: document,
+                    padding: 8,
+                  },
+                },
+                {
+                  name: "arrow",
+                  enabled: true,
+                  options: {
+                    element: anchorEl,
+                  },
+                },
+              ]}
+            >
+              <Box
+                sx={{
+                  bgcolor: "white",
+                  p: 2,
+                  borderRadius: "10px",
+                  width: "300px",
+                  boxShadow: 1,
+                }}
+              >
+                <CyFilterMenu />
+              </Box>
+            </Popper>
+          </Box>
+        </ClickAwayListener>
+      </Stack>
     </Box>
   );
 };

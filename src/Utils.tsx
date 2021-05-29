@@ -480,12 +480,14 @@ export const updateCompletion = (state: globalStateType) => {
         miss: serieMiss,
         got: serieGot,
         plan: seriePlan,
-        per: Math.floor((serieGot / serieTot) * 100) || 0,
+        gotPer: Math.floor((serieGot / serieTot) * 100) || 0,
+        planPer: Math.floor((seriePlan / serieTot) * 100) || 0,
         totWeight: serieTotWeight,
         missWeight: serieMissWeight,
         gotWeight: serieGotWeight,
         planWeight: seriePlanWeight,
-        perWeight: Math.floor((serieGotWeight / serieTotWeight) * 100) || 0,
+        gotPerWeight: Math.floor((serieGotWeight / serieTotWeight) * 100) || 0,
+        planPerWeight: Math.floor((seriePlanWeight / serieTotWeight) * 100) || 0,
       };
 
       //Update Global Completion
@@ -522,12 +524,14 @@ export const updateCompletion = (state: globalStateType) => {
         got: got,
         miss: miss,
         plan: plan,
-        per: Math.floor((got / tot) * 100),
+        gotPer: Math.floor((got / tot) * 100),
+        planPer: Math.floor((plan / tot) * 100),
         totWeight: totWeight,
         gotWeight: gotWeight,
         planWeight: planWeight,
         missWeight: missWeight,
-        perWeight: Math.floor((gotWeight / totWeight) * 100),
+        gotPerWeight: Math.floor((gotWeight / totWeight) * 100),
+        planPerWeight: Math.floor((planWeight / totWeight) * 100),
       };
 
       //Update Global Completion
