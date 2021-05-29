@@ -1,11 +1,5 @@
 import {
     Box,
-    Button,
-    Chip,
-    IconButton,
-    Switch,
-    TextField,
-    Tooltip,
     Typography,
     useAutocomplete,
   } from "@material-ui/core";
@@ -20,42 +14,6 @@ import {
     Children,
     isValidElement,
   } from "react";
-  // import useAutocomplete from '@material-ui/core/useAutocomplete';
-  import { render } from "react-dom";
-  import * as vis from "vis-network";
-  import cytoscape from "cytoscape";
-  
-  import { useQuery, gql } from "@apollo/client";
-  import { useSharedState } from "./Store";
-  import Loader from "./Loader";
-  import { keycharm } from "vis-network";
-  import SeriesListItem from "./SeriesListItem";
-  import {
-    formatsType,
-    globalStateType,
-    seriesListElementType,
-    sortType,
-    userOptionType,
-  } from "./Types";
-  import { FixedSizeList } from "react-window";
-  import AutoSizer from "react-virtualized-auto-sizer";
-  import { matchSorter } from "match-sorter";
-  import {
-    convertBulkTerm,
-    FORMATS,
-    FORMATS_IDS,
-    getBulkStat,
-    sortAlphabetical,
-    sortComplete,
-    updateCompletion,
-    useStateWithLocalStorage,
-  } from "./Utils";
-  import xor from "lodash/xor";
-  import without from "lodash/without";
-  import { get, zipWith } from "lodash";
-  import FormControl from "@material-ui/core/FormControl";
-  import InputLabel from "@material-ui/core/InputLabel";
-  import Input from "@material-ui/core/Input";
   import ButtonBase from "@material-ui/core/ButtonBase";
   import SelectAllRoundedIcon from "@material-ui/icons/SelectAllRounded";
   import HighlightOffRoundedIcon from "@material-ui/icons/HighlightOffRounded";
@@ -79,9 +37,9 @@ export const ButtonInputRow: FC<props> = ({
         position: "relative",
         display: "grid",
         gridTemplateColumns: "1fr 25%",
-        gridTemplateRows: "40% 60%",
+        gridTemplateRows: "auto auto",
         gridTemplateAreas: "'name s' 'help .'",
-        alignItems: "start",
+        alignItems: "center",
         m: "5px 0px",
       }}
     >

@@ -33,7 +33,8 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
         userOptions: { ...state.userOptions, cyLayout: layoutTag },
       };
       state.cyViz?.elements().makeLayout(getCyLayout(tempState)).run();
-      state.cyViz?.center();
+      state.cyViz?.fit(undefined, 50);
+      state.cyViz?.panBy({ x: -35, y: 0 });
       return tempState;
     });
   };
@@ -143,9 +144,9 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
         <Tooltip title="Center View" placement="left" disableInteractive>
           <IconButton
             onClick={() => {
-              state.cyViz?.fit();
+              state.cyViz?.fit(undefined, 50);
+              state.cyViz?.panBy({ x: -35, y: 0 });
             }}
-            // color={isSelectedLayout("klay")}
           >
             <CenterFocusStrongRoundedIcon />
           </IconButton>
@@ -170,6 +171,17 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
             <AccountTreeRoundedIcon />
           </IconButton>
         </Tooltip>
+        {/* <Tooltip title="Elk Layout" placement="left" disableInteractive>
+          <IconButton
+            sx={{
+              transform: "rotate(90deg)",
+            }}
+            onClick={() => handleClickLayout("elk")}
+            color={isSelectedLayout("elk")}
+          >
+            <AccountTreeRoundedIcon />
+          </IconButton>
+        </Tooltip> */}
         <Divider />
         <Box>
           <Tooltip

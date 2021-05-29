@@ -1,16 +1,8 @@
-import {
-  Box,
-  Switch,
-} from "@material-ui/core";
-import React, {
-  useEffect,
-  FC,
-} from "react";
+import { Box, Switch } from "@material-ui/core";
+import React, { useEffect, FC } from "react";
 
 import { useSharedState } from "./Store";
-import {
-  formatsType,
-} from "./Types";
+import { formatsType } from "./Types";
 import {
   convertBulkTerm,
   FORMATS,
@@ -77,7 +69,7 @@ const CompletionMenu: FC = () => {
     <Box>
       <ButtonInputRow
         name="Smart Completion"
-        helperText="Only consider completion of thematic groups you have already started"
+        helperText="Only consider completion of thematic groups you have already started. (E.g. If you read all manga of a series without watching any animation the series is completed anyway)"
         onClick={() => handleClick("smart")}
         control={
           <Switch
@@ -92,6 +84,9 @@ const CompletionMenu: FC = () => {
         stateArray="animeComposition"
         dataset={FORMATS}
         disabled={!state.userOptions.smartCompletion}
+        sx={
+          !state.userOptions.smartCompletion ? { display: "none" } : undefined
+        }
       />
       <FilterGroup
         name={"Formats to consider Manga"}
@@ -99,6 +94,9 @@ const CompletionMenu: FC = () => {
         stateArray="mangaComposition"
         dataset={FORMATS}
         disabled={!state.userOptions.smartCompletion}
+        sx={
+          !state.userOptions.smartCompletion ? { display: "none" } : undefined
+        }
       />
       <FilterGroup
         name={"Formats to consider Novel"}
@@ -106,13 +104,19 @@ const CompletionMenu: FC = () => {
         stateArray="novelComposition"
         dataset={FORMATS}
         disabled={!state.userOptions.smartCompletion}
+        sx={
+          !state.userOptions.smartCompletion ? { display: "none" } : undefined
+        }
       />
-      <Divider variant="middle" sx={{
-        my:2
-      }} />
+      <Divider
+        variant="middle"
+        sx={{
+          my: 2,
+        }}
+      />
       <ButtonInputRow
         name="Custom Completion"
-        helperText="Choose what formats to consider for completion in all series"
+        helperText="Choose what formats to include for completion in a series"
         onClick={() => handleClick("smart")}
         control={
           <Switch
@@ -128,6 +132,9 @@ const CompletionMenu: FC = () => {
         stateArray="completion"
         dataset={FORMATS}
         disabled={state.userOptions.smartCompletion}
+        sx={
+          state.userOptions.smartCompletion ? { display: "none" } : undefined
+        }
       />
     </Box>
   );

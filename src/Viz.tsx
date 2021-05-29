@@ -22,6 +22,7 @@ import Button from "@material-ui/core/Button";
 import cola from "cytoscape-cola";
 import klay from "cytoscape-klay";
 import dagre from "cytoscape-dagre";
+// import elk from "cytoscape-elk";
 import popper from "cytoscape-popper";
 import fcose from "cytoscape-fcose";
 import nodeHtmlLabel from "cytoscape-node-html-label";
@@ -44,6 +45,7 @@ const Viz: FC<BoxProps> = (boxProps) => {
       cytoscape.use(cola);
       cytoscape.use(klay);
       cytoscape.use(dagre);
+      // cytoscape.use(elk);
       cytoscape.use(popper);
       cytoscape.use(fcose);
     } catch (error) {}
@@ -232,7 +234,8 @@ const Viz: FC<BoxProps> = (boxProps) => {
 
         state.cyViz.elements().makeLayout(getCyLayout(state)).run();
 
-        state.cyViz?.center();
+        state.cyViz?.fit(undefined, 50);
+        state.cyViz?.panBy({ x: -35, y: 0 });
       }
 
       return { ...state,
@@ -259,24 +262,14 @@ const Viz: FC<BoxProps> = (boxProps) => {
         state.cyViz?.center();
         state.cyViz.elements().makeLayout(getCyLayout(state)).run();
 
-        state.cyViz?.center();
+        state.cyViz?.fit(undefined, 50);
+        state.cyViz?.panBy({ x: -35, y: 0 });
       }
 
       return { ...state};
     });
   }, [state.userOptions.cyFilter, state.userOptions.cyShowHidden]);
 
-  const handleClickLayout = (layoutTag: string) => {
-    setState((state) => {
-      let tempState = {
-        ...state,
-        userOptions: { ...state.userOptions, cyLayout: layoutTag },
-      };
-      state.cyViz?.elements().makeLayout(getCyLayout(tempState)).run();
-      state.cyViz?.center();
-      return tempState;
-    });
-  };
 
   const applyFilter = (cyViz: cytoscape.Core) => {
     //Restore all hidden nodes

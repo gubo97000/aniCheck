@@ -53,7 +53,7 @@ export default function OptionsModal() {
           boxShadow: 24,
           p: 4,
 
-          height:"90%",
+          maxHeight:"90%",
           borderRadius: "10px",
           overflow: "auto auto",
         }}
@@ -62,15 +62,15 @@ export default function OptionsModal() {
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={handleChange} aria-label="options">
               <Tab label="Completion" value="1" />
-              <Tab label="Sort" value="2" />
-              <Tab label="Filter" value="3" />
+              {/* <Tab label="Sort" value="2" /> */}
+              {/* <Tab label="Filter" value="3" /> */}
             </TabList>
           </Box>
           <TabPanel value="1">
             <CompletionMenu />
           </TabPanel>
           <TabPanel value="2">
-            <CyFilterMenu />
+            {/* <CyFilterMenu /> */}
           </TabPanel>
           <TabPanel value="3">Item Three</TabPanel>
         </TabContext>

@@ -862,8 +862,6 @@ export const getCyLayout = (state: globalStateType) => {
         return {
           name: "breadthfirst",
           roots: [state.seriesSelected.seriesPrime.id],
-          // directed: true,
-          // padding: 10
         };
 
       case "klay":
@@ -883,7 +881,7 @@ export const getCyLayout = (state: globalStateType) => {
             nodeLayering: "NETWORK_SIMPLEX",
 
             mergeEdges: true,
-            thoroughness: 50, // How much effort should be spent to produce a nice layout...
+            thoroughness: 10, // How much effort should be spent to produce a nice layout...
           },
         } as any;
 
@@ -893,6 +891,21 @@ export const getCyLayout = (state: globalStateType) => {
           .style("curve-style", "bezier");
         return {
           name: "dagre",
+          // animate: true,
+          nodeDimensionsIncludeLabels: true,
+
+          rankSep: 80,
+          // ranker: 'tight-tree', // 'network-simplex', 'tight-tree' or 'longest-path'
+          // ranker: 'network-simplex', // 'network-simplex', 'tight-tree' or 'longest-path'
+          // ranker: 'longest-path', // 'network-simplex', 'tight-tree' or 'longest-path'
+        } as any;
+
+      case "elk":
+        (state.cyViz?.style() as any)
+          .selector("edge")
+          .style("curve-style", "bezier");
+        return {
+          name: "elk",
           // animate: true,
           nodeDimensionsIncludeLabels: true,
 

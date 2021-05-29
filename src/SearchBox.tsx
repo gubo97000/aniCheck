@@ -45,6 +45,7 @@ import FilterAltRoundedIcon from "@material-ui/icons/FilterAltRounded";
 import { useWorker } from "@koale/useworker";
 import SearchRoundedIcon from "@material-ui/icons/SearchRounded";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
 
 const SearchBox: FC = ({ children }) => {
   // console.log(props.children.props.children.props)
@@ -145,17 +146,27 @@ const SearchBox: FC = ({ children }) => {
         // variant="filled"
         // margin="normal"
         value={query}
+        // color="primary"
         onChange={handleChange}
         placeholder="Search"
-        inputProps={{
+        InputProps={{
           sx: {
             bgcolor: "grey.300",
-            borderRadius: "5px",
-            border: "0px solid",
+            // borderRadius: "5px",
+            // border: "0px solid",
           },
           startAdornment: (
             <InputAdornment position="start">
               <SearchRoundedIcon />
+            </InputAdornment>
+          ),
+          endAdornment: (
+            <InputAdornment position="end">
+              {query ? (
+                <IconButton onClick={()=>{setQuery("")}}>
+                  <ClearRoundedIcon />
+                </IconButton>
+              ) : undefined}
             </InputAdornment>
           ),
         }}
