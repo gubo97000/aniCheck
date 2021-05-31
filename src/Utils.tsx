@@ -7,6 +7,7 @@ import { useSharedState } from "./Store";
 import {
   formatsType,
   globalStateType,
+  NodeType,
   relationsType,
   seriesListElementType,
   serieStatusType,
@@ -291,46 +292,53 @@ export const useAsync = <T, E = string>(
 };
 
 /// Sort Functions
-export function sortWeight(rankedItems: any[], invert: boolean) {
+export function sortWeight(
+  rankedItems: { item: seriesListElementType; [key: string]: any }[],
+  invert: boolean
+) {
   return rankedItems.sort((itm1, itm2) => {
     return invert
-      ? itm1.item.stats["selected"].missWeight -
-          itm2.item.stats["selected"].missWeight
-      : itm2.item.stats["selected"].missWeight -
-          itm1.item.stats["selected"].missWeight;
+      ? (itm1.item.stats["selected"].missWeight ?? 0) -
+          (itm2.item.stats["selected"].missWeight ?? 0)
+      : (itm2.item.stats["selected"].missWeight ?? 0) -
+          (itm1.item.stats["selected"].missWeight ?? 0);
   });
 }
 
-export function sortWeightPer(rankedItems: any[], invert: boolean) {
+export function sortWeightPer(
+  rankedItems: { item: seriesListElementType; [key: string]: any }[],
+  invert: boolean
+) {
   return rankedItems.sort((itm1, itm2) => {
     let weight1 =
-      itm1.item.stats["selected"].perWeight +
-      Math.floor(
-        ((itm1.item.stats["selected"].planWeight ?? 0) /
-          (itm1.item.stats["selected"].totWeight ?? 0)) *
-          100
-      );
+      (itm1.item.stats["selected"].gotPerWeight ?? 0) +
+      (itm1.item.stats["selected"].planPerWeight ?? 0);
     let weight2 =
-      itm2.item.stats["selected"].perWeight +
-      Math.floor(
-        ((itm2.item.stats["selected"].planWeight ?? 0) /
-          (itm2.item.stats["selected"].totWeight ?? 0)) *
-          100
-      );
+      (itm2.item.stats["selected"].gotPerWeight ?? 0) +
+      (itm2.item.stats["selected"].planPerWeight ?? 0);
     return (invert ? -1 : 1) * (weight1 - weight2);
   });
 }
 
-export function sortComplete(rankedItems: any[], invert: boolean) {
+export function sortComplete(
+  rankedItems: { item: seriesListElementType; [key: string]: any }[],
+  invert: boolean
+) {
   return rankedItems.sort((itm1, itm2) => {
-    return (
-      (invert ? -1 : 1) *
-      (itm1.item.stats["selected"].per - itm2.item.stats["selected"].per)
-    );
+    let weight1 =
+      (itm1.item.stats["selected"].gotPer ?? 0) +
+      (itm1.item.stats["selected"].planPer ?? 0);
+    let weight2 =
+      (itm2.item.stats["selected"].gotPer ?? 0) +
+      (itm2.item.stats["selected"].planPer ?? 0);
+    return (invert ? -1 : 1) * (weight1 - weight2);
   });
 }
 
-export function sortAlphabetical(rankedItems: any[], invert: boolean) {
+export function sortAlphabetical(
+  rankedItems: { item: seriesListElementType; [key: string]: any }[],
+  invert: boolean
+) {
   console.log(rankedItems);
   return rankedItems.sort((itm1, itm2) => {
     return invert
@@ -339,10 +347,13 @@ export function sortAlphabetical(rankedItems: any[], invert: boolean) {
   });
 }
 
-export function sortSize(rankedItems: any[], invert: boolean) {
+export function sortSize(
+  rankedItems: any[],
+  invert: boolean
+) {
   return rankedItems.sort((itm1, itm2) => {
     return (
-      (invert ? -1 : 1) * (itm1.item.stats.serieTot - itm2.item.stats.serieTot)
+      (invert ? -1 : 1) * (itm1.item.stats.tot - itm2.item.stats.tot)
     );
   });
 }
@@ -487,7 +498,8 @@ export const updateCompletion = (state: globalStateType) => {
         gotWeight: serieGotWeight,
         planWeight: seriePlanWeight,
         gotPerWeight: Math.floor((serieGotWeight / serieTotWeight) * 100) || 0,
-        planPerWeight: Math.floor((seriePlanWeight / serieTotWeight) * 100) || 0,
+        planPerWeight:
+          Math.floor((seriePlanWeight / serieTotWeight) * 100) || 0,
       };
 
       //Update Global Completion

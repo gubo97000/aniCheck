@@ -68,7 +68,7 @@ const Viz: FC<BoxProps> = (boxProps) => {
           // node b
           data: {
             id: "b",
-            title: "Insert the user id you need to check on the upper right",
+            title: "Insert a username then click on a serie!",
             startDate: "2020-02-01",
             format: "HELO",
           },

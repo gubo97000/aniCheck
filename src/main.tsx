@@ -38,6 +38,7 @@ const MainApp: FC<BoxProps> = (boxProps) => {
             },
         gridTemplateAreas: "'viz nav'",
         height: "100vh",
+        bgcolor:"background.default",
       }}
     >
       <Viz

@@ -61,16 +61,16 @@ export default function OptionsModal() {
         <TabContext value={page}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={handleChange} aria-label="options">
-              <Tab label="Completion" value="1" />
-              {/* <Tab label="Sort" value="2" /> */}
+              <Tab label="General" value="1" />
+              <Tab label="Completion" value="2" />
               {/* <Tab label="Filter" value="3" /> */}
             </TabList>
           </Box>
           <TabPanel value="1">
-            <CompletionMenu />
+            {/* <CyFilterMenu /> */}
           </TabPanel>
           <TabPanel value="2">
-            {/* <CyFilterMenu /> */}
+            <CompletionMenu />
           </TabPanel>
           <TabPanel value="3">Item Three</TabPanel>
         </TabContext>

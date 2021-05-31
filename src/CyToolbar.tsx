@@ -98,7 +98,7 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
           position: "absolute",
           top: "calc(20% - 60px)",
           right: "20px",
-          bgcolor: "white",
+          bgcolor:"background.paper",
           boxShadow: 1,
           borderRadius: "50px",
         }}
@@ -136,7 +136,7 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
           position: "absolute",
           top: "20%",
           right: "20px",
-          bgcolor: "white",
+          bgcolor:"background.paper",
           boxShadow: 1,
           borderRadius: "10px",
         }}

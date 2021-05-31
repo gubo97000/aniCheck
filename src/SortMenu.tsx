@@ -102,13 +102,13 @@ const SortMenu: FC<BoxProps> = (boxProps) => {
           horizontal: "left",
         }}
       >
-        <MenuItem
+        {/* <MenuItem
           selected={sort.type == "complete%"}
           onClick={() => handleSelection("complete%")}
         >
           {sort.inverted ? <NorthRoundedIcon /> : <SouthRoundedIcon />}
           Complete %
-        </MenuItem>
+        </MenuItem> */}
 
         <MenuItem
           selected={sort.type == "weight%"}
