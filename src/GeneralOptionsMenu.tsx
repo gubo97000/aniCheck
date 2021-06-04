@@ -2,7 +2,7 @@ import { Box, Switch } from "@material-ui/core";
 import React, { useEffect, FC } from "react";
 
 import { useSharedState } from "./Store";
-import { formatsType } from "./Types";
+import { formatsType, userOptionType } from "./Types";
 import {
   convertBulkTerm,
   FORMATS,
@@ -29,7 +29,7 @@ const GeneralOptionsMenu: FC = () => {
         ...state,
         userOptions: {
           ...state.userOptions,
-          themeMode: event.target.value as string,
+          themeMode: event.target.value as userOptionType["themeMode"],
         },
       };
     });
@@ -40,7 +40,7 @@ const GeneralOptionsMenu: FC = () => {
         ...state,
         userOptions: {
           ...state.userOptions,
-          vizMode: event.target.value as string,
+          vizMode: event.target.value as userOptionType["vizMode"],
         },
       };
     });
