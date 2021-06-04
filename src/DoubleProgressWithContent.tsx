@@ -34,7 +34,6 @@ import Loader from "./Loader";
 import { keycharm } from "vis-network";
 import { seriesListElementType } from "./Types";
 import { useSharedState } from "./Store";
-import { formatToIcon } from "./Utils";
 
 interface props {
   value1: number;
@@ -54,9 +53,11 @@ const DoubleProgressWithContent: FC<props> = ({
     <Box sx={{ ...sx, position: "relative", display: "inline-flex" }}>
       <Tooltip
         placement="right"
-        title={`${value2 ? `${value2}% Planned` : ""}`+
-        `${value2 & value1 ? " / ": ""}`+
-        `${value1 ? `${value1}% Completed` : ""}`}
+        title={
+          `${value2 ? `${value2}% Planned` : ""}` +
+          `${value1 && value2 ? " / " : ""}` +
+          `${value1 ? `${value1}% Completed` : ""}`
+        }
         disableInteractive
       >
         <CircularProgress
@@ -80,18 +81,18 @@ const DoubleProgressWithContent: FC<props> = ({
           justifyContent: "center",
         }}
       >
-          <CircularProgress
-            variant="determinate"
-            color="secondary"
-            value={value2 + value1}
-            size={(size ?? 40) - 2}
-            thickness={4.0}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          />
+        <CircularProgress
+          variant="determinate"
+          color="secondary"
+          value={value2 + value1}
+          size={(size ?? 40) - 2}
+          thickness={4.0}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        />
 
         <Box
           sx={{

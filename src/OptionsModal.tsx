@@ -13,16 +13,21 @@ import TabContext from "@material-ui/lab/TabContext";
 import TabList from "@material-ui/lab/TabList";
 import TabPanel from "@material-ui/lab/TabPanel";
 import CyFilterMenu from "./CyFilterMenu";
+import GeneralOptionsMenu from "./GeneralOptionsMenu";
 
 export default function OptionsModal() {
   const [state, setState] = useSharedState();
   const [page, setPage] = useState("1");
   const [open, setOpen] = useState(false);
+  const openOptionsModal = (openState: boolean, page?: string) => {
+    setOpen(openState);
+    setPage(page ?? "general");
+  };
   useEffect(() => {
     setState((state) => {
       return {
         ...state,
-        modalOpenState: [open, setOpen],
+        modalOpenState: [open, openOptionsModal],
       };
     });
   }, []);
@@ -53,7 +58,7 @@ export default function OptionsModal() {
           boxShadow: 24,
           p: 4,
 
-          maxHeight:"90%",
+          maxHeight: "90%",
           borderRadius: "10px",
           overflow: "auto auto",
         }}
@@ -61,15 +66,13 @@ export default function OptionsModal() {
         <TabContext value={page}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={handleChange} aria-label="options">
-              <Tab label="General" value="1" />
-              <Tab label="Completion" value="2" />
+              <Tab label="General" value="general" />
+              <Tab label="Completion" value="completion_options" />
               {/* <Tab label="Filter" value="3" /> */}
             </TabList>
           </Box>
-          <TabPanel value="1">
-            {/* <CyFilterMenu /> */}
-          </TabPanel>
-          <TabPanel value="2">
+          <TabPanel value="general"><GeneralOptionsMenu/></TabPanel>
+          <TabPanel value="completion_options">
             <CompletionMenu />
           </TabPanel>
           <TabPanel value="3">Item Three</TabPanel>

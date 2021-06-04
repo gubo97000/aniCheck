@@ -140,6 +140,7 @@ export const FilterGroup: FC<props & BoxProps> = ({
         sx={{
           gridArea: "name",
           placeSelf: "center start",
+          color: "text.primary",
           ...(disabled
             ? {
                 color: "text.disabled",

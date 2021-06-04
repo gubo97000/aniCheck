@@ -1,4 +1,3 @@
-import { makeStyles } from "@material-ui/core";
 import cytoscape from "cytoscape";
 import React, {
   createContext,
@@ -15,6 +14,8 @@ import { FORMATS_IDS, sortAlphabetical, useStateWithLocalStorage } from "./Utils
 const initialState: globalStateType = {
   cy: cytoscape({ headless: true }),
   userOptions: {
+    themeMode:"auto",
+    vizMode:"list",
     sort: {
       type: "alphabetical",
       inverted: false,

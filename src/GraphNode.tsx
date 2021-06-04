@@ -41,9 +41,9 @@ import TvIcon from "@material-ui/icons/Tv";
 import MusicVideoIcon from "@material-ui/icons/MusicVideo";
 import BookIcon from "@material-ui/icons/Book";
 import OpenInNewRoundedIcon from "@material-ui/icons/OpenInNewRounded";
-import { formatToIcon } from "./Utils";
 import { NodeType } from "./Types";
 import ButtonBase from "@material-ui/core/ButtonBase";
+import { FORMATS } from "./Utils";
 
 interface props {
   data: NodeType;
@@ -176,7 +176,7 @@ const GraphNode: FC<props> = ({ data }) => {
             top: "9px",
           }}
         >
-          {formatToIcon(data.format)}
+          {FORMATS[data.format]?.icon}
         </Icon>
       </Box>
     </Paper>

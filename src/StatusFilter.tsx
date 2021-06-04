@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   Button,
+  ButtonProps,
   Grid,
   IconButton,
   List,
@@ -68,10 +69,9 @@ interface props {
   children: React.ReactNode[] | React.ReactNode;
   statusId: serieStatusType;
   tooltip?: string;
-  icon?: React.ReactNode;
 }
 
-const FilterButton: FC<props> = ({ children, statusId, tooltip, icon }) => {
+const FilterButton: FC<props & ButtonProps> = ({ children, statusId, tooltip, ...buttonProps }) => {
   const [state, setState] = useSharedState();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -93,14 +93,14 @@ const FilterButton: FC<props> = ({ children, statusId, tooltip, icon }) => {
     });
   };
 
-  const handleColor = () => {
+  const isSelectedColor = () => {
     if (!state.userOptions.statusFilter.includes(statusId)) {
       return "primary";
     } else {
       return undefined;
     }
   };
-  const handleVariant = () => {
+  const isSelectedVariant = () => {
     if (!state.userOptions.statusFilter.includes(statusId)) {
       return "contained";
     } else {
@@ -112,9 +112,10 @@ const FilterButton: FC<props> = ({ children, statusId, tooltip, icon }) => {
     <Tooltip title={tooltip ?? false} disableInteractive>
       <Button
         onClick={handleClick}
-        // color={handleColor()}
-        variant={handleVariant()}
-        startIcon={icon}
+        color={buttonProps.color}
+        variant={isSelectedVariant()}
+        startIcon={buttonProps.startIcon}
+        {...buttonProps}
       >
         {children}
       </Button>
@@ -145,40 +146,50 @@ const StatusFilter: FC = () => {
         <FilterButton
           statusId="COMPLETE"
           tooltip="Completed"
-          icon={<CheckCircleOutlineRoundedIcon />}
+          startIcon={<CheckCircleOutlineRoundedIcon />}
+          color="primary"
         >
           {/* <CheckCircleOutlineRoundedIcon /> */}
-          {state.globalStats.got}
+          {state.globalStats?.got}
         </FilterButton>
         <FilterButton
           statusId="PLAN_TO_COMPLETE"
           tooltip="Plan To Complete"
-          icon={<CloudCircleIcon />}
+          startIcon={<CloudCircleIcon />}
+          color="secondary"
         >
           {/* <CloudCircleIcon /> */}
-          {state.globalStats.plan}
+          {state.globalStats?.plan}
         </FilterButton>
         <FilterButton
           statusId="NOT_COMPLETE"
           tooltip="Not Completed"
-          icon={<AdjustRoundedIcon />}
+          startIcon={<AdjustRoundedIcon />}
+          color={undefined}
         >
           {/* <AdjustRoundedIcon /> */}
-          {state.globalStats.miss}
+          {state.globalStats?.miss}
         </FilterButton>
-        <FilterButton
-          statusId="ERR"
-          tooltip="Not Included with current options"
-          icon={<HighlightOffRoundedIcon />}
-        >
-          {/* <HighlightOffRoundedIcon /> */}
-          {state.globalStats.tot -
-            (state.globalStats.got +
-              state.globalStats.miss +
-              state.globalStats.plan)}
-        </FilterButton>
+        {(state.globalStats?.tot ?? 0) -
+          ((state.globalStats?.got ?? 0) +
+            (state.globalStats?.miss ?? 0) +
+            (state.globalStats?.plan ?? 0)) ==
+        0 ? undefined : (
+          <FilterButton
+            statusId="ERR"
+            tooltip="Not Included with current options"
+            startIcon={<HighlightOffRoundedIcon />}
+            color={undefined}
+          >
+            {/* <HighlightOffRoundedIcon /> */}
+            {(state.globalStats?.tot ?? 0) -
+              ((state.globalStats?.got ?? 0) +
+                (state.globalStats?.miss ?? 0) +
+                (state.globalStats?.plan ?? 0))}
+          </FilterButton>
+        )}
       </Box>
-    {/* <Typography>
+      {/* <Typography>
         {without(
             ["COMPLETE", "PLAN_TO_COMPLETE", "NOT_COMPLETE", "ERR"],
             ...state.userOptions.statusFilter

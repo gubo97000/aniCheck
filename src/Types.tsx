@@ -36,16 +36,23 @@ export type statusType =
   | "PAUSED"
   | "REPEATING"
   | "NO";
+export type releaseStatusType =
+  | "FINISHED"
+  | "RELEASING"
+  | "NOT_YET_RELEASED"
+  | "CANCELLED"
+  | "HIATUS";
+export type formatsBulkTermsType = "anime" | "manga" | "novel";
 
 export type globalStateType = {
   cy: cytoscape.Core;
   userOptions: userOptionType;
-  modalOpenState?: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+  modalOpenState?: [boolean, (openState: boolean, page?: string) => void];
   modalInfoOpenState?: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
   seriesSelected?: seriesListElementType;
   seriesDict: { [key: string]: seriesListElementType };
   cyViz?: cytoscape.Core;
-  globalStats: statsType[string];
+  globalStats: statsType[formatsType | "selected"];
   status: ["ok" | "loading" | "error", string];
   user: userType;
   usersHist: string[];
@@ -53,6 +60,8 @@ export type globalStateType = {
 };
 
 export type userOptionType = {
+  themeMode: "light" | "dark" | "auto";
+  vizMode: "graph" | "list";
   sort: sortType;
   smartCompletion: boolean;
   animeComposition: formatsType[];
@@ -73,7 +82,7 @@ export type sortType = {
 };
 
 export type statsType = {
-  [key: string]: {
+  [key in formatsType | "selected"]: {
     tot: number;
     miss: number;
     got: number;
@@ -93,15 +102,16 @@ export type seriesListElementType = {
   seriesPrime: NodeType;
   series: { nodes: NodeType[]; edges: EdgeType[] };
   stats: statsType;
+  formatsIncluded?: formatsType[];
   status: serieStatusType;
   serieComplete: { nodes: NodeType[]; edges: EdgeType[] };
 };
 
 export type NodeType = {
   id: any;
-  status: string;
-  airStatus: any;
-  format: any;
+  status: statusType;
+  airStatus: releaseStatusType;
+  format: formatsType;
   title: string;
   titles: string[];
   siteUrl: any;

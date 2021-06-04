@@ -136,7 +136,12 @@ const SearchBox: FC = ({ children }) => {
         sx={{
           gridArea: "search",
           justifySelf: "left",
-          // bgcolor:"primary.light"
+          "& .MuiOutlinedInput-notchedOutline":{
+            border:"1px solid",
+            borderColor:"#00000000"
+          },
+          // border:"3px solid black",
+          // bgcolor:"primary.main"
 
           // bgcolor:"lightpink",
         }}
@@ -147,22 +152,32 @@ const SearchBox: FC = ({ children }) => {
         value={query}
         // color="primary"
         onChange={handleChange}
-        placeholder="Search"
+        placeholder="Search Series"
         InputProps={{
           sx: {
-            bgcolor: "grey.300",
+            bgcolor: "primary.ghost",
+            "& ::placeholder":{
+              color:"primary.dark",
+              fontWeight:"bold"
+            },
             // borderRadius: "5px",
             // border: "0px solid",
           },
           startAdornment: (
-            <InputAdornment position="start">
+            <InputAdornment position="start" sx={{
+              color:"primary.main"
+              }}>
               <SearchRoundedIcon />
             </InputAdornment>
           ),
           endAdornment: (
             <InputAdornment position="end">
               {query ? (
-                <IconButton onClick={()=>{setQuery("")}}>
+                <IconButton
+                  onClick={() => {
+                    setQuery("");
+                  }}
+                >
                   <ClearRoundedIcon />
                 </IconButton>
               ) : undefined}
@@ -175,7 +190,7 @@ const SearchBox: FC = ({ children }) => {
           gridArea: "complete",
         }}
         onClick={() => {
-          state.modalOpenState?.[1](true);
+          state.modalOpenState?.[1](true, "completion_options");
         }}
       >
         <DonutLargeRoundedIcon />

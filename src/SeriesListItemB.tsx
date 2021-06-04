@@ -15,13 +15,14 @@ import cytoscape from "cytoscape";
 import { useQuery, gql } from "@apollo/client";
 import Loader from "./Loader";
 import { keycharm } from "vis-network";
-import { seriesListElementType } from "./Types";
+import { seriesListElementType, statsType } from "./Types";
 import { useSharedState } from "./Store";
-import { formatToIcon } from "./Utils";
 import DoubleProgressWithContent from "./DoubleProgressWithContent";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import { ListChildComponentProps } from "react-window";
 import ButtonBase from "@material-ui/core/ButtonBase";
+import { FORMATS } from "./Utils";
+import CheckCircleOutlineRoundedIcon from "@material-ui/icons/CheckCircleOutlineRounded";
 
 const SeriesListItem: FC<
   ListChildComponentProps<{ seriesList: seriesListElementType[] }>
@@ -56,7 +57,7 @@ const SeriesListItem: FC<
         <ButtonBase
           sx={{
             display: "grid",
-            gridTemplateColumns: "1fr  25%",
+            gridTemplateColumns: "1fr  32%",
             // gridTemplateRows: "25% auto auto",
             gridTemplateAreas: "'content stats'",
             alignItems: "stretch",
@@ -77,7 +78,7 @@ const SeriesListItem: FC<
             }) no-repeat center center`,
             backgroundSize: "cover",
             color: "white",
-            
+
             // boxShadow: 3,
 
             borderRadius: "10px",
@@ -145,52 +146,54 @@ const SeriesListItem: FC<
             >
               {isScrolling
                 ? undefined
-                : Object.keys(serieEl.stats).map((format) => {
-                    if (format != "selected" && serieEl.stats[format].tot) {
-                      return (
-                        <Box
-                          key={format}
-                          sx={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            alignItems: "center",
-                            justifyContent: "center",
+                : (Object.keys(serieEl.stats) as (keyof statsType)[]).map(
+                    (format) => {
+                      if (format != "selected" && serieEl.stats[format].tot) {
+                        return (
+                          <Box
+                            key={format}
+                            sx={{
+                              display: "flex",
+                              flexWrap: "wrap",
+                              alignItems: "center",
+                              justifyContent: "center",
 
-                            mr: "6px",
-                            mb: "5px",
-                            color:
-                              serieEl.stats[format].tot -
-                              serieEl.stats[format].got
-                                ? "gray"
-                                : "primary.main",
-                            width: "40px",
-                            height: "40px",
-                            bgcolor: "white",
-                            // bgcolor:"rgba(255,255,255,0.9)",
-                            // backdropFilter: "blur(5px)",
-                            // clipPath: "circle(15px at center)",
-                            borderRadius: "50px",
-                            // textAlign: "center",
-                          }}
-                        >
-                          <DoubleProgressWithContent
-                            value1={Math.floor(
-                              (serieEl.stats[format].got /
-                                serieEl.stats[format].tot) *
-                                100
-                            )}
-                            value2={Math.floor(
-                              (serieEl.stats[format].plan /
-                                serieEl.stats[format].tot) *
-                                100
-                            )}
+                              mr: "6px",
+                              mb: "5px",
+                              color:
+                                serieEl.stats[format].tot -
+                                serieEl.stats[format].got
+                                  ? "gray"
+                                  : "primary.main",
+                              width: "40px",
+                              height: "40px",
+                              bgcolor: "white",
+                              // bgcolor:"rgba(255,255,255,0.9)",
+                              // backdropFilter: "blur(5px)",
+                              // clipPath: "circle(15px at center)",
+                              borderRadius: "50px",
+                              // textAlign: "center",
+                            }}
                           >
-                            {formatToIcon(format)}
-                          </DoubleProgressWithContent>
-                        </Box>
-                      );
+                            <DoubleProgressWithContent
+                              value1={Math.floor(
+                                (serieEl.stats[format].got /
+                                  serieEl.stats[format].tot) *
+                                  100
+                              )}
+                              value2={Math.floor(
+                                (serieEl.stats[format].plan /
+                                  serieEl.stats[format].tot) *
+                                  100
+                              )}
+                            >
+                              {FORMATS[format].icon}
+                            </DoubleProgressWithContent>
+                          </Box>
+                        );
+                      }
                     }
-                  })}
+                  )}
             </Box>
           </Box>
 
@@ -222,37 +225,98 @@ const SeriesListItem: FC<
               }}
             >
               <Typography>
-                {(serieEl.stats["selected"].gotPerWeight ?? 0) +
-                  (serieEl.stats["selected"].planPerWeight ?? 0)}
+                {serieEl.status == "PLAN_TO_COMPLETE" ||
+                serieEl.status == "COMPLETE"
+                  ? 100
+                  : (serieEl.stats["selected"].gotPerWeight ?? 0) +
+                    (serieEl.stats["selected"].planPerWeight ?? 0)}
               </Typography>
             </DoubleProgressWithContent>
-            <Tooltip
-              placement="right"
-              title={
-                serieEl.stats["selected"].missWeight
-                  ? `${serieEl.stats["selected"].missWeight} minutes to complete`
-                  : "You did it!"
-              }
-              disableInteractive
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: " space-evenly",
+              }}
             >
-              <Box
-                sx={{
-                  bgcolor: "rgba(0,2,2,0.2)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+              {serieEl.stats["selected"].planWeight ? (
+                <Tooltip
+                  placement="right"
+                  title={
+                    serieEl.stats["selected"].planWeight
+                      ? `${serieEl.stats["selected"].planWeight} minutes planned`
+                      : "You did it!"
+                  }
+                  disableInteractive
+                >
+                  <Box
+                    sx={{
+                      bgcolor: "rgba(0,2,2,0.2)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
 
-                  color: "primary.main",
-                  backdropFilter: "blur(10px)",
-                  p: "2px 8px",
-                  borderRadius: "10px",
-                  fontWeight: 600,
-                }}
-              >
-                <AccessTimeIcon sx={{ mr: "3px" }} />
-                {serieEl.stats["selected"].missWeight}
-              </Box>
-            </Tooltip>
+                      color: "secondary.main",
+                      backdropFilter: "blur(10px)",
+                      p: "2px 8px",
+                      borderRadius: "10px",
+                      fontWeight: 600,
+                    }}
+                  >
+                    <AccessTimeIcon sx={{ mr: "3px" }} />
+                    {serieEl.stats["selected"].planWeight}
+                  </Box>
+                </Tooltip>
+              ) : undefined}
+              {serieEl.stats["selected"].missWeight ? (
+                <Tooltip
+                  placement="right"
+                  title={
+                    serieEl.stats["selected"].missWeight
+                      ? `${serieEl.stats["selected"].missWeight} minutes missing`
+                      : "You did it!"
+                  }
+                  disableInteractive
+                >
+                  <Box
+                    sx={{
+                      bgcolor: "rgba(0,2,2,0.2)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+
+                      color: "white",
+                      backdropFilter: "blur(10px)",
+                      p: "2px 8px",
+                      borderRadius: "10px",
+                      fontWeight: 600,
+                    }}
+                  >
+                    <AccessTimeIcon sx={{ mr: "3px" }} />
+                    {serieEl.stats["selected"].missWeight}
+                  </Box>
+                </Tooltip>
+              ) : undefined}
+              {serieEl.stats["selected"].gotPerWeight == 100 ? (
+                <Box
+                  sx={{
+                    bgcolor: "rgba(0,2,2,0.2)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+
+                    color: "primary.main",
+                    backdropFilter: "blur(10px)",
+                    p: "2px 8px",
+                    borderRadius: "10px",
+                    fontWeight: 600,
+                  }}
+                >
+                  <CheckCircleOutlineRoundedIcon sx={{ mr: "3px" }} />
+                  {"You did it!"}
+                </Box>
+              ) : undefined}
+            </Box>
           </Box>
         </ButtonBase>
       }

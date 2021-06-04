@@ -15,6 +15,11 @@ import Theme from "./Theme";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 import Box from "@material-ui/core/Box";
 import { BoxProps } from "@material-ui/core";
+import ListViz from "./ListViz";
+import Button from "@material-ui/core/Button";
+import Chip from "@material-ui/core/Chip";
+import AccountTreeRoundedIcon from "@material-ui/icons/AccountTreeRounded";
+import ViewModuleRoundedIcon from "@material-ui/icons/ViewModuleRounded";
 
 const client = new ApolloClient({
   uri: "https://graphql.anilist.co",
@@ -38,14 +43,54 @@ const MainApp: FC<BoxProps> = (boxProps) => {
             },
         gridTemplateAreas: "'viz nav'",
         height: "100vh",
-        bgcolor:"background.default",
+        bgcolor: "background.default",
+        position: "relative",
       }}
     >
-      <Viz
-        sx={{
-          gridArea: "viz",
-        }}
-      />
+      {state.userOptions.vizMode == "graph" ? (
+        <Viz
+          sx={{
+            gridArea: "viz",
+          }}
+        />
+      ) : (
+        <ListViz
+          sx={{
+            gridArea: "viz",
+          }}
+        />
+      )}
+      {state.userOptions.vizMode == "graph" ? (
+        <Chip
+          sx={{ gridArea: "viz", position: "absolute", top: 10, right: 10}}
+          label={"List View"}
+          icon={<ViewModuleRoundedIcon />}
+          clickable={true}
+          onClick={() => {
+            setState((state) => {
+              return {
+                ...state,
+                userOptions: { ...state.userOptions, vizMode: "list" },
+              };
+            });
+          }}
+        />
+      ) : (
+        <Chip
+          sx={{ gridArea: "viz", position: "absolute", top: 10, right: 10 }}
+          label={"Relations Graph"}
+          icon={<AccountTreeRoundedIcon />}
+          clickable={true}
+          onClick={() => {
+            setState((state) => {
+              return {
+                ...state,
+                userOptions: { ...state.userOptions, vizMode: "graph" },
+              };
+            });
+          }}
+        />
+      )}
       <Nav
         sx={{
           gridArea: "nav",

@@ -5,13 +5,16 @@ import { useCallback, useEffect, useState } from "react";
 import { avoidNodes } from "./ProblematicNodes";
 import { useSharedState } from "./Store";
 import {
+  formatsBulkTermsType,
   formatsType,
   globalStateType,
   NodeType,
   relationsType,
+  releaseStatusType,
   seriesListElementType,
   serieStatusType,
   statsType,
+  statusType,
   userOptionType,
 } from "./Types";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
@@ -21,6 +24,12 @@ import BookIcon from "@material-ui/icons/Book";
 import TheatersIcon from "@material-ui/icons/Theaters";
 import AlbumRoundedIcon from "@material-ui/icons/AlbumRounded";
 import LanguageRoundedIcon from "@material-ui/icons/LanguageRounded";
+import CheckCircleOutlineRoundedIcon from "@material-ui/icons/CheckCircleOutlineRounded";
+import HighlightOffRoundedIcon from "@material-ui/icons/HighlightOffRounded";
+import AdjustRoundedIcon from "@material-ui/icons/AdjustRounded";
+import CloudCircleIcon from "@material-ui/icons/CloudCircle";
+import PlayCircleOutlineRoundedIcon from "@material-ui/icons/PlayCircleOutlineRounded";
+import PauseCircleOutlineRoundedIcon from "@material-ui/icons/PauseCircleOutlineRounded";
 
 /// CONSTANTS
 export const FORMATS_IDS: formatsType[] = [
@@ -142,32 +151,113 @@ export const relationPriority = (() => {
   return dict as { [key in relationsType]: number };
 })();
 
-export function formatToIcon(format: string) {
-  switch (format) {
-    case "TV":
-      return <TvIcon />;
-    case "TV_SHORT":
-      return <TvIcon />;
-    case "MOVIE":
-      return <TheatersIcon />;
-    case "SPECIAL":
-      return <TvIcon />;
-    case "OVA":
-      return <AlbumRoundedIcon />;
-    case "ONA":
-      return <LanguageRoundedIcon />;
-    case "MUSIC":
-      return <MusicVideoIcon />;
-    case "MANGA":
-      return <MenuBookIcon />;
-    case "ONE_SHOT":
-      return <MenuBookIcon />;
-    case "NOVEL":
-      return <BookIcon />;
-    default:
-      return "";
-  }
-}
+//Completion Status Dict
+export const STATUSES: {
+  [key in statusType]: {
+    id: key;
+    label: string;
+    icon: React.ReactElement;
+    tooltip: string;
+    color: "primary" | "secondary" | "default" | undefined;
+  };
+} = {
+  CURRENT: {
+    id: "CURRENT",
+    label: "Watching",
+    icon: <PlayCircleOutlineRoundedIcon />,
+    tooltip: "Anime broadcast on television",
+    color: "secondary",
+  },
+  PLANNING: {
+    id: "PLANNING",
+    label: "Plan To Watch",
+    icon: <CloudCircleIcon />,
+    tooltip: "Anime broadcast on television",
+    color: "secondary",
+  },
+  COMPLETED: {
+    id: "COMPLETED",
+    label: "Completed",
+    icon: <CheckCircleOutlineRoundedIcon />,
+    tooltip: "Anime broadcast on television",
+    color: "primary",
+  },
+  DROPPED: {
+    id: "DROPPED",
+    label: "Dropped",
+    icon: <CheckCircleOutlineRoundedIcon />,
+    tooltip: "Anime broadcast on television",
+    color: "primary",
+  },
+  PAUSED: {
+    id: "PAUSED",
+    label: "Paused",
+    icon: <PauseCircleOutlineRoundedIcon />,
+    tooltip: "Anime broadcast on television",
+    color: "secondary",
+  },
+  REPEATING: {
+    id: "REPEATING",
+    label: "Repeating",
+    icon: <CheckCircleOutlineRoundedIcon />,
+    tooltip: "Anime broadcast on television",
+    color: "primary",
+  },
+  NO: {
+    id: "NO",
+    label: "Missing",
+    icon: <AdjustRoundedIcon />,
+    tooltip: "Anime broadcast on television",
+    color: undefined,
+  },
+};
+//Release Status Dict
+export const RELEASE_STATUS: {
+  [key in releaseStatusType]: {
+    id: key;
+    label: string;
+    icon: React.ReactElement;
+    tooltip: string;
+    color: "primary" | "secondary" | "default" | undefined;
+  };
+} = {
+  FINISHED: {
+    id: "FINISHED",
+    label: "Finished",
+    icon: <CloudCircleIcon />,
+    tooltip: "Has completed and is no longer being released",
+    color: "secondary",
+  },
+  RELEASING: {
+    id: "RELEASING",
+    label: "Releasing",
+    icon: <CloudCircleIcon />,
+    tooltip: "Currently releasing",
+    color: "secondary",
+  },
+  NOT_YET_RELEASED: {
+    id: "NOT_YET_RELEASED",
+    label: "Not Yet Released",
+    icon: <CheckCircleOutlineRoundedIcon />,
+    tooltip: "To be released at a later date",
+    color: "primary",
+  },
+  CANCELLED: {
+    id: "CANCELLED",
+    label: "Cancelled",
+    icon: <CheckCircleOutlineRoundedIcon />,
+    tooltip: "Ended before the work could be finished",
+    color: "primary",
+  },
+  HIATUS: {
+    id: "HIATUS",
+    label: "Hiatus",
+    icon: <CloudCircleIcon />,
+    tooltip:
+      "Is currently paused from releasing and will resume at a later date",
+    color: "secondary",
+  },
+};
 
 /// HOOKS
 //Local storage hook
@@ -326,11 +416,11 @@ export function sortComplete(
 ) {
   return rankedItems.sort((itm1, itm2) => {
     let weight1 =
-      (itm1.item.stats["selected"].gotPer ?? 0) +
-      (itm1.item.stats["selected"].planPer ?? 0);
+      (itm1.item.stats["selected"]?.gotPer ?? 0) +
+      (itm1.item.stats["selected"]?.planPer ?? 0);
     let weight2 =
-      (itm2.item.stats["selected"].gotPer ?? 0) +
-      (itm2.item.stats["selected"].planPer ?? 0);
+      (itm2.item.stats["selected"]?.gotPer ?? 0) +
+      (itm2.item.stats["selected"]?.planPer ?? 0);
     return (invert ? -1 : 1) * (weight1 - weight2);
   });
 }
@@ -347,14 +437,9 @@ export function sortAlphabetical(
   });
 }
 
-export function sortSize(
-  rankedItems: any[],
-  invert: boolean
-) {
+export function sortSize(rankedItems: any[], invert: boolean) {
   return rankedItems.sort((itm1, itm2) => {
-    return (
-      (invert ? -1 : 1) * (itm1.item.stats.tot - itm2.item.stats.tot)
-    );
+    return (invert ? -1 : 1) * (itm1.item.stats.tot - itm2.item.stats.tot);
   });
 }
 
@@ -387,7 +472,10 @@ export function getSortFc(tag: string) {
  * @param userOptions
  * @returns
  */
-export function convertBulkTerm(term: string, userOptions: userOptionType) {
+export function convertBulkTerm(
+  term: formatsType | formatsBulkTermsType,
+  userOptions: userOptionType
+) {
   switch (term) {
     case "anime":
       return userOptions.animeComposition;
@@ -403,7 +491,7 @@ export function convertBulkTerm(term: string, userOptions: userOptionType) {
   }
 }
 
-export function getBulkStat(formatArr: string[], stats: statsType) {
+export function getBulkStat(formatArr: formatsType[], stats: statsType) {
   let tot: number = 0;
   let miss: number = 0;
   let got: number = 0;
@@ -414,14 +502,14 @@ export function getBulkStat(formatArr: string[], stats: statsType) {
   let planWeight: number = 0;
 
   for (const format of formatArr) {
-    tot += stats[format].tot ?? 0;
-    miss += stats[format].miss ?? 0;
-    got += stats[format].got ?? 0;
-    plan += stats[format].plan ?? 0;
-    totWeight += stats[format].totWeight ?? 0;
-    missWeight += stats[format].missWeight ?? 0;
-    gotWeight += stats[format].gotWeight ?? 0;
-    planWeight += stats[format].planWeight ?? 0;
+    tot += stats[format]?.tot ?? 0;
+    miss += stats[format]?.miss ?? 0;
+    got += stats[format]?.got ?? 0;
+    plan += stats[format]?.plan ?? 0;
+    totWeight += stats[format]?.totWeight ?? 0;
+    missWeight += stats[format]?.missWeight ?? 0;
+    gotWeight += stats[format]?.gotWeight ?? 0;
+    planWeight += stats[format]?.planWeight ?? 0;
   }
   return {
     tot: tot,
@@ -459,8 +547,9 @@ export const updateCompletion = (state: globalStateType) => {
       let serieMissWeight: number = 0;
       let serieGotWeight: number = 0;
       let seriePlanWeight: number = 0;
+      let formatsIncluded: formatsType[] = [];
 
-      for (const bulkTerm of ["anime", "manga", "novel"]) {
+      for (const bulkTerm of ["anime", "manga", "novel"] as const) {
         let {
           got,
           miss,
@@ -484,8 +573,15 @@ export const updateCompletion = (state: globalStateType) => {
           serieMissWeight += missWeight;
           serieGotWeight += gotWeight;
           seriePlanWeight += planWeight;
+
+          //Add considered formats
+          formatsIncluded = [
+            ...formatsIncluded,
+            ...convertBulkTerm(bulkTerm, state.userOptions),
+          ];
         }
       }
+      //Saving Computed Stats
       state.seriesDict[id].stats["selected"] = {
         tot: serieTot,
         miss: serieMiss,
@@ -501,6 +597,8 @@ export const updateCompletion = (state: globalStateType) => {
         planPerWeight:
           Math.floor((seriePlanWeight / serieTotWeight) * 100) || 0,
       };
+      //Saving Included Formats
+      state.seriesDict[id].formatsIncluded = formatsIncluded;
 
       //Update Global Completion
       if (serieTot != 0) {
@@ -545,6 +643,8 @@ export const updateCompletion = (state: globalStateType) => {
         gotPerWeight: Math.floor((gotWeight / totWeight) * 100),
         planPerWeight: Math.floor((planWeight / totWeight) * 100),
       };
+      //Saving Included Formats
+      state.seriesDict[id].formatsIncluded = state.userOptions.completion;
 
       //Update Global Completion
       if (tot != 0) {
@@ -771,7 +871,8 @@ export const computeData = (
 
   //Compute Stats
   let seriesList = seriesListSorted.map((serie) => {
-    let stat: statsType = {};
+    let stat: { [key in formatsType]?: statsType[formatsType | "selected"] } =
+      {};
     for (let format of [
       "TV",
       "TV_SHORT",
@@ -783,7 +884,7 @@ export const computeData = (
       "MANGA",
       "NOVEL",
       "ONE_SHOT",
-    ]) {
+    ] as const) {
       let formatEl = serie.series.nodes().filter(`node[format='${format}']`);
       // if (serie.seriesPrime.data("id") == 21093) {
       //   console.log(format)
@@ -831,7 +932,11 @@ export const computeData = (
         // per: Math.round((formatEl.filter("node[status!='NO']").length / formatEl.length) * 100),
       };
     }
-    return { ...serie, stats: stat, status: "ERR" as serieStatusType };
+    return {
+      ...serie,
+      stats: stat as statsType,
+      status: "ERR" as serieStatusType,
+    };
   });
 
   //Creating Serializable Dict

@@ -48,7 +48,7 @@ const Nav: FC<BoxProps> = (boxProps) => {
       <InfoModal />
       <Box sx={{ gridArea: "top" }}>
         <Loader />
-        <StatusFilter />
+        {Object.keys(state.seriesDict).length ? <StatusFilter /> : undefined}
         {Object.keys(state.seriesDict).length ? <SearchBox /> : undefined}
       </Box>
       <Box sx={{ gridArea: "content" }}>
