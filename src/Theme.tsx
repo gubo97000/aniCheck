@@ -31,7 +31,7 @@ import { useSharedState } from "./Store";
 
 import { createTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import * as Color from "color";
+import Color from "color";
 
 declare module "@material-ui/core/styles" {
   interface PaletteColor {
