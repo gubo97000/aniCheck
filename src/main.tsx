@@ -20,11 +20,23 @@ import Button from "@material-ui/core/Button";
 import Chip from "@material-ui/core/Chip";
 import AccountTreeRoundedIcon from "@material-ui/icons/AccountTreeRounded";
 import ViewModuleRoundedIcon from "@material-ui/icons/ViewModuleRounded";
+import { registerSW } from 'virtual:pwa-register'
+// import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const client = new ApolloClient({
   uri: "https://graphql.anilist.co",
   cache: new InMemoryCache(),
 });
+
+
+const updateSW = registerSW({
+  onNeedRefresh() {
+    // show a prompt to user
+  },
+  onOfflineReady() {
+    // show a ready to work offline to user
+  },
+})
 
 const MainApp: FC<BoxProps> = (boxProps) => {
   const [state, setState] = useSharedState();
@@ -112,3 +124,5 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
+
+// serviceWorkerRegistration.register();

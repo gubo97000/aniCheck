@@ -27,7 +27,7 @@ import React, {
 import { render } from "react-dom";
 import * as vis from "vis-network";
 import cytoscape, { EdgeCollection } from "cytoscape";
-import siteIcon from "./favicon.png";
+import siteIcon from "/pwaicon.png";
 
 import { parseAndCheckHttpResponse, useLazyQuery } from "@apollo/client";
 import { useSharedState } from "./Store";

@@ -43,12 +43,14 @@
     "react-window": "^1.8.6",
     "remark-gfm": "^1.0.0",
     "vis-network": "^9.0.4",
-    "web-worker": "^1.0.0"
+    "web-worker": "^1.0.0",
+    "workbox-cli": "^3.6.3"
   },
   "devDependencies": {
     "@types/color": "^3.0.1",
     "@types/cytoscape": "^3.14.12",
     "@types/lodash": "^4.14.170",
+    "@types/node": "^15.12.5",
     "@types/react": "^17.0.9",
     "@types/react-cytoscapejs": "^1.2.1",
     "@types/react-dom": "^17.0.6",
@@ -58,6 +60,7 @@
     "gh-pages": "^3.2.0",
     "typescript": "^4.3.2",
     "vite": "^2.2.3",
-    "vite-plugin-markdown": "^2.0.2"
+    "vite-plugin-markdown": "^2.0.2",
+    "vite-plugin-pwa": "^0.8.1"
   }
 }
