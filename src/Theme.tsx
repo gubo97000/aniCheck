@@ -1,39 +1,31 @@
 import {
-  Avatar,
-  Box,
-  Grid,
-  IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
   PaletteMode,
-  RadioGroup,
-  TextField,
   ThemeProvider,
+  StyledEngineProvider,
   useAutocomplete,
-} from "@material-ui/core";
+} from "@mui/material";
 import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  useMemo,
   FC,
   Children,
   isValidElement,
+  ReactNode,
 } from "react";
-// import useAutocomplete from '@material-ui/core/useAutocomplete';
+// import useAutocomplete from '@mui/material/useAutocomplete';
 
 import { useSharedState } from "./Store";
 
-import { createTheme } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { createTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Color from "color";
 
-declare module "@material-ui/core/styles" {
+
+// declare module '@mui/styles/defaultTheme' {
+//   // eslint-disable-next-line @typescript-eslint/no-empty-interface
+//   interface DefaultTheme extends Theme {}
+// }
+
+
+declare module "@mui/material/styles" {
   interface PaletteColor {
     ghost?: string;
   }
@@ -42,7 +34,7 @@ declare module "@material-ui/core/styles" {
   }
 }
 
-const Theme: FC = ({ children }) => {
+const Theme: FC<{ children: ReactNode }> = ({ children }) => {
   const [state, setState] = useSharedState();
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
@@ -72,6 +64,10 @@ const Theme: FC = ({ children }) => {
       },
     },
   });
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </StyledEngineProvider>
+  );
 };
 export default Theme;

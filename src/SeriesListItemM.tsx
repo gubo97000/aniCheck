@@ -23,23 +23,20 @@ import { GridChildComponentProps, ListChildComponentProps } from "react-window";
 import ButtonBase from "@mui/material/ButtonBase";
 import { FORMATS } from "./Utils";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
+import ProgressBarStacked from "./ProgressBarStacked";
 import { useNavigate } from "react-router-dom";
 
-const SeriesListItem: FC<
+const SeriesListItemM: FC<
   GridChildComponentProps<{ seriesList: seriesListElementType[] }>
 > = ({ columnIndex, rowIndex, style, isScrolling, data }) => {
   const [state, setState] = useSharedState();
   const [checked, setChecked] = useState(false);
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   isScrolling = true;
-  let serieEl =
-    data.seriesList[
-      columnIndex +
-        rowIndex * parseInt(state.userOptions.listLayout.split(".")[1])
-    ];
+  let serieEl = data.seriesList[columnIndex + rowIndex * 4];
+  if (!serieEl) return (<div></div>);
   let { series, seriesPrime } = serieEl;
   let key = seriesPrime.id;
-  let fixRounding = (serieEl.stats["selected"].missPerWeight ?? 0) == 1 ? 1 : 0;
 
   useLayoutEffect(() => {
     if (checked) {
@@ -56,43 +53,44 @@ const SeriesListItem: FC<
   // useLayoutEffect(() => {
   //   console.log(state.seriesDict[key]);
   // }, [state.seriesDict]);
-
+  
   return (
-    <Box style={{ ...style }} key={key}>
+    <Box style={{ ...style, 
+    display: "grid", 
+    placeItems: "center",
+    }} key={key}>
       {
         // isScrolling ? seriesPrime.title :
         <ButtonBase
           sx={{
-            contentVisibility: "auto",
-            display: "grid",
-            gridTemplateColumns: "1fr  32%",
-            // gridTemplateRows: "25% auto auto",
-            gridTemplateAreas: "'content stats'",
-            alignItems: "stretch",
-
-            height: checked ? "calc(100% - 6px)" : "calc(100% - 10px)",
-            width: checked ? "calc(100% - 16px)" : "calc(100% - 20px)",
-            m: checked ? "3px 8px 3px 8px" : "5px 10px 5px 10px",
-
-            border: checked ? "3px solid" : "1px solid",
+            // display: "grid",
+            // gridTemplateColumns: "1fr  32%",
+            // //gridTemplateRows: "25% auto auto",
+            // gridTemplateAreas: "'content stats'",
+            // alignItems: "stretch",
+            aspectRatio: "43/61",
+            height: `calc(95% - ${checked ? "0px" : "4px"})`,
+            // width: `calc(95% - ${checked ? "0px" : "4px"})`,
+            // m: checked ? "3px 8px 3px 8px" : "5px 10px 5px 10px",
+            m: "auto",
+            border: checked ? "2px solid" : "0px solid",
             borderColor: checked ? "primary.main" : `grey.500`,
             // background: isScrolling
             //   ? undefined
             //   : `url(${
             //       seriesPrime.bannerImage ?? seriesPrime.cover
             //     }) no-repeat center center`,
-            background: `url(${
-              seriesPrime.bannerImage ?? seriesPrime.cover
-            }) no-repeat center center`,
+            background: `url(${seriesPrime.cover}) no-repeat center center`,
             backgroundSize: "cover",
             color: "white",
 
             // boxShadow: 3,
 
-            borderRadius: "10px",
-            boxShadow: `inset 0 0 0 2000px ${
-              checked ? "rgba(0, 0, 0, 0.3)" : "rgba(0, 0, 0, 0.4)"
-            }`,
+            borderRadius: "5px",
+            // boxShadow: `inset 0 0 0 2000px ${
+            //   checked ? "rgba(0, 0, 0, 0.3)" : "rgba(0, 0, 0, 0.4)"
+            // }`,
+            boxShadow: `inset 0px 35px 20px -30px black, inset 0px -65px 60px -30px black`,
             overflow: "hidden",
             textAlign: "left",
           }}
@@ -103,15 +101,16 @@ const SeriesListItem: FC<
             setState((state) => {
               return { ...state, seriesSelected: serieEl };
             });
-            navigate(serieEl.seriesPrime.id); //Very Important the order otherwise loop condition in router!
+            navigate(`${key}`);
           }}
         >
           <Box
             sx={{
-              gridArea: "content",
-              placeSelf: "stretch",
-
-              display: "grid",
+              // gridArea: "content",
+              placeSelf: "end start",
+              margin: "0px 4px",
+              width: "100%",
+              // display: "grid",
               gridTemplateRows: "1fr 45px",
               gridTemplateAreas: "'title' 'bot-stat'",
               gap: "1px",
@@ -121,26 +120,36 @@ const SeriesListItem: FC<
           >
             <Typography
               sx={{
-                pt: "10px",
-                pr: "10px",
-                pl: "20px",
-                pb: "20px",
-                gridArea: "title",
+                // gridArea: "title",
                 // placeSelf: "stretch",
                 // placeSelf: "center",
+                width: "100%",
                 overflow: "hidden",
-
                 display: "-webkit-box",
-
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
               }}
-              variant="h6"
+              variant="subtitle2"
             >
               {seriesPrime.title}
             </Typography>
-
-            <Box
+            
+            <ProgressBarStacked
+                data={[
+                  serieEl.stats["selected"].gotPerWeight ?? 0,
+                  serieEl.stats["selected"].planPerWeight ?? 0,
+                  serieEl.stats["selected"].missPerWeight ?? 0,
+                ]}
+                sx={{
+                  position:"absolute",
+                  // top: "89%",
+                  top: "0px",
+                  left: "0px"
+                }}
+              />
+              
+            {/* </Box> */}
+            {/* <Box
               sx={{
                 gridArea: "bot-stat",
                 placeSelf: "stretch",
@@ -203,10 +212,10 @@ const SeriesListItem: FC<
                       }
                     }
                   )}
-            </Box>
+            </Box> */}
           </Box>
 
-          <Box
+          {/* <Box
             sx={{
               gridArea: "stats",
               // placeSelf: "stretch",
@@ -222,9 +231,7 @@ const SeriesListItem: FC<
             }}
           >
             <DoubleProgressWithContent
-              value1={
-                (serieEl.stats["selected"].gotPerWeight ?? 0) - fixRounding
-              }
+              value1={serieEl.stats["selected"].gotPerWeight ?? 0}
               value2={serieEl.stats["selected"].planPerWeight ?? 0}
               size={80}
               sx={{
@@ -239,8 +246,7 @@ const SeriesListItem: FC<
                 {serieEl.status == "PLAN_TO_COMPLETE" ||
                 serieEl.status == "COMPLETE"
                   ? 100
-                  : (serieEl.stats["selected"].gotPerWeight ?? 0) -
-                    fixRounding +
+                  : (serieEl.stats["selected"].gotPerWeight ?? 0) +
                     (serieEl.stats["selected"].planPerWeight ?? 0)}
               </Typography>
             </DoubleProgressWithContent>
@@ -309,8 +315,7 @@ const SeriesListItem: FC<
                   </Box>
                 </Tooltip>
               ) : undefined}
-              {(serieEl.stats["selected"].gotPerWeight ?? 0) - fixRounding ==
-              100 ? (
+              {serieEl.stats["selected"].gotPerWeight == 100 ? (
                 <Box
                   sx={{
                     bgcolor: "rgba(0,2,2,0.2)",
@@ -330,10 +335,11 @@ const SeriesListItem: FC<
                 </Box>
               ) : undefined}
             </Box>
-          </Box>
+          </Box> */}
         </ButtonBase>
       }
     </Box>
   );
 };
-export default SeriesListItem;
+
+export default SeriesListItemM;

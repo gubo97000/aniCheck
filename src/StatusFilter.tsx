@@ -1,69 +1,23 @@
 import {
-  Avatar,
   Box,
   Button,
-  ButtonProps,
-  Grid,
-  IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
-  Menu,
-  MenuItem,
-  RadioGroup,
-  TextField,
-  Typography,
-  useAutocomplete,
-} from "@material-ui/core";
+  ButtonProps
+} from "@mui/material";
 import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  useMemo,
-  FC,
-  Children,
-  isValidElement,
+  FC
 } from "react";
-// import useAutocomplete from '@material-ui/core/useAutocomplete';
-import { render } from "react-dom";
-import * as vis from "vis-network";
-import cytoscape from "cytoscape";
+// import useAutocomplete from '@mui/material/useAutocomplete';
 
-import { useQuery, gql } from "@apollo/client";
-import { useSharedState } from "./Store";
-import Loader from "./Loader";
-import { keycharm } from "vis-network";
-import {
-  globalStateType,
-  seriesListElementType,
-  serieStatusType,
-  sortType,
-} from "./Types";
-import { FixedSizeList } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { matchSorter } from "match-sorter";
-import {
-  sortAlphabetical,
-  sortComplete,
-  useStateWithLocalStorage,
-} from "./Utils";
-import Sort from "@material-ui/icons/Sort";
-import NorthRoundedIcon from "@material-ui/icons/NorthRounded";
-import SouthRoundedIcon from "@material-ui/icons/SouthRounded";
-import CheckCircleOutlineRoundedIcon from "@material-ui/icons/CheckCircleOutlineRounded";
-import HighlightOffRoundedIcon from "@material-ui/icons/HighlightOffRounded";
-import AdjustRoundedIcon from "@material-ui/icons/AdjustRounded";
-import CloudCircleIcon from "@material-ui/icons/CloudCircle";
-import Stack from "@material-ui/core/Stack";
-import xor from "lodash/xor";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Tooltip from "@material-ui/core/Tooltip";
+import AdjustRoundedIcon from "@mui/icons-material/AdjustRounded";
+import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
+import CloudCircleIcon from "@mui/icons-material/CloudCircle";
+import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
+import Tooltip from "@mui/material/Tooltip";
 import without from "lodash/without";
+import { useSharedState } from "./Store";
+import {
+  serieStatusType
+} from "./Types";
 
 interface props {
   children: React.ReactNode[] | React.ReactNode;

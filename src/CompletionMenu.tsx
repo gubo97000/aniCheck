@@ -1,4 +1,4 @@
-import { Box, Switch } from "@material-ui/core";
+import { Box, Switch } from "@mui/material";
 import React, { useEffect, FC } from "react";
 
 import { useSharedState } from "./Store";
@@ -11,10 +11,9 @@ import {
   sortAlphabetical,
   sortComplete,
   updateCompletion,
-  useStateWithLocalStorage,
 } from "./Utils";
 import xor from "lodash/xor";
-import Divider from "@material-ui/core/Divider";
+import Divider from "@mui/material/Divider";
 import { ButtonInputRow } from "./ButtonInputRow";
 import { FilterGroup } from "./FilterGroup";
 

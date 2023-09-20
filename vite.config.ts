@@ -1,11 +1,12 @@
 import { defineConfig } from "vite";
-import reactRefresh from "@vitejs/plugin-react-refresh";
+import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
+import { comlink } from "vite-plugin-comlink";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    reactRefresh(),
+    react(),
     VitePWA({
       // mode: "development",
       // strategies: 'injectManifest',
@@ -27,22 +28,37 @@ export default defineConfig({
       workbox: {
         // workbox options for generateSW
       },
+      devOptions: {
+        enabled: true,
+      },
     }),
+    comlink(),
   ],
   base: "/aniCheck/",
-  resolve: {
-    alias: [
-      {
-        find: /^@material-ui\/icons\/(.*)/,
-        replacement: "@material-ui/icons/esm/$1",
-      },
-    ],
+  worker: {
+    plugins: [comlink()],
   },
+  // resolve: {
+  //   alias: [
+  //     {
+  //       find: /^@material-ui\/icons\/(.*)/,
+  //       replacement: "@mui/icons-material/esm/$1",
+  //     },
+  //   ],
+  // },
   build: {
-    terserOptions: {
-      mangle: {
-        reserved: ["cytoscape", "__assign"],
-      },
-    },
+    target: "esnext",
+    // minify: "terser",
+    // minify: false,
+    // terserOptions: {
+    //   mangle: {
+    //     reserved: ["cytoscape", "__assign"],
+    //   },
+    // },
   },
+  // esbuild:{
+  //   // down here the equivalent of terser option above
+  //   keepNames: true,
+
+  // }
 });

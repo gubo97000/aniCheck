@@ -1,29 +1,19 @@
-import { Box, Switch } from "@material-ui/core";
-import React, { useEffect, FC } from "react";
+import { Box } from "@mui/material";
+import React, { FC, useEffect } from "react";
 
-import { useSharedState } from "./Store";
-import { formatsType, userOptionType } from "./Types";
-import {
-  convertBulkTerm,
-  FORMATS,
-  FORMATS_IDS,
-  getBulkStat,
-  sortAlphabetical,
-  sortComplete,
-  updateCompletion,
-  useStateWithLocalStorage,
-} from "./Utils";
-import xor from "lodash/xor";
-import Divider from "@material-ui/core/Divider";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { ButtonInputRow } from "./ButtonInputRow";
-import { FilterGroup } from "./FilterGroup";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+import { useSharedState } from "./Store";
+import { userOptionType } from "./Types";
+import {
+  updateCompletion
+} from "./Utils";
 
 const GeneralOptionsMenu: FC = () => {
   const [state, setState] = useSharedState();
 
-  const handleChangeTheme = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleChangeTheme = (event: SelectChangeEvent) => {
     setState((state) => {
       return {
         ...state,
@@ -34,7 +24,7 @@ const GeneralOptionsMenu: FC = () => {
       };
     });
   };
-  const handleChangeViz = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleChangeViz = (event: SelectChangeEvent) => {
     setState((state) => {
       return {
         ...state,

@@ -1,4 +1,4 @@
-import * as cytoscape from "cytoscape";
+import cytoscape from "cytoscape";
 import React, { ReactNode } from "react";
 // import cytoscape from "cytoscape";
 import { useCallback, useEffect, useState } from "react";
@@ -17,19 +17,20 @@ import {
   statusType,
   userOptionType,
 } from "./Types";
-import MenuBookIcon from "@material-ui/icons/MenuBook";
-import TvIcon from "@material-ui/icons/Tv";
-import MusicVideoIcon from "@material-ui/icons/MusicVideo";
-import BookIcon from "@material-ui/icons/Book";
-import TheatersIcon from "@material-ui/icons/Theaters";
-import AlbumRoundedIcon from "@material-ui/icons/AlbumRounded";
-import LanguageRoundedIcon from "@material-ui/icons/LanguageRounded";
-import CheckCircleOutlineRoundedIcon from "@material-ui/icons/CheckCircleOutlineRounded";
-import HighlightOffRoundedIcon from "@material-ui/icons/HighlightOffRounded";
-import AdjustRoundedIcon from "@material-ui/icons/AdjustRounded";
-import CloudCircleIcon from "@material-ui/icons/CloudCircle";
-import PlayCircleOutlineRoundedIcon from "@material-ui/icons/PlayCircleOutlineRounded";
-import PauseCircleOutlineRoundedIcon from "@material-ui/icons/PauseCircleOutlineRounded";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import TvIcon from "@mui/icons-material/Tv";
+import MusicVideoIcon from "@mui/icons-material/MusicVideo";
+import BookIcon from "@mui/icons-material/Book";
+import TheatersIcon from "@mui/icons-material/Theaters";
+import AlbumRoundedIcon from "@mui/icons-material/AlbumRounded";
+import LanguageRoundedIcon from "@mui/icons-material/LanguageRounded";
+import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
+import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
+import AdjustRoundedIcon from "@mui/icons-material/AdjustRounded";
+import CloudCircleIcon from "@mui/icons-material/CloudCircle";
+import PlayCircleOutlineRoundedIcon from "@mui/icons-material/PlayCircleOutlineRounded";
+import PauseCircleOutlineRoundedIcon from "@mui/icons-material/PauseCircleOutlineRounded";
+import { isCachesAvailable } from "./lib/CacheUtils";
 
 /// CONSTANTS
 export const FORMATS_IDS: formatsType[] = [
@@ -259,128 +260,6 @@ export const RELEASE_STATUS: {
   },
 };
 
-/// HOOKS
-//Local storage hook
-export function useStateWithLocalStorage<T>(
-  localStorageKey: string,
-  defaultValue: any = null
-): [T, React.Dispatch<React.SetStateAction<T>>] {
-  try {
-    JSON.parse(
-      localStorage.getItem(localStorageKey) ?? JSON.stringify(defaultValue)
-    );
-  } catch (error) {
-    console.log("Old Data found, trying to reset");
-    localStorage.removeItem(localStorageKey);
-  }
-
-  const [value, setValue] = useState<T>(
-    JSON.parse(
-      localStorage.getItem(localStorageKey) ?? JSON.stringify(defaultValue)
-    ) as T
-  );
-
-  useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(value));
-  }, [value]);
-
-  return [value, setValue];
-}
-
-//Possibly better version, still to check
-function useLocalStorage<T>(key: string, initialValue: T) {
-  // State to store our value
-  // Pass initial state function to useState so logic is only executed once
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    try {
-      // Get from local storage by key
-      const item = window.localStorage.getItem(key);
-      // Parse stored json or if none return initialValue
-      return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      // If error also return initialValue
-      console.log(error);
-      return initialValue;
-    }
-  });
-  // Return a wrapped version of useState's setter function that
-  // persists the new value to localStorage.
-  const setValue = (value: T | ((val: T) => T)) => {
-    try {
-      // Allow value to be a function so we have same API as useState
-      const valueToStore =
-        value instanceof Function ? value(storedValue) : value;
-      // Save state
-      setStoredValue(valueToStore);
-      // Save to local storage
-      window.localStorage.setItem(key, JSON.stringify(valueToStore));
-    } catch (error) {
-      // A more advanced implementation would handle the error case
-      console.log(error);
-    }
-  };
-  return [storedValue, setValue] as const;
-}
-
-// Debounce Hook
-export function useDebounce<T>(value: T, delay: number): T {
-  // State and setters for debounced value
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-  useEffect(
-    () => {
-      // Update debounced value after delay
-      const handler = setTimeout(() => {
-        setDebouncedValue(value);
-      }, delay);
-
-      // Cancel the timeout if value changes (also on delay change or unmount)
-      return () => {
-        clearTimeout(handler);
-      };
-    },
-    [value, delay] // Only re-call effect if value or delay changes
-  );
-  return debouncedValue;
-}
-
-// Async Hook
-export const useAsync = <T, E = string>(
-  asyncFunction: () => Promise<T>,
-  immediate = true
-) => {
-  const [status, setStatus] =
-    useState<"idle" | "pending" | "success" | "error">("idle");
-  const [value, setValue] = useState<T | null>(null);
-  const [error, setError] = useState<E | null>(null);
-  // The execute function wraps asyncFunction and
-  // handles setting state for pending, value, and error.
-  // useCallback ensures the below useEffect is not called
-  // on every render, but only if asyncFunction changes.
-  const execute = useCallback(() => {
-    setStatus("pending");
-    setValue(null);
-    setError(null);
-    return asyncFunction()
-      .then((response: any) => {
-        setValue(response);
-        setStatus("success");
-      })
-      .catch((error: any) => {
-        setError(error);
-        setStatus("error");
-      });
-  }, [asyncFunction]);
-  // Call execute if we want to fire it right away.
-  // Otherwise execute can be called later, such as
-  // in an onClick handler.
-  useEffect(() => {
-    if (immediate) {
-      execute();
-    }
-  }, [execute, immediate]);
-  return { execute, status, value, error };
-};
-
 /// Sort Functions
 export function sortWeight(
   rankedItems: { item: seriesListElementType; [key: string]: any }[],
@@ -593,7 +472,8 @@ export const updateCompletion = (state: globalStateType) => {
         missWeight: serieMissWeight,
         gotWeight: serieGotWeight,
         planWeight: seriePlanWeight,
-        gotPerWeight: Math.floor((serieGotWeight / serieTotWeight) * 100) || 0,
+        missPerWeight: Math.ceil((serieMissWeight / serieTotWeight) * 100) || 0,
+        gotPerWeight: Math.ceil((serieGotWeight / serieTotWeight) * 100) || 0,
         planPerWeight:
           Math.floor((seriePlanWeight / serieTotWeight) * 100) || 0,
       };
@@ -640,8 +520,9 @@ export const updateCompletion = (state: globalStateType) => {
         gotWeight: gotWeight,
         planWeight: planWeight,
         missWeight: missWeight,
-        gotPerWeight: Math.floor((gotWeight / totWeight) * 100),
-        planPerWeight: Math.floor((planWeight / totWeight) * 100),
+        missPerWeight: Math.ceil((missWeight / totWeight) * 100),
+        gotPerWeight: Math.ceil((gotWeight / totWeight) * 100),
+        planPerWeight: Math.ceil((planWeight / totWeight) * 100),
       };
       //Saving Included Formats
       state.seriesDict[id].formatsIncluded = state.userOptions.completion;
@@ -664,6 +545,33 @@ export const updateCompletion = (state: globalStateType) => {
     }
   }
   console.log(globalStats);
+  
+  //Caching the results
+  //TODO: first version, need to update
+  if(isCachesAvailable()){
+    caches.open(state.user.name ?? "").then((ch) => {
+      ch.put(
+        "cachedState",
+        new Response(
+          JSON.stringify({
+            seriesDict: state.seriesDict,
+            globalStats: globalStats,
+  
+            //Not really necessary here
+            userOptions: state.userOptions,
+            user: state.user,
+            userHist: state.usersHist,
+          }),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+      );
+    });
+  }
+  
   return { ...state, seriesDict: state.seriesDict, globalStats: globalStats };
 };
 
@@ -681,6 +589,7 @@ export const computeData = (
   relationPriority: { [key: string]: number },
   problematicEles: string[]
 ) => {
+  console.log("ComputeData")
   const cy = cytoscape({ headless: true });
 
   const avoidEles = () => {

@@ -1,4 +1,4 @@
-import { Box, BoxProps, Typography, useAutocomplete } from "@material-ui/core";
+import { Box, BoxProps, Typography, useAutocomplete } from "@mui/material";
 import React, {
   useState,
   useRef,
@@ -10,10 +10,10 @@ import React, {
   Children,
   isValidElement,
 } from "react";
-import ButtonBase from "@material-ui/core/ButtonBase";
-import SelectAllRoundedIcon from "@material-ui/icons/SelectAllRounded";
-import HighlightOffRoundedIcon from "@material-ui/icons/HighlightOffRounded";
-import Divider from "@material-ui/core/Divider";
+import ButtonBase from "@mui/material/ButtonBase";
+import SelectAllRoundedIcon from "@mui/icons-material/SelectAllRounded";
+import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
+import Divider from "@mui/material/Divider";
 
 type props = {
   name: string;

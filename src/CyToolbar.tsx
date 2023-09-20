@@ -2,21 +2,21 @@ import React, { useState, useEffect, useMemo, FC } from "react";
 
 import { useQuery, gql } from "@apollo/client";
 import { useSharedState } from "./Store";
-import { BoxProps } from "@material-ui/core/Box";
-import Box from "@material-ui/core/Box";
+import { BoxProps } from "@mui/material/Box";
+import Box from "@mui/material/Box";
 import InfoModal from "./InfoModal";
-import AccountTreeRoundedIcon from "@material-ui/icons/AccountTreeRounded";
-import { Stack, Button, Badge, Divider, Tooltip } from "@material-ui/core";
+import AccountTreeRoundedIcon from "@mui/icons-material/AccountTreeRounded";
+import { Stack, Button, Badge, Divider, Tooltip } from "@mui/material";
 import { getCyLayout } from "./Utils";
-import IconButton from "@material-ui/core/IconButton";
-import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
-import FilterAltRoundedIcon from "@material-ui/icons/FilterAltRounded";
-import CenterFocusStrongRoundedIcon from "@material-ui/icons/CenterFocusStrongRounded";
-import Popper from "@material-ui/core/Popper";
+import IconButton from "@mui/material/IconButton";
+import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import FilterAltRoundedIcon from "@mui/icons-material/FilterAltRounded";
+import CenterFocusStrongRoundedIcon from "@mui/icons-material/CenterFocusStrongRounded";
+import Popper from "@mui/material/Popper";
 import CyFilterMenu from "./CyFilterMenu";
-import ArrowBackIosRoundedIcon from "@material-ui/icons/ArrowBackIosRounded";
-import ArrowForwardIosRoundedIcon from "@material-ui/icons/ArrowForwardIosRounded";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
+import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 type props = {
   // badge: number;
@@ -122,7 +122,7 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
                 };
               });
             }}
-          >
+            size="large">
             {state.userOptions.cyShowNav ? (
               <ArrowForwardIosRoundedIcon />
             ) : (
@@ -148,7 +148,7 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
               state.cyViz?.fit(undefined, 50);
               state.cyViz?.panBy({ x: -35, y: 0 });
             }}
-          >
+            size="large">
             <CenterFocusStrongRoundedIcon />
           </IconButton>
         </Tooltip>
@@ -157,7 +157,7 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
           <IconButton
             onClick={() => handleClickLayout("klay")}
             color={isSelectedLayout("klay")}
-          >
+            size="large">
             <AccountTreeRoundedIcon />
           </IconButton>
         </Tooltip>
@@ -168,7 +168,7 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
             }}
             onClick={() => handleClickLayout("dagre")}
             color={isSelectedLayout("dagre")}
-          >
+            size="large">
             <AccountTreeRoundedIcon />
           </IconButton>
         </Tooltip>
@@ -211,7 +211,7 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
                 }}
                 color={state.userOptions.cyShowHidden ? "primary" : "default"}
                 disabled={state.seriesSelected?.serieComplete.nodes.length == 0}
-              >
+                size="large">
                 <AddCircleRoundedIcon />
               </IconButton>
             </Badge>
@@ -239,7 +239,7 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
                       ? "primary"
                       : "default"
                   }
-                >
+                  size="large">
                   <FilterAltRoundedIcon />
                 </IconButton>
               </Badge>

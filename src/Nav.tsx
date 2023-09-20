@@ -22,10 +22,11 @@ import SearchBox from "./SearchBox";
 import SeriesList from "./SeriesList";
 import OptionsModal from "./OptionsModal";
 import StatusFilter from "./StatusFilter";
-import { BoxProps } from "@material-ui/core/Box";
-import Box from "@material-ui/core/Box";
+import { BoxProps } from "@mui/material/Box";
+import Box from "@mui/material/Box";
 import InfoModal from "./InfoModal";
 import AniChika from "./AniChika";
+import { Outlet } from "react-router-dom";
 
 const Nav: FC<BoxProps> = (boxProps) => {
   const [state, setState] = useSharedState();
@@ -52,7 +53,8 @@ const Nav: FC<BoxProps> = (boxProps) => {
         {Object.keys(state.seriesDict).length ? <SearchBox /> : undefined}
       </Box>
       <Box sx={{ gridArea: "content" }}>
-        {Object.keys(state.seriesDict).length ? <SeriesList /> : <AniChika />}
+        {/* {Object.keys(state.seriesDict).length ? <SeriesList /> : <AniChika />} */}
+        {Object.keys(state.seriesDict).length ? <Outlet /> : <AniChika />}
       </Box>
     </Box>
   );

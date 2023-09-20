@@ -13,7 +13,7 @@ import {
   RadioGroup,
   TextField,
   useAutocomplete,
-} from "@material-ui/core";
+} from "@mui/material";
 import React, {
   useState,
   useRef,
@@ -25,27 +25,17 @@ import React, {
   Children,
   isValidElement,
 } from "react";
-// import useAutocomplete from '@material-ui/core/useAutocomplete';
+// import useAutocomplete from '@mui/material/useAutocomplete';
 import { render } from "react-dom";
 import * as vis from "vis-network";
 import cytoscape from "cytoscape";
 
 import { useQuery, gql } from "@apollo/client";
-import { useSharedState } from "./Store";
-import Loader from "./Loader";
-import { keycharm } from "vis-network";
-import { globalStateType, seriesListElementType } from "./Types";
-import { FixedSizeList } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { matchSorter } from "match-sorter";
-import SortMenu from "./SortMenu";
-import { getSortFc, useAsync, useDebounce } from "./Utils";
-import DonutLargeRoundedIcon from "@material-ui/icons/DonutLargeRounded";
-import SortIcon from "@material-ui/icons/Sort";
-import FilterAltRoundedIcon from "@material-ui/icons/FilterAltRounded";
-import { useWorker } from "@koale/useworker";
-import SettingsRoundedIcon from "@material-ui/icons/SettingsRounded";
-import HelpOutlineRoundedIcon from "@material-ui/icons/HelpOutlineRounded";
+import { initialState, useSharedState } from "./Store";
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
+import { LogoutOutlined } from "@mui/icons-material";
+import { deleteCache } from "./lib/CacheUtils";
 
 const LoaderHead: FC<BoxProps> = (boxProps) => {
   const [state, setState] = useSharedState();
@@ -57,12 +47,38 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
         ...boxProps.sx,
         display: "grid",
         //   gridTemplateRows: "60px",
-        gridTemplateColumns: "1fr 50px 50px",
+        gridTemplateColumns: "1fr 50px 50px 50px",
         gridTemplateRows: "50px",
-        gridTemplateAreas: "'. help options'",
+        gridTemplateAreas: "'. logout help options'",
         placeItems: "center",
       }}
     >
+      { state.user.name ?
+      <IconButton
+        sx={{
+          //   m: "3px",
+          p: "8px",
+          backdropFilter: "blur(8px)",
+          bgcolor: "rgba(255,255,255,0.5)",
+          gridArea: "logout",
+          border: "1px solid",
+          borderColor: "primary.main",
+          color: "primary.main",
+          ":hover": {
+            bgcolor: "rgba(255,255,255,0.3)",
+          },
+        }}
+        onClick={() => {
+          //Delete cache
+          deleteCache(state.user.name??"");
+          //Clear state
+          setState(initialState);
+          //Redirect to login
+          window.location.href = "/aniCheck/";
+        }}
+        size="large">
+        <LogoutOutlined />
+      </IconButton>:undefined}
       <IconButton
         sx={{
           //   m: "3px",
@@ -80,7 +96,7 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
         onClick={() => {
           state.modalOpenState?.[1](true);
         }}
-      >
+        size="large">
         <SettingsRoundedIcon />
       </IconButton>
       <IconButton
@@ -100,7 +116,7 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
         onClick={() => {
           state.modalInfoOpenState?.[1](true);
         }}
-      >
+        size="large">
         <HelpOutlineRoundedIcon />
       </IconButton>
     </Box>

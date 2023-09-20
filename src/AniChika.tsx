@@ -22,11 +22,11 @@ import SearchBox from "./SearchBox";
 import SeriesList from "./SeriesList";
 import OptionsModal from "./OptionsModal";
 import StatusFilter from "./StatusFilter";
-import { BoxProps } from "@material-ui/core/Box";
-import Box from "@material-ui/core/Box";
+import { BoxProps } from "@mui/material/Box";
+import Box from "@mui/material/Box";
 import InfoModal from "./InfoModal";
-import { Typography } from "@material-ui/core";
-import Input from "@material-ui/core/Input";
+import { Typography } from "@mui/material";
+import Input from "@mui/material/Input";
 import LoaderInput from "./LoaderInput";
 
 const AniChika: FC<BoxProps> = (boxProps) => {

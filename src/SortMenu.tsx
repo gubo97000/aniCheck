@@ -14,7 +14,7 @@ import {
   RadioGroup,
   TextField,
   useAutocomplete,
-} from "@material-ui/core";
+} from "@mui/material";
 import React, {
   useState,
   useRef,
@@ -26,7 +26,7 @@ import React, {
   Children,
   isValidElement,
 } from "react";
-// import useAutocomplete from '@material-ui/core/useAutocomplete';
+// import useAutocomplete from '@mui/material/useAutocomplete';
 import { render } from "react-dom";
 import * as vis from "vis-network";
 import cytoscape from "cytoscape";
@@ -36,12 +36,12 @@ import { globalStateType, seriesListElementType, sortType } from "./Types";
 import {
   sortAlphabetical,
   sortComplete,
-  useStateWithLocalStorage,
 } from "./Utils";
-import SortRoundedIcon from "@material-ui/icons/SortRounded";
-import NorthRoundedIcon from "@material-ui/icons/NorthRounded";
-import SouthRoundedIcon from "@material-ui/icons/SouthRounded";
-import { BoxProps } from "@material-ui/core/Box";
+import SortRoundedIcon from "@mui/icons-material/SortRounded";
+import NorthRoundedIcon from "@mui/icons-material/NorthRounded";
+import SouthRoundedIcon from "@mui/icons-material/SouthRounded";
+import { BoxProps } from "@mui/material/Box";
+import { useStateWithLocalStorage } from "./lib/Hooks";
 
 const SortMenu: FC<BoxProps> = (boxProps) => {
   const [state, setState] = useSharedState();
@@ -82,7 +82,7 @@ const SortMenu: FC<BoxProps> = (boxProps) => {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-      >
+        size="large">
         <SortRoundedIcon />
       </IconButton>
       <Menu

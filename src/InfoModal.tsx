@@ -1,17 +1,17 @@
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import Modal from "@material-ui/core/Modal";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { useSharedState } from "./Store";
 import SortMenu from "./SortMenu";
 import CompletionMenu from "./CompletionMenu";
-import Paper from "@material-ui/core/Paper";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import TabContext from "@material-ui/lab/TabContext";
-import TabList from "@material-ui/lab/TabList";
-import TabPanel from "@material-ui/lab/TabPanel";
+import Paper from "@mui/material/Paper";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
 import CyFilterMenu from "./CyFilterMenu";
 import ReactMarkdown from "react-markdown";
 import infoText from "./info.md?raw"

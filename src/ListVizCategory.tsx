@@ -11,13 +11,13 @@ import * as vis from "vis-network";
 import cytoscape from "cytoscape";
 import CytoscapeComponent from "react-cytoscapejs";
 import { useSharedState } from "./Store";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 import { formatsBulkTermsType, globalStateType } from "./Types";
 import { book } from "./cytoIcons";
-import Stack from "@material-ui/core/Stack";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
+import Stack from "@mui/material/Stack";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
 
 import cola from "cytoscape-cola";
 import klay from "cytoscape-klay";
@@ -35,12 +35,12 @@ import {
   getCyLayout,
   getCyStyle,
 } from "./Utils";
-import Badge from "@material-ui/core/Badge";
-import { BoxProps } from "@material-ui/core/Box";
-import Box from "@material-ui/core/Box";
+import Badge from "@mui/material/Badge";
+import { BoxProps } from "@mui/material/Box";
+import Box from "@mui/material/Box";
 import CyToolbar from "./CyToolbar";
-import Icon from "@material-ui/core/Icon";
-import { Typography } from "@material-ui/core";
+import Icon from "@mui/material/Icon";
+import { Typography } from "@mui/material";
 import CardItemA from "./CardItemA";
 type props = {
   category: formatsBulkTermsType;
@@ -64,7 +64,7 @@ const ListVizCategory: FC<props & BoxProps> = ({ category, ...boxProps }) => {
       novelComposition: ["NOVEL"],
     }).includes(node.format);
   });
-  console.log(nodes);
+  // console.log(nodes);
   return nodes?.length ? (
     <Box
       sx={{

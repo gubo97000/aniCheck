@@ -15,7 +15,7 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   TextField,
-} from "@material-ui/core";
+} from "@mui/material";
 import React, {
   useState,
   useRef,
@@ -31,25 +31,10 @@ import siteIcon from "/pwaicon.png";
 
 import { parseAndCheckHttpResponse, useLazyQuery } from "@apollo/client";
 import { useSharedState } from "./Store";
-import * as Queries from "./Queries";
-import {
-  COLOR_CODES,
-  computeData,
-  relationPriority,
-  updateCompletion,
-  useStateWithLocalStorage,
-} from "./Utils";
-import { globalStateType, seriesListElementType, statsType } from "./Types";
-import EastRounded from "@material-ui/icons/EastRounded";
-import { round } from "lodash";
-import { avoidNodes, problematicNodes } from "./ProblematicNodes";
-import { useWorker } from "@koale/useworker";
-import { getUntrackedObject } from "react-tracked";
-import { CheckBoxOutlineBlank } from "@material-ui/icons";
-import Box from "@material-ui/core/Box";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
 import LoaderHead from "./LoaderHead";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 
 const Loader: FC = () => {
   const [state, setState] = useSharedState();

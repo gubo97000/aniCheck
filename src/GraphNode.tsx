@@ -1,48 +1,15 @@
 import {
-  Avatar,
   Box,
-  Checkbox,
-  CircularProgress,
-  FormControlLabel,
   Grid,
   Icon,
-  IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemIcon,
-  ListItemSecondaryAction,
-  ListItemText,
   Paper,
-  Radio,
-  Tooltip,
-  Typography,
-} from "@material-ui/core";
+  Typography
+} from "@mui/material";
 import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  useMemo,
-  FC,
+  FC
 } from "react";
-import { render } from "react-dom";
-import * as vis from "vis-network";
-import cytoscape from "cytoscape";
 
-import { useQuery, gql } from "@apollo/client";
-import Loader from "./Loader";
-import { keycharm } from "vis-network";
-import { useSharedState } from "./Store";
-
-import MenuBookIcon from "@material-ui/icons/MenuBook";
-import TvIcon from "@material-ui/icons/Tv";
-import MusicVideoIcon from "@material-ui/icons/MusicVideo";
-import BookIcon from "@material-ui/icons/Book";
-import OpenInNewRoundedIcon from "@material-ui/icons/OpenInNewRounded";
 import { NodeType } from "./Types";
-import ButtonBase from "@material-ui/core/ButtonBase";
 import { FORMATS } from "./Utils";
 
 interface props {
@@ -73,6 +40,15 @@ const GraphNode: FC<props> = ({ data }) => {
         // overflow: "hidden",
         position: "relative",
       }}
+      style={{
+        width: 200,
+        height: 60,
+        border: "1px solid",
+        borderColor: statusToColor(data.status),
+        // overflow: "hidden",
+        position: "relative",
+      }}
+
     >
       {/* <Tooltip
         title="Right Click to open in AniList"

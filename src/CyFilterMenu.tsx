@@ -1,68 +1,17 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Chip,
-  FormControlLabel,
-  Grid,
-  IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
-  Menu,
-  MenuItem,
-  RadioGroup,
-  Switch,
-  TextField,
-  Tooltip,
-  useAutocomplete,
-} from "@material-ui/core";
 import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  useMemo,
-  FC,
-  Children,
-  isValidElement,
+  FC
 } from "react";
-// import useAutocomplete from '@material-ui/core/useAutocomplete';
-import { render } from "react-dom";
-import * as vis from "vis-network";
-import cytoscape from "cytoscape";
+// import useAutocomplete from '@mui/material/useAutocomplete';
 
-import { useQuery, gql } from "@apollo/client";
-import { useSharedState } from "./Store";
-import Loader from "./Loader";
-import { keycharm } from "vis-network";
-import {
-  formatsType,
-  globalStateType,
-  seriesListElementType,
-  sortType,
-} from "./Types";
-import { FixedSizeList } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { matchSorter } from "match-sorter";
-import {
-  convertBulkTerm,
-  FORMATS,
-  FORMATS_IDS,
-  getBulkStat,
-  sortAlphabetical,
-  sortComplete,
-  updateCompletion,
-  useStateWithLocalStorage,
-} from "./Utils";
 import xor from "lodash/xor";
-import without from "lodash/without";
-import { get, map, zipWith } from "lodash";
-import { getUntrackedObject } from "react-tracked";
 import { FilterGroup } from "./FilterGroup";
+import { useSharedState } from "./Store";
+import {
+  formatsType
+} from "./Types";
+import {
+  FORMATS
+} from "./Utils";
 
 const CyFilterMenu: FC = () => {
   const [state, setState] = useSharedState();

@@ -1,55 +1,24 @@
 import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  FC,
+  FC
 } from "react";
-import { render } from "react-dom";
-import * as vis from "vis-network";
-import cytoscape from "cytoscape";
-import CytoscapeComponent from "react-cytoscapejs";
 import { useSharedState } from "./Store";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import { globalStateType, NodeType } from "./Types";
-import { book } from "./cytoIcons";
-import Stack from "@material-ui/core/Stack";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
+import { NodeType } from "./Types";
 
-import cola from "cytoscape-cola";
-import klay from "cytoscape-klay";
-import dagre from "cytoscape-dagre";
 // import elk from "cytoscape-elk";
-import popper from "cytoscape-popper";
-import fcose from "cytoscape-fcose";
-import nodeHtmlLabel from "cytoscape-node-html-label";
-import { renderToString } from "react-dom/server";
-import GraphNode from "./GraphNode";
+import HighlightOffRounded from "@mui/icons-material/HighlightOffRounded";
+import { Chip, Typography } from "@mui/material";
+import Box, { BoxProps } from "@mui/material/Box";
 import {
-  dataForCyto,
   FORMATS,
-  getCyLayout,
-  getCyStyle,
   RELEASE_STATUS,
-  STATUSES,
+  STATUSES
 } from "./Utils";
-import Badge from "@material-ui/core/Badge";
-import { BoxProps } from "@material-ui/core/Box";
-import Box from "@material-ui/core/Box";
-import CyToolbar from "./CyToolbar";
-import Icon from "@material-ui/core/Icon";
-import { Chip, IconButton, Typography } from "@material-ui/core";
-import OpenInNewRoundedIcon from "@material-ui/icons/OpenInNewRounded";
-import HighlightOffRounded from "@material-ui/icons/HighlightOffRounded";
 
 type props = {
   node: NodeType;
 };
 
-const ListViz: FC<props & BoxProps> = ({ node, ...boxProps }) => {
+const CardItemA: FC<props & BoxProps> = ({ node, ...boxProps }) => {
   // const graphBox = useRef(null)
   const [state, setState] = useSharedState();
 
@@ -236,4 +205,4 @@ const ListViz: FC<props & BoxProps> = ({ node, ...boxProps }) => {
     </Box>
   );
 };
-export default ListViz;
+export default CardItemA;

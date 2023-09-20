@@ -3,19 +3,9 @@ import {
   Box,
   Checkbox,
   CircularProgress,
-  FormControlLabel,
-  IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemIcon,
-  ListItemSecondaryAction,
-  ListItemText,
-  Paper,
-  Radio,
   Tooltip,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import React, {
   useState,
   useRef,
@@ -40,6 +30,7 @@ interface props {
   value2: number;
   size?: number;
   sx?: any;
+  children?: React.ReactNode;
 }
 
 const DoubleProgressWithContent: FC<props> = ({

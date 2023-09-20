@@ -1,52 +1,28 @@
 import {
-  Avatar,
   Box,
-  Grid,
   IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
-  RadioGroup,
-  TextField,
-  useAutocomplete,
-} from "@material-ui/core";
+  TextField
+} from "@mui/material";
 import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  useMemo,
   FC,
-  Children,
-  isValidElement,
+  useEffect,
+  useState
 } from "react";
-// import useAutocomplete from '@material-ui/core/useAutocomplete';
-import { render } from "react-dom";
-import * as vis from "vis-network";
-import cytoscape from "cytoscape";
+// import useAutocomplete from '@mui/material/useAutocomplete';
 
-import { useQuery, gql } from "@apollo/client";
-import { useSharedState } from "./Store";
-import Loader from "./Loader";
-import { keycharm } from "vis-network";
-import { globalStateType, seriesListElementType } from "./Types";
-import { FixedSizeList } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
+import { GridViewOutlined, ViewAgendaOutlined } from "@mui/icons-material";
+import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
+import DonutLargeRoundedIcon from "@mui/icons-material/DonutLargeRounded";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import InputAdornment from "@mui/material/InputAdornment";
 import { matchSorter } from "match-sorter";
 import SortMenu from "./SortMenu";
-import { getSortFc, useAsync, useDebounce } from "./Utils";
-import DonutLargeRoundedIcon from "@material-ui/icons/DonutLargeRounded";
-import SortIcon from "@material-ui/icons/Sort";
-import FilterAltRoundedIcon from "@material-ui/icons/FilterAltRounded";
-import { useWorker } from "@koale/useworker";
-import SearchRoundedIcon from "@material-ui/icons/SearchRounded";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
+import { useSharedState } from "./Store";
+import { seriesListElementType } from "./Types";
+import { getSortFc, } from "./Utils";
+import { useAsync, useDebounce } from "./lib/Hooks";
 
-const SearchBox: FC = ({ children }) => {
+const SearchBox: FC = ({ }) => {
   // console.log(props.children.props.children.props)
   const [state, setState] = useSharedState();
   const [query, setQuery] = useState("");
@@ -126,8 +102,8 @@ const SearchBox: FC = ({ children }) => {
         // position: "relative",
         display: "grid",
         gridTemplateRows: "60px",
-        gridTemplateColumns: "50% 1fr 50px 50px",
-        gridTemplateAreas: "'search . complete sort'",
+        gridTemplateColumns: "50% 1fr 50px 50px 50px",
+        gridTemplateAreas: "'search . complete sort layout'",
         placeItems: "center",
         m: "0px 10px 0px 14px",
       }}
@@ -177,7 +153,7 @@ const SearchBox: FC = ({ children }) => {
                   onClick={() => {
                     setQuery("");
                   }}
-                >
+                  size="large">
                   <ClearRoundedIcon />
                 </IconButton>
               ) : undefined}
@@ -192,7 +168,7 @@ const SearchBox: FC = ({ children }) => {
         onClick={() => {
           state.modalOpenState?.[1](true, "completion_options");
         }}
-      >
+        size="large">
         <DonutLargeRoundedIcon />
       </IconButton>
       <SortMenu
@@ -200,6 +176,25 @@ const SearchBox: FC = ({ children }) => {
           gridArea: "sort",
         }}
       />
+      <IconButton
+        sx={{
+          gridArea: "layout",
+        }}
+        onClick={() => {
+          setState((state) => {
+            return {
+              ...state,
+              userOptions:{
+                ...state.userOptions,
+                listLayout: ["g.1","g.4"][(["g.1","g.4"].indexOf(state.userOptions.listLayout)+1)%2]
+              }
+            };
+          });
+        }}
+        size="large">
+          {state.userOptions.listLayout == "g.1" ? <ViewAgendaOutlined/> : <GridViewOutlined/>}
+          
+      </IconButton>
     </Box>
   );
 };

@@ -8,19 +8,20 @@ import React, {
 } from "react";
 import { createContainer } from "react-tracked";
 import { globalStateType, userOptionType } from "./Types";
-import { FORMATS_IDS, sortAlphabetical, useStateWithLocalStorage } from "./Utils";
+import { FORMATS_IDS, sortAlphabetical } from "./Utils";
 // import Reducer from './Reducer'
 
-const initialState: globalStateType = {
-  cy: cytoscape({ headless: true }),
+export const initialState: globalStateType = {
+  // cy: cytoscape({ headless: true }),
   userOptions: {
-    themeMode:"auto",
-    vizMode:"list",
+    themeMode: "auto",
+    vizMode: "list",
     sort: {
       type: "alphabetical",
       inverted: false,
     },
     smartCompletion: true,
+    listLayout: "g.4",
     completion: FORMATS_IDS,
     animeComposition: [
       "TV",
@@ -42,14 +43,31 @@ const initialState: globalStateType = {
   },
   seriesDict: {},
   user: {},
-  usersHist:[],
+  usersHist: [],
   globalStats: { tot: 0, miss: 0, got: 0, plan: 0 },
   status: ["ok", " "],
   // seriesSelected: ,
   // seriesList: { seriesPrime: cytoscape({ headless: true }).elements(), series: cytoscape({ headless: true }).elements() },
 };
 
-const useGlobalState = () => useState(initialState);
+const cacheAvailable = "caches" in self;
+let cachedState: Partial<globalStateType>;
+if (cacheAvailable) {
+  //Retrieve from cache older state
+  const cache = await caches.open(
+    `${(localStorage.getItem("usr") ?? "").slice(1, -1)}`
+  );
+
+  cachedState = await (await cache.match((await cache.keys())[0]))?.json();
+
+  if (cachedState) {
+    // history.pushState({}, "", `/aniCheck/${cachedState.user?.name}`);
+    console.log(`📝 Found cache for user ${cachedState.user?.name}`);
+  }
+}
+
+console.log("✨ Creating initial State");
+const useGlobalState = () => useState({ ...initialState, ...cachedState });
 
 export const { Provider: SharedStateProvider, useTracked: useSharedState } =
   createContainer(useGlobalState);

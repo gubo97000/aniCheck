@@ -45,7 +45,7 @@ export type releaseStatusType =
 export type formatsBulkTermsType = "anime" | "manga" | "novel";
 
 export type globalStateType = {
-  cy: cytoscape.Core;
+  // cy: cytoscape.Core;
   userOptions: userOptionType;
   modalOpenState?: [boolean, (openState: boolean, page?: string) => void];
   modalInfoOpenState?: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
@@ -62,6 +62,7 @@ export type globalStateType = {
 export type userOptionType = {
   themeMode: "light" | "dark" | "auto";
   vizMode: "graph" | "list";
+  listLayout: string;
   sort: sortType;
   smartCompletion: boolean;
   animeComposition: formatsType[];
@@ -93,6 +94,7 @@ export type statsType = {
     missWeight?: number;
     gotWeight?: number;
     planWeight?: number;
+    missPerWeight?: number;
     gotPerWeight?: number;
     planPerWeight?: number;
   };

@@ -1,67 +1,68 @@
 import {
-  Avatar,
-  Button,
   CircularProgress,
   FormControl,
   FormHelperText,
-  Grid,
   IconButton,
   Input,
   InputAdornment,
-  InputLabel,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
-  TextField,
-} from "@material-ui/core";
-import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  FC,
-} from "react";
-import { render } from "react-dom";
-import * as vis from "vis-network";
-import cytoscape, { EdgeCollection } from "cytoscape";
-import siteIcon from "./favicon.png";
+} from "@mui/material";
+import React, { FC, useCallback, useEffect } from "react";
 
-import { parseAndCheckHttpResponse, useLazyQuery } from "@apollo/client";
-import { useSharedState } from "./Store";
+import { useLazyQuery } from "@apollo/client";
+import EastRounded from "@mui/icons-material/EastRounded";
+import Box, { BoxProps } from "@mui/material/Box";
+import { useNavigate } from "react-router-dom";
+import { problematicNodes } from "./ProblematicNodes";
 import * as Queries from "./Queries";
+import { useSharedState } from "./Store";
+import { globalStateType } from "./Types";
 import {
   COLOR_CODES,
   computeData,
   relationPriority,
   updateCompletion,
-  useStateWithLocalStorage,
 } from "./Utils";
-import { globalStateType, seriesListElementType, statsType } from "./Types";
-import EastRounded from "@material-ui/icons/EastRounded";
-import { round } from "lodash";
-import { avoidNodes, problematicNodes } from "./ProblematicNodes";
-import { useWorker } from "@koale/useworker";
-import { getUntrackedObject } from "react-tracked";
-import { CheckBoxOutlineBlank } from "@material-ui/icons";
-import Box, { BoxProps } from "@material-ui/core/Box";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import LoaderHead from "./LoaderHead";
+import { useStateWithLocalStorage } from "./lib/Hooks";
+import { workerInstance } from "./lib/WebWorkersInterfaces";
 
-const LoaderInput: FC<BoxProps> = ({...boxProps}) => {
+const LoaderInput: FC<BoxProps> = ({ ...boxProps }) => {
   const [state, setState] = useSharedState();
   const [usr, setUsr] = useStateWithLocalStorage<string>("usr", "");
-  const [workerFn, { status: statusWorker, kill: killWorker }] = useWorker(
-    computeData,
-    {
-      remoteDependencies: [
-        "https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.18.2/cytoscape.min.js",
-        "https://cdnjs.cloudflare.com/ajax/libs/tslib/2.2.0/tslib.min.js",
-      ],
-    }
+  const navigate = useNavigate();
+  let statusWorker = "FINISHED"; // TODO: delete this line
+
+  const wComputeData = useCallback(
+    async (
+      data: any[],
+      relationPriority: {
+        [key: string]: number;
+      },
+      problematicEles: string[]
+    ) => {
+      console.log("ComputeData");
+      return await workerInstance.wComputeData(
+        data,
+        relationPriority,
+        problematicEles
+      );
+    },
+    []
   );
+
+  // const wComputeData = async (
+  //   data: any[],
+  //   relationPriority: {
+  //     [key: string]: number;
+  //   },
+  //   problematicEles: string[]
+  // ) => {
+  //   console.log("ComputeData");
+  //   return await workerInstance.wComputeData(
+  //     data,
+  //     relationPriority,
+  //     problematicEles
+  //   );
+  // };
 
   const startQuery = () => {
     setState((state) => {
@@ -71,7 +72,15 @@ const LoaderInput: FC<BoxProps> = ({...boxProps}) => {
   };
 
   const asyncCompute = async () => {
-    let seriesDict = await workerFn(
+    // let seriesDict = await workerFn(
+    //   [
+    //     ...statusAnime.data.MediaListCollection.lists,
+    //     ...statusManga.data.MediaListCollection.lists,
+    //   ],
+    //   relationPriority,
+    //   problematicNodes
+    // );
+    let seriesDict = await wComputeData(
       [
         ...statusAnime.data.MediaListCollection.lists,
         ...statusManga.data.MediaListCollection.lists,
@@ -79,6 +88,7 @@ const LoaderInput: FC<BoxProps> = ({...boxProps}) => {
       relationPriority,
       problematicNodes
     );
+
     // setState(state => { return { ...state, seriesDict: seriesDict, } })
     setState((state) => updateCompletion({ ...state, seriesDict: seriesDict }));
   };
@@ -190,6 +200,7 @@ const LoaderInput: FC<BoxProps> = ({...boxProps}) => {
           }}
           onKeyPress={(ev) => {
             if (ev.key == "Enter" && state.status[0] != "loading") {
+              navigate(usr);
               startQuery();
             }
           }}
@@ -198,7 +209,14 @@ const LoaderInput: FC<BoxProps> = ({...boxProps}) => {
               {state.status[0] == "loading" ? (
                 <CircularProgress />
               ) : (
-                <IconButton aria-label="get user anime" onClick={startQuery}>
+                <IconButton
+                  aria-label="get user anime"
+                  onClick={() => {
+                    navigate(usr);
+                    startQuery();
+                  }}
+                  size="large"
+                >
                   <EastRounded />
                 </IconButton>
               )}
@@ -208,7 +226,7 @@ const LoaderInput: FC<BoxProps> = ({...boxProps}) => {
         <FormHelperText
           error={state.status[0] == "error"}
           id="standard-weight-helper-text"
-          sx={{  }}
+          sx={{}}
         >
           {state.status[1]}
         </FormHelperText>

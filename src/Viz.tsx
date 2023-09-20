@@ -11,13 +11,13 @@ import * as vis from "vis-network";
 import cytoscape from "cytoscape";
 import CytoscapeComponent from "react-cytoscapejs";
 import { useSharedState } from "./Store";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 import { globalStateType } from "./Types";
 import { book } from "./cytoIcons";
-import Stack from "@material-ui/core/Stack";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
+import Stack from "@mui/material/Stack";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
 
 import cola from "cytoscape-cola";
 import klay from "cytoscape-klay";
@@ -29,9 +29,9 @@ import nodeHtmlLabel from "cytoscape-node-html-label";
 import { renderToString } from "react-dom/server";
 import GraphNode from "./GraphNode";
 import { dataForCyto, getCyLayout, getCyStyle } from "./Utils";
-import Badge from "@material-ui/core/Badge";
-import { BoxProps } from "@material-ui/core/Box";
-import Box from "@material-ui/core/Box";
+import Badge from "@mui/material/Badge";
+import { BoxProps } from "@mui/material/Box";
+import Box from "@mui/material/Box";
 import CyToolbar from "./CyToolbar";
 
 const Viz: FC<BoxProps> = (boxProps) => {
@@ -39,18 +39,19 @@ const Viz: FC<BoxProps> = (boxProps) => {
   const [state, setState] = useSharedState();
 
   let cyRef = useRef(null);
-  useEffect(() => {
+  const initCytoscape = () => {
     try {
       cytoscape.use(nodeHtmlLabel);
-      cytoscape.use(cola);
+      // cytoscape.use(cola);
       cytoscape.use(klay);
       cytoscape.use(dagre);
-      // cytoscape.use(elk);
-      cytoscape.use(popper);
-      cytoscape.use(fcose);
+      // // cytoscape.use(elk);
+      // cytoscape.use(popper);
+      // cytoscape.use(fcose);
     } catch (error) {}
 
     let cy = cytoscape({
+      headless: false,
       container: cyRef.current,
       wheelSensitivity: 0.3,
       elements: [
@@ -195,33 +196,40 @@ const Viz: FC<BoxProps> = (boxProps) => {
     });
 
     //Adding Nice Node Layout as Label
-    (cy as any).nodeHtmlLabel([
-      {
-        query: "node", // cytoscape query selector
-        halign: "center", // title vertical position. Can be 'left',''center, 'right'
-        valign: "center", // title vertical position. Can be 'top',''center, 'bottom'
-        halignBox: "center", // title vertical position. Can be 'left',''center, 'right'
-        valignBox: "center", // title relative box vertical position. Can be 'top',''center, 'bottom'
-        cssClass: "", // any classes will be as attribute of <div> container for every title
-        tpl(data: any) {
-          return renderToString(<GraphNode data={data} />);
+    (cy as any).nodeHtmlLabel(
+      [
+        {
+          query: "node", // cytoscape query selector
+          halign: "center", // title vertical position. Can be 'left',''center, 'right'
+          valign: "center", // title vertical position. Can be 'top',''center, 'bottom'
+          halignBox: "center", // title vertical position. Can be 'left',''center, 'right'
+          valignBox: "center", // title relative box vertical position. Can be 'top',''center, 'bottom'
+          cssClass: "", // any classes will be as attribute of <div> container for every title
+          tpl(data: any) {
+            return renderToString(<GraphNode data={data} />);
+          },
         },
-      },
+        {
+          query: "node:hidden",
+          tpl: () => "",
+        },
+      ],
       {
-        query: "node:hidden",
-        tpl: () => "",
-      },
-    ], {
-      enablePointerEvents: true
-    });
+        enablePointerEvents: true,
+      }
+    );
+    return cy;
+  };
 
+  useEffect(() => {
     setState((state) => {
-      return { ...state, cyViz: cy };
+      return { ...state, cyViz: initCytoscape() };
     });
   }, []);
 
   useEffect(() => {
     setState((state) => {
+      state.cyViz=initCytoscape(); //TODO: This is the hackest hack ever because otherwise cyViz f disappear (not really) and app crash
       if (state.seriesSelected && state.cyViz) {
         console.log(state.seriesSelected);
         state.cyViz.elements().remove();
@@ -232,7 +240,9 @@ const Viz: FC<BoxProps> = (boxProps) => {
         state.cyViz.add(dataForCyto(state.seriesSelected.serieComplete, true));
 
         applyFilter(state.cyViz);
-        state.cyViz?.center();
+
+        console.log(cyRef.current);
+        state.cyViz.center();
 
         state.cyViz.elements().makeLayout(getCyLayout(state)).run();
 
@@ -240,8 +250,10 @@ const Viz: FC<BoxProps> = (boxProps) => {
         state.cyViz?.panBy({ x: -35, y: 0 });
       }
 
-      return { ...state,
-        userOptions: { ...state.userOptions, cyShowHidden: false }, };
+      return {
+        ...state,
+        userOptions: { ...state.userOptions, cyShowHidden: false },
+      };
     });
   }, [state.seriesSelected]);
 
@@ -259,7 +271,6 @@ const Viz: FC<BoxProps> = (boxProps) => {
   useEffect(() => {
     setState((state) => {
       if (state.seriesSelected && state.cyViz) {
-
         applyFilter(state.cyViz);
         state.cyViz?.center();
         state.cyViz.elements().makeLayout(getCyLayout(state)).run();
@@ -268,10 +279,9 @@ const Viz: FC<BoxProps> = (boxProps) => {
         state.cyViz?.panBy({ x: -35, y: 0 });
       }
 
-      return { ...state};
+      return { ...state };
     });
   }, [state.userOptions.cyFilter, state.userOptions.cyShowHidden]);
-
 
   const applyFilter = (cyViz: cytoscape.Core) => {
     //Restore all hidden nodes
@@ -305,8 +315,11 @@ const Viz: FC<BoxProps> = (boxProps) => {
         display: { xs: "none", sm: "block" },
       }}
     >
-      <Box ref={cyRef} style={{ width: "100%", height: "100vh", overflow:"hidden" }} />
-      <CyToolbar/>
+      <Box
+        ref={cyRef}
+        style={{ width: "100%", height: "100vh", overflow: "hidden" }}
+      />
+      <CyToolbar />
     </Box>
   );
 };
