@@ -53,10 +53,11 @@ export type globalStateType = {
   seriesDict: { [key: string]: seriesListElementType };
   cyViz?: cytoscape.Core;
   globalStats: statsType[formatsType | "selected"];
-  status: ["ok" | "loading" | "error", string];
+  status: ["ok" | "loading" | "error" | "success", string];
   user: userType;
   usersHist: string[];
   seriesToRender?: seriesListElementType[];
+  tempInfo: { usingCache: boolean };
 };
 
 export type userOptionType = {

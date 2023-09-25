@@ -1,7 +1,5 @@
 import cytoscape from "cytoscape";
-import React, { ReactNode } from "react";
-// import cytoscape from "cytoscape";
-import { useCallback, useEffect, useState } from "react";
+import React from "react";
 import { avoidNodes } from "./ProblematicNodes";
 import { useSharedState } from "./Store";
 import {
@@ -166,49 +164,49 @@ export const STATUSES: {
     id: "CURRENT",
     label: "Watching",
     icon: <PlayCircleOutlineRoundedIcon />,
-    tooltip: "Anime broadcast on television",
+    tooltip: "Currently watching",
     color: "secondary",
   },
   PLANNING: {
     id: "PLANNING",
     label: "Plan To Watch",
     icon: <CloudCircleIcon />,
-    tooltip: "Anime broadcast on television",
+    tooltip: "Planning to watch the anime",
     color: "secondary",
   },
   COMPLETED: {
     id: "COMPLETED",
     label: "Completed",
     icon: <CheckCircleOutlineRoundedIcon />,
-    tooltip: "Anime broadcast on television",
+    tooltip: "Completly watched",
     color: "primary",
   },
   DROPPED: {
     id: "DROPPED",
     label: "Dropped",
     icon: <CheckCircleOutlineRoundedIcon />,
-    tooltip: "Anime broadcast on television",
+    tooltip: "Looks like you didn't like it!",
     color: "primary",
   },
   PAUSED: {
     id: "PAUSED",
     label: "Paused",
     icon: <PauseCircleOutlineRoundedIcon />,
-    tooltip: "Anime broadcast on television",
+    tooltip: "Taking a pause?",
     color: "secondary",
   },
   REPEATING: {
     id: "REPEATING",
     label: "Repeating",
     icon: <CheckCircleOutlineRoundedIcon />,
-    tooltip: "Anime broadcast on television",
+    tooltip: "You must really like this one!",
     color: "primary",
   },
   NO: {
     id: "NO",
     label: "Missing",
     icon: <AdjustRoundedIcon />,
-    tooltip: "Anime broadcast on television",
+    tooltip: "NO",
     color: undefined,
   },
 };
@@ -545,33 +543,7 @@ export const updateCompletion = (state: globalStateType) => {
     }
   }
   console.log(globalStats);
-  
-  //Caching the results
-  //TODO: first version, need to update
-  if(isCachesAvailable()){
-    caches.open(state.user.name ?? "").then((ch) => {
-      ch.put(
-        "cachedState",
-        new Response(
-          JSON.stringify({
-            seriesDict: state.seriesDict,
-            globalStats: globalStats,
-  
-            //Not really necessary here
-            userOptions: state.userOptions,
-            user: state.user,
-            userHist: state.usersHist,
-          }),
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-      );
-    });
-  }
-  
+
   return { ...state, seriesDict: state.seriesDict, globalStats: globalStats };
 };
 
@@ -589,7 +561,7 @@ export const computeData = (
   relationPriority: { [key: string]: number },
   problematicEles: string[]
 ) => {
-  console.log("ComputeData")
+  console.log("ComputeData");
   const cy = cytoscape({ headless: true });
 
   const avoidEles = () => {

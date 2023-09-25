@@ -53,32 +53,34 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
         placeItems: "center",
       }}
     >
-      { state.user.name ?
-      <IconButton
-        sx={{
-          //   m: "3px",
-          p: "8px",
-          backdropFilter: "blur(8px)",
-          bgcolor: "rgba(255,255,255,0.5)",
-          gridArea: "logout",
-          border: "1px solid",
-          borderColor: "primary.main",
-          color: "primary.main",
-          ":hover": {
-            bgcolor: "rgba(255,255,255,0.3)",
-          },
-        }}
-        onClick={() => {
-          //Delete cache
-          deleteCache(state.user.name??"");
-          //Clear state
-          setState(initialState);
-          //Redirect to login
-          window.location.href = "/aniCheck/";
-        }}
-        size="large">
-        <LogoutOutlined />
-      </IconButton>:undefined}
+      {state.user.name ? (
+        <IconButton
+          sx={{
+            //   m: "3px",
+            p: "8px",
+            backdropFilter: "blur(8px)",
+            bgcolor: "rgba(255,255,255,0.5)",
+            gridArea: "logout",
+            border: "1px solid",
+            borderColor: "primary.main",
+            color: "primary.main",
+            ":hover": {
+              bgcolor: "rgba(255,255,255,0.3)",
+            },
+          }}
+          onClick={() => {
+            //Delete cache
+            deleteCache(state.user.name ?? "");
+            //Clear state
+            setState(initialState);
+            //Redirect to login
+            // window.location.href = "/aniCheck/";
+          }}
+          size="large"
+        >
+          <LogoutOutlined />
+        </IconButton>
+      ) : undefined}
       <IconButton
         sx={{
           //   m: "3px",
@@ -96,7 +98,8 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
         onClick={() => {
           state.modalOpenState?.[1](true);
         }}
-        size="large">
+        size="large"
+      >
         <SettingsRoundedIcon />
       </IconButton>
       <IconButton
@@ -116,7 +119,8 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
         onClick={() => {
           state.modalInfoOpenState?.[1](true);
         }}
-        size="large">
+        size="large"
+      >
         <HelpOutlineRoundedIcon />
       </IconButton>
     </Box>

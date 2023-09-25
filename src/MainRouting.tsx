@@ -25,7 +25,7 @@ const MainRouting: FC<BoxProps> = (boxProps) => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
-        path="/aniCheck"
+        path="/aniCheck/"
         loader={() => {
           // console.log(state.user.name, window.location.href );
           return null;
@@ -42,7 +42,7 @@ const MainRouting: FC<BoxProps> = (boxProps) => {
         <Route
           path=":userId"
           loader={({ params }) => {
-            if (state.user.name != params.userId) return redirect("/aniCheck");
+            if (state.user.name != params.userId) return redirect("/aniCheck/");
             return null;
           }}
           element={<SeriesList />}
@@ -50,7 +50,7 @@ const MainRouting: FC<BoxProps> = (boxProps) => {
           <Route
             path=":serieID"
             // loader={({ params }) => {
-            //   //If the url comes from outside check if it is valid, 
+            //   //If the url comes from outside check if it is valid,
             //   // triggers also if there is no selected series before
             //   console.log(state.seriesSelected?.seriesPrime.id, params.serieID)
             //   if (!state.seriesSelected && params.serieID){

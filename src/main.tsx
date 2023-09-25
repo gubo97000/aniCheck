@@ -31,6 +31,7 @@ import {
 import MainApp from "./MainApp";
 import SeriesList from "./SeriesList";
 import MainRouting from "./MainRouting";
+import { WebWorkerContext } from "./ProviderWebWorker";
 
 // import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
@@ -43,10 +44,8 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/aniCheck" element={<MainApp />}>
       <Route path=":userId" element={<SeriesList />}>
-        <Route path=":serieID">
-          {" "}
-        </Route>
-        </Route>
+        <Route path=":serieID"> </Route>
+      </Route>
     </Route>
   )
 );
@@ -66,7 +65,7 @@ root.render(
     <SharedStateProvider>
       <ApolloProvider client={client}>
         <Theme>
-          <MainRouting/>
+          <MainRouting />
           {/* <RouterProvider router={router} /> */}
         </Theme>
       </ApolloProvider>

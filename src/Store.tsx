@@ -46,6 +46,9 @@ export const initialState: globalStateType = {
   usersHist: [],
   globalStats: { tot: 0, miss: 0, got: 0, plan: 0 },
   status: ["ok", " "],
+  tempInfo:{
+    usingCache: false,
+  }
   // seriesSelected: ,
   // seriesList: { seriesPrime: cytoscape({ headless: true }).elements(), series: cytoscape({ headless: true }).elements() },
 };
@@ -63,6 +66,7 @@ if (cacheAvailable) {
   if (cachedState) {
     // history.pushState({}, "", `/aniCheck/${cachedState.user?.name}`);
     console.log(`📝 Found cache for user ${cachedState.user?.name}`);
+    cachedState.tempInfo = {usingCache: true}
   }
 }
 

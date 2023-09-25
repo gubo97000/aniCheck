@@ -24,11 +24,13 @@ import {
 } from "./Utils";
 import { useStateWithLocalStorage } from "./lib/Hooks";
 import { workerInstance } from "./lib/WebWorkersInterfaces";
+import { useUpdateWorker } from "./lib/useUpdateWorker";
 
 const LoaderInput: FC<BoxProps> = ({ ...boxProps }) => {
   const [state, setState] = useSharedState();
   const [usr, setUsr] = useStateWithLocalStorage<string>("usr", "");
   const navigate = useNavigate();
+  const { run, result } = useUpdateWorker();
   let statusWorker = "FINISHED"; // TODO: delete this line
 
   const wComputeData = useCallback(
@@ -48,7 +50,12 @@ const LoaderInput: FC<BoxProps> = ({ ...boxProps }) => {
     },
     []
   );
-
+  // useEffect(() => {
+  //   if (!result) return;
+  //   setState((state) =>
+  //     updateCompletion({ ...state, seriesDict: getResult() })
+  //   );
+  // }, [result]);
   // const wComputeData = async (
   //   data: any[],
   //   relationPriority: {
@@ -130,9 +137,10 @@ const LoaderInput: FC<BoxProps> = ({ ...boxProps }) => {
     notifyOnNetworkStatusChange: true,
     onCompleted: () => {
       computeUser();
-      getAnimeLists({
-        variables: { user: usr, type: "ANIME" },
-      });
+      run("fullUpdate", { user: statusUser.data.User.name });
+      // getAnimeLists({
+      //   variables: { user: usr, type: "ANIME" },
+      // });
     },
   });
   const [getAnimeLists, statusAnime] = useLazyQuery(Queries.GET_LISTS, {
