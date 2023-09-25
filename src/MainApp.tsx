@@ -38,6 +38,34 @@ const MainApp: FC<BoxProps> = (boxProps) => {
           ) : (
             <Nav sx={{ height: "100vh" }}></Nav>
           )}
+
+          {/* <Box
+            sx={{
+              height:
+                location.pathname.split("/").length == 4 ? "100vh" : "0px",
+              width: location.pathname.split("/").length == 4 ? "100%" : "0%",
+            }}
+          >
+            {state.userOptions.vizMode == "graph" ? (
+              <Viz
+                sx={{
+                  height: "100vh",
+                }}
+              />
+            ) : (
+              <ListViz
+                sx={{
+                  height: "100vh",
+                }}
+              />
+            )}
+          </Box>
+          <Nav
+            sx={{
+              height: "100vh",
+              width: location.pathname.split("/").length == 4 ? "0%" : "100%",
+            }}
+          ></Nav> */}
         </Box>
       ) : (
         <Box

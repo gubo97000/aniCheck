@@ -48,7 +48,8 @@ export type globalStateType = {
   // cy: cytoscape.Core;
   userOptions: userOptionType;
   modalOpenState?: [boolean, (openState: boolean, page?: string) => void];
-  modalInfoOpenState?: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+  // modalInfoOpenState?: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+  modalInfoOpenState?: boolean;
   seriesSelected?: seriesListElementType;
   seriesDict: { [key: string]: seriesListElementType };
   cyViz?: cytoscape.Core;

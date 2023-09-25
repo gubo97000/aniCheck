@@ -39,7 +39,7 @@ import { deleteCache } from "./lib/CacheUtils";
 
 const LoaderHead: FC<BoxProps> = (boxProps) => {
   const [state, setState] = useSharedState();
-
+  useEffect(() => {}, [state.modalOpenState]); //Fixes a bug the set state function doesn't update after a change screen in mobile
   return (
     <Box
       {...boxProps}
@@ -117,7 +117,15 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
           },
         }}
         onClick={() => {
-          state.modalInfoOpenState?.[1](true);
+          console.log("clicked");
+          console.log(state.modalInfoOpenState);
+          setState((s) => {
+            return {
+              ...s,
+              modalInfoOpenState: true,
+            };
+          });
+          // state.modalInfoOpenState?.[1](true);
         }}
         size="large"
       >
