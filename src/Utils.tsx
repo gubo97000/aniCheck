@@ -773,7 +773,9 @@ export const computeData = (
       "NOVEL",
       "ONE_SHOT",
     ] as const) {
-      let formatEl = serie.series.nodes().filter(`node[format='${format}']`);
+      let formatEl = serie.series
+        .nodes()
+        .filter(`node[format='${format}'][airStatus!="CANCELLED"]`); //TODO: This is a possible fix for the CANCELLED bug 🐛
       // if (serie.seriesPrime.data("id") == 21093) {
       //   console.log(format)
       //   console.log(formatEl.filter("node[status='NO']"))

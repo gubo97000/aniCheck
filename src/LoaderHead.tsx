@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   BoxProps,
+  Chip,
   Grid,
   Icon,
   IconButton,
@@ -131,6 +132,10 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
       >
         <HelpOutlineRoundedIcon />
       </IconButton>
+      {/* <Chip
+        style={{ position: "absolute", top: "75px", left: "350px" }}
+        label="🧪 Work in Progress"
+      /> */}
     </Box>
   );
 };
