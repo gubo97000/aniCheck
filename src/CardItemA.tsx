@@ -1,6 +1,4 @@
-import React, {
-  FC
-} from "react";
+import React, { FC } from "react";
 import { useSharedState } from "./Store";
 import { NodeType } from "./Types";
 
@@ -8,11 +6,7 @@ import { NodeType } from "./Types";
 import HighlightOffRounded from "@mui/icons-material/HighlightOffRounded";
 import { Chip, Typography } from "@mui/material";
 import Box, { BoxProps } from "@mui/material/Box";
-import {
-  FORMATS,
-  RELEASE_STATUS,
-  STATUSES
-} from "./Utils";
+import { FORMATS, RELEASE_STATUS, STATUSES } from "./Utils";
 
 type props = {
   node: NodeType;

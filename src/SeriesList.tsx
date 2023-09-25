@@ -26,6 +26,7 @@ import SeriesListItemB from "./SeriesListItemB";
 import SeriesListItemM from "./SeriesListItemM";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { random } from "lodash";
+import { useMediaQuery } from "./lib/Hooks";
 
 interface scrollProps {
   onScroll?: any;
@@ -72,6 +73,7 @@ const SeriesList: FC<BoxProps> = (boxProps) => {
   const gridRef = React.createRef<FixedSizeGrid<any>>();
   const outerRef = React.createRef();
   const [state, setState] = useSharedState();
+  const isMobile = useMediaQuery("(max-width: 600px)");
   let [seriesList, setSeriesList] = useState<seriesListElementType[]>([]);
 
   useEffect(() => {
@@ -135,11 +137,13 @@ const SeriesList: FC<BoxProps> = (boxProps) => {
         <AutoSizer>
           {({ height, width }) => (
             <FixedSizeGrid<{ seriesList: seriesListElementType[] }>
+              // className="serie-list"
+              style={{ overflowX: "hidden" }}
               ref={gridRef}
               height={height}
               width={width}
               columnWidth={
-                (width - 20) /
+                (width - (isMobile ? 0 : 13)) /
                 parseInt(state.userOptions.listLayout.split(".")[1])
               }
               rowHeight={

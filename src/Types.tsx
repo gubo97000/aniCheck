@@ -41,7 +41,8 @@ export type releaseStatusType =
   | "RELEASING"
   | "NOT_YET_RELEASED"
   | "CANCELLED"
-  | "HIATUS";
+  | "HIATUS"
+  | "UNKNOWN";
 export type formatsBulkTermsType = "anime" | "manga" | "novel";
 
 export type globalStateType = {

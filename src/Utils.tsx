@@ -256,6 +256,13 @@ export const RELEASE_STATUS: {
       "Is currently paused from releasing and will resume at a later date",
     color: "secondary",
   },
+  UNKNOWN: {
+    id: "UNKNOWN",
+    label: "Unknown",
+    icon: <CloudCircleIcon />,
+    tooltip: "A true mistery!",
+    color: "secondary",
+  },
 };
 
 /// Sort Functions
@@ -599,7 +606,7 @@ export const computeData = (
     return {
       id: node.id,
       status: "NO",
-      airStatus: node.status,
+      airStatus: node.status ?? "",
       format: node.format ?? "SPECIAL",
       title: node.title.userPreferred,
       titles: [...Object.values(node.title), ...node.synonyms].filter(
