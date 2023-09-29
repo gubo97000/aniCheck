@@ -25,7 +25,7 @@ const MainRouting: FC<BoxProps> = (boxProps) => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
-        path="/aniCheck/"
+        path="/"
         loader={() => {
           // console.log(state.user.name, window.location.href );
           return null;
@@ -42,7 +42,7 @@ const MainRouting: FC<BoxProps> = (boxProps) => {
         <Route
           path=":userId"
           loader={({ params }) => {
-            if (state.user.name != params.userId) return redirect("/aniCheck/");
+            if (state.user.name != params.userId) return redirect("/");
             return null;
           }}
           element={<SeriesList />}

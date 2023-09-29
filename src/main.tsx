@@ -42,7 +42,7 @@ const client = new ApolloClient({
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/aniCheck" element={<MainApp />}>
+    <Route path="/" element={<MainApp />}>
       <Route path=":userId" element={<SeriesList />}>
         <Route path=":serieID"> </Route>
       </Route>

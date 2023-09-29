@@ -12,6 +12,7 @@ export default defineConfig({
       // strategies: 'injectManifest',
       // srcDir: 'src',
       // filename: 'service-worker.ts',
+      registerType: "autoUpdate",
       manifest: {
         name: "AniCheck",
         short_name: "AniCheck",
@@ -34,7 +35,8 @@ export default defineConfig({
     }),
     comlink(),
   ],
-  base: "/aniCheck/",
+  // base: "/aniCheck/",
+  base: "/",
   worker: {
     plugins: [comlink()],
   },

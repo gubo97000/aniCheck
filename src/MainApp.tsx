@@ -21,7 +21,8 @@ const MainApp: FC<BoxProps> = (boxProps) => {
     <>
       {isMobile ? (
         <Box sx={{ bgcolor: "background.default", height: "100%" }}>
-          {location.pathname.split("/").length == 4 ? (
+          {/* 🐛 If domain is changed check if this is still ok */}
+          {location.pathname.split("/").length == 3 ? (
             state.userOptions.vizMode == "graph" ? (
               <Viz
                 sx={{
