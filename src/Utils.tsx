@@ -29,6 +29,7 @@ import CloudCircleIcon from "@mui/icons-material/CloudCircle";
 import PlayCircleOutlineRoundedIcon from "@mui/icons-material/PlayCircleOutlineRounded";
 import PauseCircleOutlineRoundedIcon from "@mui/icons-material/PauseCircleOutlineRounded";
 import { isCachesAvailable } from "./lib/CacheUtils";
+import { random } from "lodash";
 
 /// CONSTANTS
 export const FORMATS_IDS: formatsType[] = [
@@ -313,7 +314,7 @@ export function sortAlphabetical(
   rankedItems: { item: seriesListElementType; [key: string]: any }[],
   invert: boolean
 ) {
-  console.log(rankedItems);
+  // console.log(rankedItems);
   return rankedItems.sort((itm1, itm2) => {
     return invert
       ? itm1.rankedValue[0].localeCompare(itm2.rankedValue)
@@ -551,7 +552,12 @@ export const updateCompletion = (state: globalStateType) => {
   }
   console.log(globalStats);
 
-  return { ...state, seriesDict: state.seriesDict, globalStats: globalStats };
+  return {
+    ...state,
+    seriesDict: { ...state.seriesDict },
+    globalStats: globalStats,
+    seriesDictFlag: random(100000000000),
+  };
 };
 
 /// Data Manipulations

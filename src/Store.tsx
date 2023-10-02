@@ -34,7 +34,8 @@ export const initialState: globalStateType = {
     ],
     mangaComposition: ["MANGA", "ONE_SHOT"],
     novelComposition: ["NOVEL"],
-    statusFilter: ["COMPLETE", "PLAN_TO_COMPLETE", "ERR"],
+    statusFilter: ["COMPLETE", "PLAN_TO_COMPLETE", "ERR"], //To Be Phased out
+    statusSelect: "NOT_COMPLETE",
     cyShowHidden: false,
     cyShowNav: true,
     cyFormatFilter: [],
@@ -46,9 +47,9 @@ export const initialState: globalStateType = {
   usersHist: [],
   globalStats: { tot: 0, miss: 0, got: 0, plan: 0 },
   status: ["ok", " "],
-  tempInfo:{
+  tempInfo: {
     usingCache: false,
-  }
+  },
   // seriesSelected: ,
   // seriesList: { seriesPrime: cytoscape({ headless: true }).elements(), series: cytoscape({ headless: true }).elements() },
 };
@@ -58,7 +59,7 @@ let cachedState: Partial<globalStateType>;
 if (cacheAvailable) {
   //Retrieve from cache older state
   const cache = await caches.open(
-    `${(localStorage.getItem("usr") ?? "").slice(1, -1)}`
+    `${(localStorage.getItem("usr") ?? "").slice(1, -1).toLowerCase().trim()}`
   );
 
   cachedState = await (await cache.match((await cache.keys())[0]))?.json();
@@ -66,7 +67,7 @@ if (cacheAvailable) {
   if (cachedState) {
     // history.pushState({}, "", `/aniCheck/${cachedState.user?.name}`);
     console.log(`📝 Found cache for user ${cachedState.user?.name}`);
-    cachedState.tempInfo = {usingCache: true}
+    cachedState.tempInfo = { usingCache: true };
   }
 }
 

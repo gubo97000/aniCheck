@@ -19,6 +19,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { isNull } from "lodash";
+import NavSlides from "./NavSlides";
 
 const MainRouting: FC<BoxProps> = (boxProps) => {
   const [state, setState] = useSharedState();
@@ -45,7 +46,8 @@ const MainRouting: FC<BoxProps> = (boxProps) => {
             if (state.user.name != params.userId) return redirect("/");
             return null;
           }}
-          element={<SeriesList />}
+          // element={<SeriesList />}
+          element={<NavSlides />}
         >
           <Route
             path=":serieID"

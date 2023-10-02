@@ -14,7 +14,7 @@ const ManagerWorkerResult: FC = () => {
   const updateCache = (stateToCache: Partial<globalStateType>) => {
     if (isCachesAvailable()) {
       console.log(stateToCache);
-      caches.open(state.user?.name ?? "").then((ch) => {
+      caches.open(state.user?.name?.toLowerCase() ?? "").then((ch) => {
         ch.put(
           "cachedState",
           new Response(

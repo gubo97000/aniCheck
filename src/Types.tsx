@@ -53,6 +53,7 @@ export type globalStateType = {
   modalInfoOpenState?: boolean;
   seriesSelected?: seriesListElementType;
   seriesDict: { [key: string]: seriesListElementType };
+  seriesDictFlag: number;
   cyViz?: cytoscape.Core;
   globalStats: statsType[formatsType | "selected"];
   status: ["ok" | "loading" | "error" | "success", string];
@@ -73,6 +74,7 @@ export type userOptionType = {
   novelComposition: formatsType[];
   completion: formatsType[];
   statusFilter: serieStatusType[];
+  statusSelect: serieStatusType;
   cyShowHidden: boolean;
   cyShowNav: boolean;
   cyFormatFilter: formatsType[];

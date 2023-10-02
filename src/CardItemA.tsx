@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, memo } from "react";
 import { useSharedState } from "./Store";
 import { NodeType } from "./Types";
 
@@ -199,4 +199,4 @@ const CardItemA: FC<props & BoxProps> = ({ node, ...boxProps }) => {
     </Box>
   );
 };
-export default CardItemA;
+export default memo(CardItemA);

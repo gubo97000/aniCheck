@@ -1,60 +1,37 @@
 import { Box, BoxProps } from "@mui/material";
-import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  useMemo,
-  FC,
-  useCallback,
-} from "react";
-import { render } from "react-dom";
-import * as vis from "vis-network";
-import cytoscape from "cytoscape";
+import React, { FC, useState } from "react";
 
-import { useQuery, gql } from "@apollo/client";
-import { useSharedState } from "./Store";
-import Loader from "./Loader";
-import { keycharm } from "vis-network";
-import { globalStateType, seriesListElementType } from "./Types";
-import { FixedSizeGrid, FixedSizeList } from "react-window";
+import { random } from "lodash";
+import { memo } from "react-tracked";
 import AutoSizer from "react-virtualized-auto-sizer";
-import SearchBox from "./SearchBox";
-import { dataForCyto } from "./Utils";
+import { FixedSizeGrid } from "react-window";
 import SeriesListItemB from "./SeriesListItemB";
 import SeriesListItemM from "./SeriesListItemM";
-import { Scrollbars } from "react-custom-scrollbars-2";
-import { random } from "lodash";
+import { useSharedState } from "./Store";
+import { seriesListElementType } from "./Types";
 import { useMediaQuery } from "./lib/Hooks";
 
-const SeriesList: FC<BoxProps> = (boxProps) => {
-  // console.log(seriesToRender)
+type props = {
+  seriesList?: seriesListElementType[];
+};
+const SeriesListSlide: FC<BoxProps & props> = ({ seriesList, ...boxProps }) => {
+  // console.log(seriesList?.length);
   // const listRef = React.createRef<FixedSizeList<any>>();
   const gridRef = React.createRef<FixedSizeGrid<any>>();
   const outerRef = React.createRef();
   const [state, setState] = useSharedState();
   const isMobile = useMediaQuery("(max-width: 600px)");
-  let [seriesList, setSeriesList] = useState<seriesListElementType[]>([]);
+  // const [seriesList, setSeriesList] = useState<seriesListElementType[]>(
+  //   seriesList ?? []
+  // );
 
-  useEffect(() => {
-    setSeriesList(
-      state.seriesToRender ?? Object.values(state.seriesDict) ?? []
-    );
-    // listRef.current?.scrollTo(0);
-    gridRef.current?.scrollTo({
-      scrollTop: 0,
-    });
-  }, [state.seriesToRender, state.seriesDict]);
-
-  function itemKey(index: number) {
-    // Find the item at the specified index.
-    // In this case "data" is an Array that was passed to List as "itemData".
-    const key = seriesList[index].seriesPrime.id ?? "1";
-
-    // Return a value that uniquely identifies this item.
-    return key;
-  }
+  // useEffect(() => {
+  //   setSeriesList(Object.values(state.seriesDict) ?? []);
+  //   // listRef.current?.scrollTo(0);
+  //   gridRef.current?.scrollTo({
+  //     scrollTop: 0,
+  //   });
+  // }, [state.seriesToRender, state.seriesDict]);
 
   function itemKeyGrid({
     columnIndex,
@@ -94,7 +71,7 @@ const SeriesList: FC<BoxProps> = (boxProps) => {
         scrollbarGutter: "stable",
       }}
     >
-      {state.seriesDict ? (
+      {seriesList ? (
         <AutoSizer>
           {({ height, width }) => (
             <FixedSizeGrid<{ seriesList: seriesListElementType[] }>
@@ -157,4 +134,4 @@ const SeriesList: FC<BoxProps> = (boxProps) => {
     </Box>
   );
 };
-export default SeriesList;
+export default memo(SeriesListSlide);

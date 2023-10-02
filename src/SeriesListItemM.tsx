@@ -7,6 +7,7 @@ import React, {
   useEffect,
   useMemo,
   FC,
+  memo,
 } from "react";
 import { render } from "react-dom";
 import * as vis from "vis-network";
@@ -31,10 +32,10 @@ const SeriesListItemM: FC<
 > = ({ columnIndex, rowIndex, style, isScrolling, data }) => {
   const [state, setState] = useSharedState();
   const [checked, setChecked] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   isScrolling = true;
   let serieEl = data.seriesList[columnIndex + rowIndex * 4];
-  if (!serieEl) return (<div></div>);
+  if (!serieEl) return <div></div>;
   let { series, seriesPrime } = serieEl;
   let key = seriesPrime.id;
 
@@ -53,12 +54,9 @@ const SeriesListItemM: FC<
   // useLayoutEffect(() => {
   //   console.log(state.seriesDict[key]);
   // }, [state.seriesDict]);
-  
+
   return (
-    <Box style={{ ...style, 
-    display: "grid", 
-    placeItems: "center",
-    }} key={key}>
+    <Box style={{ ...style, display: "grid", placeItems: "center" }} key={key}>
       {
         // isScrolling ? seriesPrime.title :
         <ButtonBase
@@ -133,21 +131,21 @@ const SeriesListItemM: FC<
             >
               {seriesPrime.title}
             </Typography>
-            
+
             <ProgressBarStacked
-                data={[
-                  serieEl.stats["selected"].gotPerWeight ?? 0,
-                  serieEl.stats["selected"].planPerWeight ?? 0,
-                  serieEl.stats["selected"].missPerWeight ?? 0,
-                ]}
-                sx={{
-                  position:"absolute",
-                  // top: "89%",
-                  top: "0px",
-                  left: "0px"
-                }}
-              />
-              
+              data={[
+                serieEl.stats["selected"].gotPerWeight ?? 0,
+                serieEl.stats["selected"].planPerWeight ?? 0,
+                serieEl.stats["selected"].missPerWeight ?? 0,
+              ]}
+              sx={{
+                position: "absolute",
+                // top: "89%",
+                top: "0px",
+                left: "0px",
+              }}
+            />
+
             {/* </Box> */}
             {/* <Box
               sx={{
@@ -342,4 +340,4 @@ const SeriesListItemM: FC<
   );
 };
 
-export default SeriesListItemM;
+export default memo(SeriesListItemM);

@@ -1,11 +1,5 @@
-import {
-  Box,
-  Button,
-  ButtonProps
-} from "@mui/material";
-import React, {
-  FC
-} from "react";
+import { Box, Button, ButtonProps, Tab, Tabs } from "@mui/material";
+import React, { FC } from "react";
 // import useAutocomplete from '@mui/material/useAutocomplete';
 
 import AdjustRoundedIcon from "@mui/icons-material/AdjustRounded";
@@ -15,9 +9,7 @@ import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import Tooltip from "@mui/material/Tooltip";
 import without from "lodash/without";
 import { useSharedState } from "./Store";
-import {
-  serieStatusType
-} from "./Types";
+import { serieStatusType } from "./Types";
 
 interface props {
   children: React.ReactNode[] | React.ReactNode;
@@ -25,7 +17,12 @@ interface props {
   tooltip?: string;
 }
 
-const FilterButton: FC<props & ButtonProps> = ({ children, statusId, tooltip, ...buttonProps }) => {
+const FilterButton: FC<props & ButtonProps> = ({
+  children,
+  statusId,
+  tooltip,
+  ...buttonProps
+}) => {
   const [state, setState] = useSharedState();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -90,13 +87,6 @@ const StatusFilter: FC = () => {
           flexWrap: "wrap",
         }}
       >
-        {/* <Tabs centered>
-        <Tab icon={<CheckCircleOutlineRoundedIcon />} label={`${state.globalStats.got}`} />
-        <Tab icon={<CloudCircleIcon />} label={`${state.globalStats.plan}`} />
-        <Tab icon={<AdjustRoundedIcon />} label={`${state.globalStats.miss}`} />
-        <Tab icon={<HighlightOffRoundedIcon />} label={`${state.globalStats.tot - (state.globalStats.got + state.globalStats.miss + state.globalStats.plan)}`} />
-      </Tabs> */}
-
         <FilterButton
           statusId="COMPLETE"
           tooltip="Completed"

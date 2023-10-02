@@ -27,6 +27,7 @@ import Box from "@mui/material/Box";
 import InfoModal from "./InfoModal";
 import AniChika from "./AniChika";
 import { Outlet } from "react-router-dom";
+import StatusTabs from "./StatusTabs";
 
 const Nav: FC<BoxProps> = (boxProps) => {
   const [state, setState] = useSharedState();
@@ -49,8 +50,9 @@ const Nav: FC<BoxProps> = (boxProps) => {
       <InfoModal />
       <Box sx={{ gridArea: "top" }}>
         <Loader />
-        {Object.keys(state.seriesDict).length ? <StatusFilter /> : undefined}
         {Object.keys(state.seriesDict).length ? <SearchBox /> : undefined}
+        {/* {Object.keys(state.seriesDict).length ? <StatusFilter /> : undefined} */}
+        {Object.keys(state.seriesDict).length ? <StatusTabs /> : undefined}
       </Box>
       <Box sx={{ gridArea: "content" }}>
         {/* {Object.keys(state.seriesDict).length ? <SeriesList /> : <AniChika />} */}
