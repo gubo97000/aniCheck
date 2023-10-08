@@ -54,6 +54,9 @@ export type globalStateType = {
   seriesSelected?: seriesListElementType;
   seriesDict: { [key: string]: seriesListElementType };
   seriesDictFlag: number;
+  seriesByStatus: Partial<{
+    [key in Partial<serieStatusType>]: seriesListElementType[];
+  }>;
   cyViz?: cytoscape.Core;
   globalStats: statsType[formatsType | "selected"];
   status: ["ok" | "loading" | "error" | "success", string];

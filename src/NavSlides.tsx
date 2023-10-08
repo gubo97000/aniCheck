@@ -15,6 +15,7 @@ export const NavSlides: FC = () => {
     ),
     // startIndex: SERIE_STATUS.indexOf("NOT_COMPLETE"),
   });
+
   //Add listener for changing status on drag
   useEffect(() => {
     if (emblaApi) {
@@ -32,21 +33,6 @@ export const NavSlides: FC = () => {
     }
   }, [emblaApi]);
 
-  //Divide series dict into 4 arrays, one for each status
-  const seriesByStatus = useMemo(() => {
-    console.log("seriesByStatus");
-    let res: Partial<{
-      [key in Partial<serieStatusType>]: seriesListElementType[];
-    }> = {};
-    for (const status of SERIE_STATUS) {
-      res[status] = Object.values(state.seriesDict).filter((serie) => {
-        return serie.status === status;
-      });
-    }
-    console.log(res?.["COMPLETE"]?.length ?? 0);
-    return { ...res };
-  }, [state.seriesDictFlag]);
-
   useEffect(() => {
     if (emblaApi) {
       emblaApi.scrollTo(SERIE_STATUS.indexOf(state.userOptions.statusSelect));
@@ -58,17 +44,21 @@ export const NavSlides: FC = () => {
     <div className="embla" ref={emblaRef}>
       <div className="embla__container">
         <div className="embla__slide">
-          <SeriesListSlide seriesList={seriesByStatus?.["COMPLETE"]} />
+          <SeriesListSlide seriesList={state.seriesByStatus?.["COMPLETE"]} />
         </div>
         <div className="embla__slide">
-          <SeriesListSlide seriesList={seriesByStatus?.["PLAN_TO_COMPLETE"]} />
+          <SeriesListSlide
+            seriesList={state.seriesByStatus?.["PLAN_TO_COMPLETE"]}
+          />
         </div>
         <div className="embla__slide">
-          <SeriesListSlide seriesList={seriesByStatus?.["NOT_COMPLETE"]} />
+          <SeriesListSlide
+            seriesList={state.seriesByStatus?.["NOT_COMPLETE"]}
+          />
         </div>
-        {seriesByStatus["ERR"]?.length == 0 ? undefined : (
+        {state.seriesByStatus["ERR"]?.length == 0 ? undefined : (
           <div className="embla__slide">
-            <SeriesListSlide seriesList={seriesByStatus?.["ERR"]} />
+            <SeriesListSlide seriesList={state.seriesByStatus?.["ERR"]} />
           </div>
         )}
       </div>

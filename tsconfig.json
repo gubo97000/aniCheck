@@ -4,7 +4,7 @@
     "lib": [
       "DOM",
       "DOM.Iterable",
-      "ESNext",
+      "ESNext"
     ],
     "types": [
       "vite/client"
@@ -22,7 +22,18 @@
     "isolatedModules": true,
     "noEmit": true,
     // "noImplicitAny": false,
-    "jsx": "react"
+    "jsx": "react",
+    "paths": {
+      "~components/*": [
+        "/home/gubo97000/GProject/aniCheck/src/components/*"
+      ],
+      "~lib/*": [
+        "/home/gubo97000/GProject/aniCheck/src/lib/*"
+      ],
+      "~/*": [
+        "/home/gubo97000/GProject/aniCheck/src/*"
+      ]
+    }
   },
   "include": [
     "./src",

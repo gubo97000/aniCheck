@@ -10,6 +10,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Notifier from "./Notifier";
 import ManagerWorkerResult from "./ManagerWorkerResult";
 import { useUpdateWorker } from "./lib/useUpdateWorker";
+import ManagerSeriesDict from "./ManagerSeriesDict";
 
 const MainApp: FC<BoxProps> = (boxProps) => {
   const [state, setState] = useSharedState();
@@ -140,6 +141,7 @@ const MainApp: FC<BoxProps> = (boxProps) => {
       )}
       <Notifier />;
       <ManagerWorkerResult />;
+      <ManagerSeriesDict />;
     </>
   );
 };

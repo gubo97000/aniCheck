@@ -10,8 +10,27 @@ import Tooltip from "@mui/material/Tooltip";
 import without from "lodash/without";
 import { useSharedState } from "./Store";
 import { serieStatusType } from "./Types";
-
-const StatusTabs: FC = () => {
+const NumberPill: FC<{ children: React.ReactNode; color?: string }> = ({
+  children,
+  color,
+}) => {
+  return (
+    <span
+      style={{
+        // border: "1px solid ",
+        marginLeft: "0.3em",
+        borderRadius: "20px",
+        padding: "0.2em 0.4em",
+        fontSize: "0.8em",
+        backgroundColor: color ?? "lightgray",
+        color: "black",
+      }}
+    >
+      {children}
+    </span>
+  );
+};
+const StatusTabs: FC<React.HTMLAttributes<HTMLDivElement>> = (props) => {
   const [state, setState] = useSharedState();
   const onChange = (event: React.SyntheticEvent, newValue: serieStatusType) => {
     setState((state) => {
@@ -36,6 +55,7 @@ const StatusTabs: FC = () => {
     // >
     <Tabs
       value={state.userOptions.statusSelect}
+      style={{ ...props.style }}
       sx={{ minHeight: 0, borderBottom: "1px solid lightgrey" }}
       onChange={onChange}
     >
@@ -45,8 +65,10 @@ const StatusTabs: FC = () => {
         value={"COMPLETE"}
         label={
           <div style={{ textTransform: "none" }}>
-            {`Completed 
-                ${state.globalStats?.got}`}
+            {`Completed`}
+            <NumberPill>
+              {state.seriesByStatus.COMPLETE?.length ?? 0}
+            </NumberPill>
           </div>
         }
         iconPosition="start"
@@ -58,8 +80,10 @@ const StatusTabs: FC = () => {
         iconPosition="start"
         label={
           <div style={{ textTransform: "none" }}>
-            {`Planned 
-            ${state.globalStats?.plan}`}
+            {`Planned`}
+            <NumberPill>
+              {state.seriesByStatus.PLAN_TO_COMPLETE?.length ?? 0}
+            </NumberPill>
           </div>
         }
       />
@@ -70,8 +94,10 @@ const StatusTabs: FC = () => {
         iconPosition="start"
         label={
           <div style={{ textTransform: "none" }}>
-            {`Missing 
-        ${state.globalStats?.miss}`}
+            {`Missing`}
+            <NumberPill>
+              {state.seriesByStatus.NOT_COMPLETE?.length ?? 0}
+            </NumberPill>
           </div>
         }
       />
@@ -87,12 +113,8 @@ const StatusTabs: FC = () => {
           iconPosition="start"
           label={
             <div style={{ textTransform: "none" }}>
-              {`Out ${
-                state.globalStats.tot -
-                (state.globalStats.got +
-                  state.globalStats.miss +
-                  state.globalStats.plan)
-              }`}
+              {`Out`}
+              <NumberPill>{state.seriesByStatus.ERR?.length ?? 0}</NumberPill>
             </div>
           }
         />

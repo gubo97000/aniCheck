@@ -1,13 +1,5 @@
-import {
-  Box,
-  Grid,
-  Icon,
-  Paper,
-  Typography
-} from "@mui/material";
-import React, {
-  FC
-} from "react";
+import { Box, Grid, Icon, Paper, Typography } from "@mui/material";
+import React, { FC } from "react";
 
 import { NodeType } from "./Types";
 import { FORMATS } from "./Utils";
@@ -48,7 +40,6 @@ const GraphNode: FC<props> = ({ data }) => {
         // overflow: "hidden",
         position: "relative",
       }}
-
     >
       {/* <Tooltip
         title="Right Click to open in AniList"
@@ -78,26 +69,26 @@ const GraphNode: FC<props> = ({ data }) => {
           <OpenInNewRoundedIcon />
         </Box>
       </Tooltip> */}
-      <Grid container sx={{ height: "100%" }}>
-        <Grid item xs={12} sx={{ height: "70%", overflow: "hidden" }}>
+      <Grid container style={{ height: "100%" }}>
+        <Grid item xs={12} style={{ height: "70%", overflow: "hidden" }}>
           <Typography>{data.title}</Typography>
         </Grid>
         <Grid
           item
           xs={6}
-          sx={{
+          style={{
             borderTop: "solid 1px",
             borderColor: "grey.500",
             // backgroundColor: "green",
             height: "30%",
-            fontSize: 13,
+            fontSize: "13px",
           }}
         >
           <Typography
-            sx={{
+            style={{
               marginRight: "22px",
               textAlign: "center",
-              fontSize: 13,
+              fontSize: "13px",
             }}
           >
             {data.startDate ?? "TBA"}
@@ -106,7 +97,7 @@ const GraphNode: FC<props> = ({ data }) => {
         <Grid
           item
           xs={6}
-          sx={{
+          style={{
             borderTop: "solid 1px",
             borderColor: "grey.500",
             // backgroundColor: "red",
@@ -115,10 +106,10 @@ const GraphNode: FC<props> = ({ data }) => {
           }}
         >
           <Typography
-            sx={{
+            style={{
               marginLeft: "22px",
               textAlign: "center",
-              fontSize: 13,
+              fontSize: "13px",
               textTransform: "capitalize",
             }}
           >
@@ -127,11 +118,11 @@ const GraphNode: FC<props> = ({ data }) => {
         </Grid>
       </Grid>
       <Box
-        sx={{
+        style={{
           position: "absolute",
-          width: 50,
-          height: 50,
-          borderRadius: 20,
+          width: "50px",
+          height: "50px",
+          borderRadius: "100%",
           border: "1px solid transparent",
           borderTopColor: "inherit",
           borderRightColor: "inherit",
@@ -143,7 +134,7 @@ const GraphNode: FC<props> = ({ data }) => {
       >
         {" "}
         <Icon
-          sx={{
+          style={{
             margin: "auto",
             width: "100%",
             transform: "rotate(45deg)",

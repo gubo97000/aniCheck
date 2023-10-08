@@ -43,6 +43,8 @@ export const initialState: globalStateType = {
     cyFilter: [],
   },
   seriesDict: {},
+  seriesByStatus: {},
+  seriesDictFlag: 0,
   user: {},
   usersHist: [],
   globalStats: { tot: 0, miss: 0, got: 0, plan: 0 },

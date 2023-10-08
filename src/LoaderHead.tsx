@@ -1,45 +1,17 @@
-import {
-  Avatar,
-  Box,
-  BoxProps,
-  Chip,
-  Grid,
-  Icon,
-  IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
-  RadioGroup,
-  TextField,
-  useAutocomplete,
-} from "@mui/material";
-import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  useMemo,
-  FC,
-  Children,
-  isValidElement,
-} from "react";
+import { Box, BoxProps, IconButton } from "@mui/material";
+import React, { FC, useEffect, useState } from "react";
 // import useAutocomplete from '@mui/material/useAutocomplete';
-import { render } from "react-dom";
-import * as vis from "vis-network";
-import cytoscape from "cytoscape";
-
-import { useQuery, gql } from "@apollo/client";
-import { initialState, useSharedState } from "./Store";
-import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
-import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { LogoutOutlined } from "@mui/icons-material";
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import { initialState, useSharedState } from "./Store";
 import { deleteCache } from "./lib/CacheUtils";
+import { useSearchParams } from "react-router-dom";
 
 const LoaderHead: FC<BoxProps> = (boxProps) => {
   const [state, setState] = useSharedState();
+  const [search, setSearch] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
   useEffect(() => {}, [state.modalOpenState]); //Fixes a bug the set state function doesn't update after a change screen in mobile
   return (
     <Box
@@ -50,10 +22,34 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
         //   gridTemplateRows: "60px",
         gridTemplateColumns: "1fr 50px 50px 50px",
         gridTemplateRows: "50px",
-        gridTemplateAreas: "'. logout help options'",
+        gridTemplateAreas: "'. i1 logout options'",
         placeItems: "center",
       }}
     >
+      {searchParams.get("s") === null ? (
+        <IconButton
+          sx={{
+            //   m: "3px",
+            p: "8px",
+            backdropFilter: "blur(8px)",
+            bgcolor: "rgba(255,255,255,0.5)",
+            gridArea: "i1",
+            border: "1px solid",
+            borderColor: "primary.main",
+            color: "primary.main",
+            ":hover": {
+              bgcolor: "rgba(255,255,255,0.3)",
+            },
+          }}
+          onClick={() => {
+            setSearchParams({ ...Object.fromEntries(searchParams), s: "" });
+          }}
+          size="large"
+        >
+          <SearchRoundedIcon />
+        </IconButton>
+      ) : undefined}
+
       {state.user.name ? (
         <IconButton
           sx={{
@@ -103,7 +99,7 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
       >
         <SettingsRoundedIcon />
       </IconButton>
-      <IconButton
+      {/* <IconButton
         sx={{
           //   m: "3px",
           p: "8px",
@@ -131,7 +127,7 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
         size="large"
       >
         <HelpOutlineRoundedIcon />
-      </IconButton>
+      </IconButton> */}
       {/* <Chip
         style={{ position: "absolute", top: "75px", left: "350px" }}
         label="🧪 Work in Progress"

@@ -8,6 +8,7 @@
     "serve": "vite preview --host",
     "deploy": "gh-pages -d dist"
   },
+  "type": "module",
   "dependencies": {
     "@apollo/client": "^3.8.3",
     "@emotion/react": "^11.11.1",
@@ -66,6 +67,7 @@
     "vite": "^4.4.9",
     "vite-plugin-comlink": "^3.0.2",
     "vite-plugin-markdown": "^2.1.0",
-    "vite-plugin-pwa": "^0.16.5"
+    "vite-plugin-pwa": "^0.16.5",
+    "vite-aliases": "^0.11.3"
   }
 }

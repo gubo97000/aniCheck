@@ -28,6 +28,7 @@ import InfoModal from "./InfoModal";
 import AniChika from "./AniChika";
 import { Outlet } from "react-router-dom";
 import StatusTabs from "./StatusTabs";
+import Header from "./components/Header/Header";
 
 const Nav: FC<BoxProps> = (boxProps) => {
   const [state, setState] = useSharedState();
@@ -49,10 +50,11 @@ const Nav: FC<BoxProps> = (boxProps) => {
       <OptionsModal />
       <InfoModal />
       <Box sx={{ gridArea: "top" }}>
-        <Loader />
-        {Object.keys(state.seriesDict).length ? <SearchBox /> : undefined}
+        {/* <Loader /> */}
+        <Header />
+        {/* {Object.keys(state.seriesDict).length ? <SearchBox /> : undefined} */}
         {/* {Object.keys(state.seriesDict).length ? <StatusFilter /> : undefined} */}
-        {Object.keys(state.seriesDict).length ? <StatusTabs /> : undefined}
+        {/* {Object.keys(state.seriesDict).length ? <StatusTabs /> : undefined} */}
       </Box>
       <Box sx={{ gridArea: "content" }}>
         {/* {Object.keys(state.seriesDict).length ? <SeriesList /> : <AniChika />} */}
