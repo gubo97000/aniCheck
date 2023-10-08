@@ -28,6 +28,7 @@ const SearchField: FC = ({}) => {
       onChange={handleChange}
       value={query}
       placeholder="Search..."
+      autoFocus
     />
   );
 };
