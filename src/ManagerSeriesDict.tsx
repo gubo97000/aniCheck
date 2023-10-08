@@ -68,7 +68,12 @@ const ManagerSeriesDict: FC = () => {
         ),
       };
     });
-  }, [searchParams, state.seriesDictFlag]);
+  }, [
+    searchParams,
+    state.seriesDictFlag,
+    state.userOptions.sort.type,
+    state.userOptions.sort.inverted,
+  ]);
 
   return null;
 };

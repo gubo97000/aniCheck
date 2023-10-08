@@ -33,10 +33,7 @@ import cytoscape from "cytoscape";
 import { useQuery, gql } from "@apollo/client";
 import { useSharedState } from "./Store";
 import { globalStateType, seriesListElementType, sortType } from "./Types";
-import {
-  sortAlphabetical,
-  sortComplete,
-} from "./Utils";
+import { sortAlphabetical, sortComplete } from "./Utils";
 import SortRoundedIcon from "@mui/icons-material/SortRounded";
 import NorthRoundedIcon from "@mui/icons-material/NorthRounded";
 import SouthRoundedIcon from "@mui/icons-material/SouthRounded";
@@ -82,7 +79,9 @@ const SortMenu: FC<BoxProps> = (boxProps) => {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        size="large">
+        sx={{ color: "primary.main" }}
+        size="medium"
+      >
         <SortRoundedIcon />
       </IconButton>
       <Menu

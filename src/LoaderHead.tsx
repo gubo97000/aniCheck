@@ -2,11 +2,16 @@ import { Box, BoxProps, IconButton } from "@mui/material";
 import React, { FC, useEffect, useState } from "react";
 // import useAutocomplete from '@mui/material/useAutocomplete';
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
-import { LogoutOutlined } from "@mui/icons-material";
+import {
+  Filter1Rounded,
+  LogoutOutlined,
+  SortOutlined,
+} from "@mui/icons-material";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import { initialState, useSharedState } from "./Store";
 import { deleteCache } from "./lib/CacheUtils";
 import { useSearchParams } from "react-router-dom";
+import SortMenu from "./SortMenu";
 
 const LoaderHead: FC<BoxProps> = (boxProps) => {
   const [state, setState] = useSharedState();
@@ -20,9 +25,9 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
         ...boxProps.sx,
         display: "grid",
         //   gridTemplateRows: "60px",
-        gridTemplateColumns: "1fr 50px 50px 50px",
+        gridTemplateColumns: "1fr 50px 50px 50px 50px",
         gridTemplateRows: "50px",
-        gridTemplateAreas: "'. i1 logout options'",
+        gridTemplateAreas: "'. i1 i2 logout options'",
         placeItems: "center",
       }}
     >
@@ -99,6 +104,42 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
       >
         <SettingsRoundedIcon />
       </IconButton>
+      {/* <IconButton
+        sx={{
+          //   m: "3px",
+          p: "0px",
+          backdropFilter: "blur(8px)",
+          bgcolor: "rgba(255,255,255,0.5)",
+          gridArea: "i2",
+          border: "1px solid",
+          borderColor: "primary.main",
+          color: "primary.main",
+          ":hover": {
+            bgcolor: "rgba(255,255,255,0.3)",
+          },
+        }}
+        // onClick={() => {
+        //   state.modalOpenState?.[1](true);
+        // }}
+        size="large"
+      > */}
+      <SortMenu
+        sx={{
+          gridArea: "i2",
+
+          p: "0px",
+          backdropFilter: "blur(8px)",
+          bgcolor: "rgba(255,255,255,0.5)",
+          border: "1px solid",
+          borderRadius: "50%",
+          borderColor: "primary.main",
+          color: "primary.main",
+          ":hover": {
+            bgcolor: "rgba(255,255,255,0.3)",
+          },
+        }}
+      />
+
       {/* <IconButton
         sx={{
           //   m: "3px",
