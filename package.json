@@ -31,6 +31,7 @@
     "embla-carousel-react": "^8.0.0-rc14",
     "esbuild": "^0.19.2",
     "graphql": "^16.8.0",
+    "gts": "^5.2.0",
     "install": "^0.13.0",
     "lodash": "^4.17.21",
     "match-sorter": "^6.3.1",
@@ -65,9 +66,8 @@
     "gh-pages": "^6.0.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
+    "vite-aliases": "^0.11.3",
     "vite-plugin-comlink": "^3.0.2",
-    "vite-plugin-markdown": "^2.1.0",
-    "vite-plugin-pwa": "^0.16.5",
-    "vite-aliases": "^0.11.3"
+    "vite-plugin-pwa": "^0.16.5"
   }
 }

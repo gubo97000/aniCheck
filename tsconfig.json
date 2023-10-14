@@ -1,5 +1,16 @@
 {
+  // "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
+    //From Google
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "declaration": true,
+    // "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "pretty": true,
+    "sourceMap": true,
+    //From AniCheck
     "target": "ESNext",
     "lib": [
       "DOM",

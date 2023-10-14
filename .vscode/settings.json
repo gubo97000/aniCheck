@@ -1,7 +1,10 @@
 {
     "editor.fontFamily": "Fira Code",
     "editor.fontLigatures": true,
-    // "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+    "typescript.tsserver.experimental.enableProjectDiagnostics": true,
     "typescript.preferences.importModuleSpecifier": "non-relative",
     "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
 }
