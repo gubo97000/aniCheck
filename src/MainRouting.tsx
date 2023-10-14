@@ -1,14 +1,14 @@
-import { BoxProps, Box, Chip } from "@mui/material";
-import React, { FC } from "react";
-import ListViz from "./ListViz";
-import Nav from "./Nav";
-import { useSharedState } from "./Store";
-import Viz from "./Viz";
-import AccountTreeRoundedIcon from "@mui/icons-material/AccountTreeRounded";
-import ViewModuleRoundedIcon from "@mui/icons-material/ViewModuleRounded";
+import {BoxProps, Box, Chip} from '@mui/material';
+import React, {FC} from 'react';
+import ListViz from './ListViz';
+import Nav from './Nav';
+import {useSharedState} from './Store';
+import Viz from './Viz';
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
+import ViewModuleRoundedIcon from '@mui/icons-material/ViewModuleRounded';
 // import { Outlet, Route } from "react-router-dom";
-import MainApp from "./MainApp";
-import SeriesList from "./SeriesList";
+import MainApp from './MainApp';
+import SeriesList from './SeriesList';
 import {
   BrowserRouter,
   Route,
@@ -17,11 +17,11 @@ import {
   createRoutesFromElements,
   redirect,
   useLocation,
-} from "react-router-dom";
-import { isNull } from "lodash";
-import NavSlides from "./NavSlides";
+} from 'react-router-dom';
+import {isNull} from 'lodash';
+import NavSlides from './NavSlides';
 
-const MainRouting: FC<BoxProps> = (boxProps) => {
+const MainRouting: FC<BoxProps> = boxProps => {
   const [state, setState] = useSharedState();
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -42,8 +42,8 @@ const MainRouting: FC<BoxProps> = (boxProps) => {
         />
         <Route
           path=":userId"
-          loader={({ params }) => {
-            if (state.user.name != params.userId) return redirect("/");
+          loader={({params}) => {
+            if (state.user.name != params.userId) return redirect('/');
             return null;
           }}
           // element={<SeriesList />}
@@ -70,7 +70,7 @@ const MainRouting: FC<BoxProps> = (boxProps) => {
             //   return null
             // }}
           >
-            {" "}
+            {' '}
           </Route>
         </Route>
       </Route>

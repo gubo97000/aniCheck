@@ -1,15 +1,15 @@
-import { Box, Button, ButtonProps, Tab, Tabs } from "@mui/material";
-import React, { FC } from "react";
+import {Box, Button, ButtonProps, Tab, Tabs} from '@mui/material';
+import React, {FC} from 'react';
 // import useAutocomplete from '@mui/material/useAutocomplete';
 
-import AdjustRoundedIcon from "@mui/icons-material/AdjustRounded";
-import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
-import CloudCircleIcon from "@mui/icons-material/CloudCircle";
-import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
-import Tooltip from "@mui/material/Tooltip";
-import without from "lodash/without";
-import { useSharedState } from "./Store";
-import { serieStatusType } from "./Types";
+import AdjustRoundedIcon from '@mui/icons-material/AdjustRounded';
+import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
+import CloudCircleIcon from '@mui/icons-material/CloudCircle';
+import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
+import Tooltip from '@mui/material/Tooltip';
+import without from 'lodash/without';
+import {useSharedState} from './Store';
+import {serieStatusType} from './Types';
 
 interface props {
   children: React.ReactNode[] | React.ReactNode;
@@ -26,7 +26,7 @@ const FilterButton: FC<props & ButtonProps> = ({
   const [state, setState] = useSharedState();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setState((state) => {
+    setState(state => {
       return {
         ...state,
         userOptions: {
@@ -36,7 +36,7 @@ const FilterButton: FC<props & ButtonProps> = ({
           //     statusId,
           // Radio Version
           statusFilter: without(
-            ["COMPLETE", "PLAN_TO_COMPLETE", "NOT_COMPLETE", "ERR"],
+            ['COMPLETE', 'PLAN_TO_COMPLETE', 'NOT_COMPLETE', 'ERR'],
             statusId
           ) as serieStatusType[],
         },
@@ -46,16 +46,16 @@ const FilterButton: FC<props & ButtonProps> = ({
 
   const isSelectedColor = () => {
     if (!state.userOptions.statusFilter.includes(statusId)) {
-      return "primary";
+      return 'primary';
     } else {
       return undefined;
     }
   };
   const isSelectedVariant = () => {
     if (!state.userOptions.statusFilter.includes(statusId)) {
-      return "contained";
+      return 'contained';
     } else {
-      return "outlined";
+      return 'outlined';
     }
   };
 
@@ -81,10 +81,10 @@ const StatusFilter: FC = () => {
     <Box>
       <Box
         sx={{
-          margin: "5px 0 0 0",
-          display: "flex",
-          justifyContent: "space-evenly",
-          flexWrap: "wrap",
+          margin: '5px 0 0 0',
+          display: 'flex',
+          justifyContent: 'space-evenly',
+          flexWrap: 'wrap',
         }}
       >
         <FilterButton

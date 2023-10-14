@@ -1,20 +1,14 @@
-import {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  useLayoutEffect,
-} from "react";
-import { useSharedState } from "../Store";
-import { useLazyQuery } from "@apollo/client";
-import { COLOR_CODES, relationPriority, updateCompletion } from "../Utils";
-import * as Queries from "../Queries";
-import { problematicNodes } from "../ProblematicNodes";
-import { globalStateType } from "../Types";
-import { workerInstance, workerPort } from "./WebWorkersInterfaces";
-import { createEndpoint, wrap } from "comlink";
-import { use } from "cytoscape";
-import { talkingWorker } from "./WebWorkersInterfaces";
+import {useState, useEffect, useCallback, useRef, useLayoutEffect} from 'react';
+import {useSharedState} from '../Store';
+import {useLazyQuery} from '@apollo/client';
+import {COLOR_CODES, relationPriority, updateCompletion} from '../Utils';
+import * as Queries from '../Queries';
+import {problematicNodes} from '../ProblematicNodes';
+import {globalStateType} from '../Types';
+import {workerInstance, workerPort} from './WebWorkersInterfaces';
+import {createEndpoint, wrap} from 'comlink';
+import {use} from 'cytoscape';
+import {talkingWorker} from './WebWorkersInterfaces';
 
 /// HOOKS
 //Local storage hook
@@ -27,7 +21,7 @@ export function useStateWithLocalStorage<T>(
       localStorage.getItem(localStorageKey) ?? JSON.stringify(defaultValue)
     );
   } catch (error) {
-    console.log("Old Data found, trying to reset");
+    console.log('Old Data found, trying to reset');
     localStorage.removeItem(localStorageKey);
   }
 
@@ -106,8 +100,8 @@ export const useAsync = <T, E = string>(
   immediate = true
 ) => {
   const [status, setStatus] = useState<
-    "idle" | "pending" | "success" | "error"
-  >("idle");
+    'idle' | 'pending' | 'success' | 'error'
+  >('idle');
   const [value, setValue] = useState<T | null>(null);
   const [error, setError] = useState<E | null>(null);
   // The execute function wraps asyncFunction and
@@ -115,17 +109,17 @@ export const useAsync = <T, E = string>(
   // useCallback ensures the below useEffect is not called
   // on every render, but only if asyncFunction changes.
   const execute = useCallback(() => {
-    setStatus("pending");
+    setStatus('pending');
     setValue(null);
     setError(null);
     return asyncFunction()
       .then((response: any) => {
         setValue(response);
-        setStatus("success");
+        setStatus('success');
       })
       .catch((error: any) => {
         setError(error);
-        setStatus("error");
+        setStatus('error');
       });
   }, [asyncFunction]);
   // Call execute if we want to fire it right away.
@@ -136,7 +130,7 @@ export const useAsync = <T, E = string>(
       execute();
     }
   }, [execute, immediate]);
-  return { execute, status, value, error };
+  return {execute, status, value, error};
 };
 
 // Media Query Hook
@@ -149,8 +143,8 @@ export const useMediaQuery = (query: string) => {
       setMatches(media.matches);
     }
     const listener = () => setMatches(media.matches);
-    window.addEventListener("resize", listener);
-    return () => window.removeEventListener("resize", listener);
+    window.addEventListener('resize', listener);
+    return () => window.removeEventListener('resize', listener);
   }, [matches, query]);
 
   return matches;
@@ -167,7 +161,7 @@ export const useAPIs = () => {
       },
       problematicEles: string[]
     ) => {
-      console.log("ComputeData");
+      console.log('ComputeData');
       return await workerInstance.wComputeData(
         data,
         relationPriority,
@@ -177,7 +171,7 @@ export const useAPIs = () => {
     []
   );
   const computeUser = () => {
-    setState((state) => {
+    setState(state => {
       return {
         ...state,
         user: {
@@ -192,7 +186,7 @@ export const useAPIs = () => {
     });
   };
   const asyncCompute = async () => {
-    let seriesDict = await wComputeData(
+    const seriesDict = await wComputeData(
       [
         ...statusAnime.data.MediaListCollection.lists,
         ...statusManga.data.MediaListCollection.lists,
@@ -201,7 +195,7 @@ export const useAPIs = () => {
       problematicNodes
     );
     // setState(state => { return { ...state, seriesDict: seriesDict, } })
-    setState((state) => updateCompletion({ ...state, seriesDict: seriesDict }));
+    setState(state => updateCompletion({...state, seriesDict: seriesDict}));
   };
   //Apollo queries creation
   const [getUser, statusUser] = useLazyQuery(Queries.GET_USER, {
@@ -209,7 +203,7 @@ export const useAPIs = () => {
     onCompleted: () => {
       computeUser();
       getAnimeLists({
-        variables: { user: state.user.name, type: "ANIME" },
+        variables: {user: state.user.name, type: 'ANIME'},
       });
     },
   });
@@ -217,7 +211,7 @@ export const useAPIs = () => {
     notifyOnNetworkStatusChange: true,
     onCompleted: () => {
       getMangaLists({
-        variables: { user: state.user.name, type: "MANGA" },
+        variables: {user: state.user.name, type: 'MANGA'},
       });
     },
   });
@@ -227,43 +221,43 @@ export const useAPIs = () => {
     // onCompleted: syncCompute,
   });
   useEffect(() => {
-    let status: globalStateType["status"][0] = "success";
-    let log: globalStateType["status"][1] = " ";
+    let status: globalStateType['status'][0] = 'success';
+    let log: globalStateType['status'][1] = ' ';
     if (statusUser.loading) {
-      status = "loading";
-      log = "Loading User Info";
+      status = 'loading';
+      log = 'Loading User Info';
     } else if (statusAnime.loading) {
-      status = "loading";
-      log = "Loading your Anime List";
+      status = 'loading';
+      log = 'Loading your Anime List';
     } else if (statusManga.loading) {
-      status = "loading";
-      log = "Loading your Manga List";
+      status = 'loading';
+      log = 'Loading your Manga List';
       // } else if (statusWorker == "RUNNING") {
       //   status = "loading";
       //   log = "Computing received data";
     } else if (statusUser.error) {
-      status = "error";
+      status = 'error';
       log = statusUser.error.message;
     } else if (statusAnime.error) {
-      status = "error";
+      status = 'error';
       log = statusAnime.error.message;
     } else if (statusManga.error) {
-      status = "error";
+      status = 'error';
       log = statusManga.error.message;
     }
-    setState((state) => {
-      return { ...state, status: [status, log] };
+    setState(state => {
+      return {...state, status: [status, log]};
     });
   }, [statusUser, statusAnime, statusManga]);
   const startQuery = () => {
-    setState((state) => {
-      return { ...state, status: ["ok", " "] };
+    setState(state => {
+      return {...state, status: ['ok', ' ']};
     });
-    getUser({ variables: { user: state.user.name } });
+    getUser({variables: {user: state.user.name}});
   };
   const getLists = () => {
     startQuery();
   };
 
-  return { getLists };
+  return {getLists};
 };

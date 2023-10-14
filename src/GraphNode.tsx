@@ -1,8 +1,8 @@
-import { Box, Grid, Icon, Paper, Typography } from "@mui/material";
-import React, { FC } from "react";
+import {Box, Grid, Icon, Paper, Typography} from '@mui/material';
+import React, {FC} from 'react';
 
-import { NodeType } from "./Types";
-import { FORMATS } from "./Utils";
+import {NodeType} from './Types';
+import {FORMATS} from './Utils';
 
 interface props {
   data: NodeType;
@@ -10,35 +10,35 @@ interface props {
 
 function statusToColor(status: string) {
   switch (status) {
-    case "NO":
-      return "red";
+    case 'NO':
+      return 'red';
 
-    case "COMPLETED":
-      return "green";
+    case 'COMPLETED':
+      return 'green';
 
     default:
-      return "grey.500";
+      return 'grey.500';
   }
 }
 
-const GraphNode: FC<props> = ({ data }) => {
+const GraphNode: FC<props> = ({data}) => {
   return (
     <Paper
       sx={{
         width: 200,
         height: 60,
-        border: "1px solid",
+        border: '1px solid',
         borderColor: statusToColor(data.status),
         // overflow: "hidden",
-        position: "relative",
+        position: 'relative',
       }}
       style={{
         width: 200,
         height: 60,
-        border: "1px solid",
+        border: '1px solid',
         borderColor: statusToColor(data.status),
         // overflow: "hidden",
-        position: "relative",
+        position: 'relative',
       }}
     >
       {/* <Tooltip
@@ -69,48 +69,48 @@ const GraphNode: FC<props> = ({ data }) => {
           <OpenInNewRoundedIcon />
         </Box>
       </Tooltip> */}
-      <Grid container style={{ height: "100%" }}>
-        <Grid item xs={12} style={{ height: "70%", overflow: "hidden" }}>
+      <Grid container style={{height: '100%'}}>
+        <Grid item xs={12} style={{height: '70%', overflow: 'hidden'}}>
           <Typography>{data.title}</Typography>
         </Grid>
         <Grid
           item
           xs={6}
           style={{
-            borderTop: "solid 1px",
-            borderColor: "grey.500",
+            borderTop: 'solid 1px',
+            borderColor: 'grey.500',
             // backgroundColor: "green",
-            height: "30%",
-            fontSize: "13px",
+            height: '30%',
+            fontSize: '13px',
           }}
         >
           <Typography
             style={{
-              marginRight: "22px",
-              textAlign: "center",
-              fontSize: "13px",
+              marginRight: '22px',
+              textAlign: 'center',
+              fontSize: '13px',
             }}
           >
-            {data.startDate ?? "TBA"}
+            {data.startDate ?? 'TBA'}
           </Typography>
         </Grid>
         <Grid
           item
           xs={6}
           style={{
-            borderTop: "solid 1px",
-            borderColor: "grey.500",
+            borderTop: 'solid 1px',
+            borderColor: 'grey.500',
             // backgroundColor: "red",
-            height: "30%",
-            textAlign: "center",
+            height: '30%',
+            textAlign: 'center',
           }}
         >
           <Typography
             style={{
-              marginLeft: "22px",
-              textAlign: "center",
-              fontSize: "13px",
-              textTransform: "capitalize",
+              marginLeft: '22px',
+              textAlign: 'center',
+              fontSize: '13px',
+              textTransform: 'capitalize',
             }}
           >
             {data.format.toLowerCase()}
@@ -119,28 +119,28 @@ const GraphNode: FC<props> = ({ data }) => {
       </Grid>
       <Box
         style={{
-          position: "absolute",
-          width: "50px",
-          height: "50px",
-          borderRadius: "100%",
-          border: "1px solid transparent",
-          borderTopColor: "inherit",
-          borderRightColor: "inherit",
-          right: "35%",
-          top: "58%",
-          backgroundColor: "white",
-          transform: "rotate(315deg)",
+          position: 'absolute',
+          width: '50px',
+          height: '50px',
+          borderRadius: '100%',
+          border: '1px solid transparent',
+          borderTopColor: 'inherit',
+          borderRightColor: 'inherit',
+          right: '35%',
+          top: '58%',
+          backgroundColor: 'white',
+          transform: 'rotate(315deg)',
         }}
       >
-        {" "}
+        {' '}
         <Icon
           style={{
-            margin: "auto",
-            width: "100%",
-            transform: "rotate(45deg)",
-            position: "absolute",
-            right: "-3px",
-            top: "9px",
+            margin: 'auto',
+            width: '100%',
+            transform: 'rotate(45deg)',
+            position: 'absolute',
+            right: '-3px',
+            top: '9px',
           }}
         >
           {FORMATS[data.format]?.icon}

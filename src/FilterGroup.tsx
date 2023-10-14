@@ -4,19 +4,16 @@ import {
   Chip,
   IconButton,
   Tooltip,
-  Typography
-} from "@mui/material";
-import React, { FC } from "react";
+  Typography,
+} from '@mui/material';
+import React, {FC} from 'react';
 // import useAutocomplete from '@mui/material/useAutocomplete';
 
-import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
-import SelectAllRoundedIcon from "@mui/icons-material/SelectAllRounded";
-import xor from "lodash/xor";
-import { useSharedState } from "./Store";
-import {
-  formatsType,
-  statusType
-} from "./Types";
+import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
+import SelectAllRoundedIcon from '@mui/icons-material/SelectAllRounded';
+import xor from 'lodash/xor';
+import {useSharedState} from './Store';
+import {formatsType, statusType} from './Types';
 
 interface props<T = formatsType | statusType> {
   name: string;
@@ -30,11 +27,11 @@ interface props<T = formatsType | statusType> {
   };
   chips: T[];
   stateArray:
-    | "animeComposition"
-    | "mangaComposition"
-    | "completion"
-    | "novelComposition"
-    | "cyFilter";
+    | 'animeComposition'
+    | 'mangaComposition'
+    | 'completion'
+    | 'novelComposition'
+    | 'cyFilter';
   disabled?: boolean;
 }
 export const FilterGroup: FC<props & BoxProps> = ({
@@ -47,7 +44,7 @@ export const FilterGroup: FC<props & BoxProps> = ({
 }) => {
   const [state, setState] = useSharedState();
   function handleClick(compType: string) {
-    setState((state) => {
+    setState(state => {
       switch (compType) {
         default:
           return {
@@ -63,7 +60,7 @@ export const FilterGroup: FC<props & BoxProps> = ({
     });
   }
   function handleSelectAll() {
-    setState((state) => {
+    setState(state => {
       return {
         ...state,
         userOptions: {
@@ -74,7 +71,7 @@ export const FilterGroup: FC<props & BoxProps> = ({
     });
   }
   function handleDeselectAll() {
-    setState((state) => {
+    setState(state => {
       return {
         ...state,
         userOptions: {
@@ -86,31 +83,31 @@ export const FilterGroup: FC<props & BoxProps> = ({
   }
   function isSelected(compType: string) {
     return state.userOptions[stateArray].includes(compType as any)
-      ? "primary"
-      : "default";
+      ? 'primary'
+      : 'default';
   }
   return (
     <Box
       sx={{
-        position: "relative",
-        display: "grid",
-        gridTemplateColumns: "1fr 40px 40px",
-        gridTemplateRows: "40px auto",
+        position: 'relative',
+        display: 'grid',
+        gridTemplateColumns: '1fr 40px 40px',
+        gridTemplateRows: '40px auto',
         gridTemplateAreas: "'name all none' 'chips chips chips'",
-        placeItems: "center",
+        placeItems: 'center',
         mt: 1,
-        ...boxProps.sx
+        ...boxProps.sx,
       }}
     >
       <Typography
         sx={{
-          gridArea: "name",
-          placeSelf: "center start",
-          color: "text.primary",
+          gridArea: 'name',
+          placeSelf: 'center start',
+          color: 'text.primary',
           ...(disabled
             ? {
-                color: "text.disabled",
-                pointerEvents: "none",
+                color: 'text.disabled',
+                pointerEvents: 'none',
               }
             : undefined),
         }}
@@ -118,56 +115,58 @@ export const FilterGroup: FC<props & BoxProps> = ({
         {name}
       </Typography>
       <Tooltip
-        key={"all"}
-        title={"Select All"}
+        key={'all'}
+        title={'Select All'}
         placement="top"
         disableInteractive
       >
         <IconButton
           sx={{
-            gridArea: "all",
+            gridArea: 'all',
           }}
           onClick={handleSelectAll}
           disabled={disabled}
-          size="large">
+          size="large"
+        >
           <SelectAllRoundedIcon />
         </IconButton>
       </Tooltip>
       <Tooltip
-        key={"none"}
-        title={"Unselect All"}
+        key={'none'}
+        title={'Unselect All'}
         placement="top"
         disableInteractive
       >
         <IconButton
           sx={{
-            gridArea: "none",
+            gridArea: 'none',
           }}
           onClick={handleDeselectAll}
           disabled={disabled}
-          size="large">
+          size="large"
+        >
           <HighlightOffRoundedIcon />
         </IconButton>
       </Tooltip>
       <Box
         sx={{
-          gridArea: "chips",
-          border: "1px solid",
-          display: "flex",
-          borderRadius: "10px",
-          borderColor: "grey.500",
-          flexWrap: "wrap",
-          p: "10px",
-          placeSelf: "stretch",
+          gridArea: 'chips',
+          border: '1px solid',
+          display: 'flex',
+          borderRadius: '10px',
+          borderColor: 'grey.500',
+          flexWrap: 'wrap',
+          p: '10px',
+          placeSelf: 'stretch',
           ...(disabled
             ? {
-                borderColor: "grey.400",
-                pointerEvents: "none",
+                borderColor: 'grey.400',
+                pointerEvents: 'none',
               }
             : undefined),
         }}
       >
-        {chips.map((chip) => {
+        {chips.map(chip => {
           return (
             <Tooltip
               key={dataset[chip].id}

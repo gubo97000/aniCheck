@@ -1,4 +1,4 @@
-import { Box, BoxProps } from "@mui/material";
+import {Box, BoxProps} from '@mui/material';
 import React, {
   useState,
   useRef,
@@ -8,34 +8,34 @@ import React, {
   useMemo,
   FC,
   useCallback,
-} from "react";
-import { render } from "react-dom";
-import * as vis from "vis-network";
-import cytoscape from "cytoscape";
+} from 'react';
+import {render} from 'react-dom';
+import * as vis from 'vis-network';
+import cytoscape from 'cytoscape';
 
-import { useQuery, gql } from "@apollo/client";
-import { useSharedState } from "./Store";
-import Loader from "./Loader";
-import { keycharm } from "vis-network";
-import { globalStateType, seriesListElementType } from "./Types";
-import { FixedSizeGrid, FixedSizeList } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
-import SearchBox from "./SearchBox";
-import { dataForCyto } from "./Utils";
-import SeriesListItemB from "./SeriesListItemB";
-import SeriesListItemM from "./SeriesListItemM";
-import { Scrollbars } from "react-custom-scrollbars-2";
-import { random } from "lodash";
-import { useMediaQuery } from "./lib/Hooks";
+import {useQuery, gql} from '@apollo/client';
+import {useSharedState} from './Store';
+import Loader from './Loader';
+import {keycharm} from 'vis-network';
+import {globalStateType, seriesListElementType} from './Types';
+import {FixedSizeGrid, FixedSizeList} from 'react-window';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import SearchBox from './SearchBox';
+import {dataForCyto} from './Utils';
+import SeriesListItemB from './SeriesListItemB';
+import SeriesListItemM from './SeriesListItemM';
+import {Scrollbars} from 'react-custom-scrollbars-2';
+import {random} from 'lodash';
+import {useMediaQuery} from './lib/Hooks';
 
-const SeriesList: FC<BoxProps> = (boxProps) => {
+const SeriesList: FC<BoxProps> = boxProps => {
   // console.log(seriesToRender)
   // const listRef = React.createRef<FixedSizeList<any>>();
   const gridRef = React.createRef<FixedSizeGrid<any>>();
   const outerRef = React.createRef();
   const [state, setState] = useSharedState();
-  const isMobile = useMediaQuery("(max-width: 600px)");
-  let [seriesList, setSeriesList] = useState<seriesListElementType[]>([]);
+  const isMobile = useMediaQuery('(max-width: 600px)');
+  const [seriesList, setSeriesList] = useState<seriesListElementType[]>([]);
 
   useEffect(() => {
     setSeriesList(
@@ -50,7 +50,7 @@ const SeriesList: FC<BoxProps> = (boxProps) => {
   function itemKey(index: number) {
     // Find the item at the specified index.
     // In this case "data" is an Array that was passed to List as "itemData".
-    const key = seriesList[index].seriesPrime.id ?? "1";
+    const key = seriesList[index].seriesPrime.id ?? '1';
 
     // Return a value that uniquely identifies this item.
     return key;
@@ -62,13 +62,13 @@ const SeriesList: FC<BoxProps> = (boxProps) => {
     rowIndex,
   }: {
     columnIndex: number;
-    data: { seriesList: seriesListElementType[] };
+    data: {seriesList: seriesListElementType[]};
     rowIndex: number;
   }): string {
     if (
       !data.seriesList[
         columnIndex +
-          rowIndex * parseInt(state.userOptions.listLayout.split(".")[1])
+          rowIndex * parseInt(state.userOptions.listLayout.split('.')[1])
       ]
     )
       return random(100000).toString();
@@ -77,8 +77,8 @@ const SeriesList: FC<BoxProps> = (boxProps) => {
     const key =
       data.seriesList[
         columnIndex +
-          rowIndex * parseInt(state.userOptions.listLayout.split(".")[1])
-      ].seriesPrime.id ?? "1";
+          rowIndex * parseInt(state.userOptions.listLayout.split('.')[1])
+      ].seriesPrime.id ?? '1';
 
     // Return a value that uniquely identifies this item.
     return key;
@@ -88,36 +88,36 @@ const SeriesList: FC<BoxProps> = (boxProps) => {
       {...boxProps}
       sx={{
         ...boxProps.sx,
-        height: "100%",
+        height: '100%',
         // height: "100%",
         // scrollbarWidth: "none",
-        scrollbarGutter: "stable",
+        scrollbarGutter: 'stable',
       }}
     >
       {state.seriesDict ? (
         <AutoSizer>
-          {({ height, width }) => (
-            <FixedSizeGrid<{ seriesList: seriesListElementType[] }>
+          {({height, width}) => (
+            <FixedSizeGrid<{seriesList: seriesListElementType[]}>
               // className="serie-list"
-              style={{ overflowX: "hidden" }}
+              style={{overflowX: 'hidden'}}
               ref={gridRef}
               height={height}
               width={width}
               columnWidth={
                 (width - (isMobile ? 0 : 13)) /
-                parseInt(state.userOptions.listLayout.split(".")[1])
+                parseInt(state.userOptions.listLayout.split('.')[1])
               }
               rowHeight={
-                parseInt(state.userOptions.listLayout.split(".")[1]) == 1
+                parseInt(state.userOptions.listLayout.split('.')[1]) == 1
                   ? 130
                   : (61 * (width - 20)) /
-                    parseInt(state.userOptions.listLayout.split(".")[1]) /
+                    parseInt(state.userOptions.listLayout.split('.')[1]) /
                     43
               }
-              columnCount={parseInt(state.userOptions.listLayout.split(".")[1])}
+              columnCount={parseInt(state.userOptions.listLayout.split('.')[1])}
               rowCount={Math.ceil(
                 (seriesList?.length ?? 0) /
-                  parseInt(state.userOptions.listLayout.split(".")[1])
+                  parseInt(state.userOptions.listLayout.split('.')[1])
               )}
               itemData={{
                 seriesList: seriesList,
@@ -128,7 +128,7 @@ const SeriesList: FC<BoxProps> = (boxProps) => {
               // outerElementType={CustomScrollbarsVirtualList}
               // outerRef={outerRef}
             >
-              {state.userOptions.listLayout == "g.1"
+              {state.userOptions.listLayout == 'g.1'
                 ? SeriesListItemB
                 : SeriesListItemM}
             </FixedSizeGrid>

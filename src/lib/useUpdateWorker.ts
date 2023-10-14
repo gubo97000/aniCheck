@@ -1,18 +1,18 @@
-import { useState, useEffect, useCallback, Dispatch } from "react";
-import { useSharedState } from "../Store";
-import { talkingWorker } from "./WebWorkersInterfaces";
-import { singletonHook } from "react-singleton-hook";
+import {useState, useEffect, useCallback, Dispatch} from 'react';
+import {useSharedState} from '../Store';
+import {talkingWorker} from './WebWorkersInterfaces';
+import {singletonHook} from 'react-singleton-hook';
 //sabre
 const IHateSingletonHookCreator = (
-  action: "fullUpdate",
-  args: { user: string }
+  action: 'fullUpdate',
+  args: {user: string}
 ) => {
-  console.log("Running");
+  console.log('Running');
   console.log(talkingWorker);
   talkingWorker.postMessage({
-    type: "start",
+    type: 'start',
     action: action,
-    arguments: { user: args.user },
+    arguments: {user: args.user},
   });
 };
 
@@ -40,16 +40,16 @@ export const updateWorker = () => {
   // };
 
   useEffect(() => {
-    console.log("Setting Up WorkerHook");
-    talkingWorker.onmessage = (e) => {
+    console.log('Setting Up WorkerHook');
+    talkingWorker.onmessage = e => {
       console.log(e);
-      e.data.type === "status" && setStatus([e.data.status, e.data.log]);
-      e.data.type === "result" && setResult(e.data);
-      e.data.type === "error" && setError(e.data.error);
+      e.data.type === 'status' && setStatus([e.data.status, e.data.log]);
+      e.data.type === 'result' && setResult(e.data);
+      e.data.type === 'error' && setError(e.data.error);
     };
   }, []);
 
-  return { run, status, result, setResult, setStatus, error };
+  return {run, status, result, setResult, setStatus, error};
 };
 
 export const useUpdateWorker = singletonHook(

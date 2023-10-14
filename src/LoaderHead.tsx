@@ -1,19 +1,19 @@
-import { Box, BoxProps, IconButton } from "@mui/material";
-import React, { FC, useEffect, useState } from "react";
+import {Box, BoxProps, IconButton} from '@mui/material';
+import React, {FC, useEffect, useState} from 'react';
 // import useAutocomplete from '@mui/material/useAutocomplete';
-import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import {
   Filter1Rounded,
   LogoutOutlined,
   SortOutlined,
-} from "@mui/icons-material";
-import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
-import { initialState, useSharedState } from "./Store";
-import { deleteCache } from "./lib/CacheUtils";
-import { useSearchParams } from "react-router-dom";
-import SortMenu from "./SortMenu";
+} from '@mui/icons-material';
+import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
+import {initialState, useSharedState} from './Store';
+import {deleteCache} from './lib/CacheUtils';
+import {useSearchParams} from 'react-router-dom';
+import SortMenu from './SortMenu';
 
-const LoaderHead: FC<BoxProps> = (boxProps) => {
+const LoaderHead: FC<BoxProps> = boxProps => {
   const [state, setState] = useSharedState();
   const [search, setSearch] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,31 +23,31 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
       {...boxProps}
       sx={{
         ...boxProps.sx,
-        display: "grid",
+        display: 'grid',
         //   gridTemplateRows: "60px",
-        gridTemplateColumns: "1fr 50px 50px 50px 50px",
-        gridTemplateRows: "50px",
+        gridTemplateColumns: '1fr 50px 50px 50px 50px',
+        gridTemplateRows: '50px',
         gridTemplateAreas: "'. i1 i2 logout options'",
-        placeItems: "center",
+        placeItems: 'center',
       }}
     >
-      {searchParams.get("s") === null ? (
+      {searchParams.get('s') === null ? (
         <IconButton
           sx={{
             //   m: "3px",
-            p: "8px",
-            backdropFilter: "blur(8px)",
-            bgcolor: "rgba(255,255,255,0.5)",
-            gridArea: "i1",
-            border: "1px solid",
-            borderColor: "primary.main",
-            color: "primary.main",
-            ":hover": {
-              bgcolor: "rgba(255,255,255,0.3)",
+            p: '8px',
+            backdropFilter: 'blur(8px)',
+            bgcolor: 'rgba(255,255,255,0.5)',
+            gridArea: 'i1',
+            border: '1px solid',
+            borderColor: 'primary.main',
+            color: 'primary.main',
+            ':hover': {
+              bgcolor: 'rgba(255,255,255,0.3)',
             },
           }}
           onClick={() => {
-            setSearchParams({ ...Object.fromEntries(searchParams), s: "" });
+            setSearchParams({...Object.fromEntries(searchParams), s: ''});
           }}
           size="large"
         >
@@ -59,20 +59,20 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
         <IconButton
           sx={{
             //   m: "3px",
-            p: "8px",
-            backdropFilter: "blur(8px)",
-            bgcolor: "rgba(255,255,255,0.5)",
-            gridArea: "logout",
-            border: "1px solid",
-            borderColor: "primary.main",
-            color: "primary.main",
-            ":hover": {
-              bgcolor: "rgba(255,255,255,0.3)",
+            p: '8px',
+            backdropFilter: 'blur(8px)',
+            bgcolor: 'rgba(255,255,255,0.5)',
+            gridArea: 'logout',
+            border: '1px solid',
+            borderColor: 'primary.main',
+            color: 'primary.main',
+            ':hover': {
+              bgcolor: 'rgba(255,255,255,0.3)',
             },
           }}
           onClick={() => {
             //Delete cache
-            deleteCache(state.user.name ?? "");
+            deleteCache(state.user.name ?? '');
             //Clear state
             setState(initialState);
             //Redirect to login
@@ -86,15 +86,15 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
       <IconButton
         sx={{
           //   m: "3px",
-          p: "8px",
-          backdropFilter: "blur(8px)",
-          bgcolor: "rgba(255,255,255,0.5)",
-          gridArea: "options",
-          border: "1px solid",
-          borderColor: "primary.main",
-          color: "primary.main",
-          ":hover": {
-            bgcolor: "rgba(255,255,255,0.3)",
+          p: '8px',
+          backdropFilter: 'blur(8px)',
+          bgcolor: 'rgba(255,255,255,0.5)',
+          gridArea: 'options',
+          border: '1px solid',
+          borderColor: 'primary.main',
+          color: 'primary.main',
+          ':hover': {
+            bgcolor: 'rgba(255,255,255,0.3)',
           },
         }}
         onClick={() => {
@@ -125,17 +125,17 @@ const LoaderHead: FC<BoxProps> = (boxProps) => {
       > */}
       <SortMenu
         sx={{
-          gridArea: "i2",
+          gridArea: 'i2',
 
-          p: "0px",
-          backdropFilter: "blur(8px)",
-          bgcolor: "rgba(255,255,255,0.5)",
-          border: "1px solid",
-          borderRadius: "50%",
-          borderColor: "primary.main",
-          color: "primary.main",
-          ":hover": {
-            bgcolor: "rgba(255,255,255,0.3)",
+          p: '0px',
+          backdropFilter: 'blur(8px)',
+          bgcolor: 'rgba(255,255,255,0.5)',
+          border: '1px solid',
+          borderRadius: '50%',
+          borderColor: 'primary.main',
+          color: 'primary.main',
+          ':hover': {
+            bgcolor: 'rgba(255,255,255,0.3)',
           },
         }}
       />

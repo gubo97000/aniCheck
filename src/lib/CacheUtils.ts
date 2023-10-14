@@ -3,7 +3,7 @@
  * @returns A boolean indicating whether the `caches` API is available.
  */
 export const isCachesAvailable = () => {
-    return "caches" in self;
+  return 'caches' in self;
 };
 
 /**

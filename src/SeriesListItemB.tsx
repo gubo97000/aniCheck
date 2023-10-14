@@ -1,4 +1,4 @@
-import { Box, Tooltip, Typography } from "@mui/material";
+import {Box, Tooltip, Typography} from '@mui/material';
 import React, {
   useState,
   useRef,
@@ -7,39 +7,40 @@ import React, {
   useEffect,
   useMemo,
   FC,
-} from "react";
-import { render } from "react-dom";
-import * as vis from "vis-network";
-import cytoscape from "cytoscape";
+} from 'react';
+import {render} from 'react-dom';
+import * as vis from 'vis-network';
+import cytoscape from 'cytoscape';
 
-import { useQuery, gql } from "@apollo/client";
-import Loader from "./Loader";
-import { keycharm } from "vis-network";
-import { seriesListElementType, statsType } from "./Types";
-import { useSharedState } from "./Store";
-import DoubleProgressWithContent from "./DoubleProgressWithContent";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import { GridChildComponentProps, ListChildComponentProps } from "react-window";
-import ButtonBase from "@mui/material/ButtonBase";
-import { FORMATS } from "./Utils";
-import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
-import { useNavigate } from "react-router-dom";
+import {useQuery, gql} from '@apollo/client';
+import Loader from './Loader';
+import {keycharm} from 'vis-network';
+import {seriesListElementType, statsType} from './Types';
+import {useSharedState} from './Store';
+import DoubleProgressWithContent from './DoubleProgressWithContent';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import {GridChildComponentProps, ListChildComponentProps} from 'react-window';
+import ButtonBase from '@mui/material/ButtonBase';
+import {FORMATS} from './Utils';
+import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
+import {useNavigate} from 'react-router-dom';
 
 const SeriesListItem: FC<
-  GridChildComponentProps<{ seriesList: seriesListElementType[] }>
-> = ({ columnIndex, rowIndex, style, isScrolling, data }) => {
+  GridChildComponentProps<{seriesList: seriesListElementType[]}>
+> = ({columnIndex, rowIndex, style, isScrolling, data}) => {
   const [state, setState] = useSharedState();
   const [checked, setChecked] = useState(false);
   const navigate = useNavigate();
   isScrolling = true;
-  let serieEl =
+  const serieEl =
     data.seriesList[
       columnIndex +
-        rowIndex * parseInt(state.userOptions.listLayout.split(".")[1])
+        rowIndex * parseInt(state.userOptions.listLayout.split('.')[1])
     ];
-  let { series, seriesPrime } = serieEl;
-  let key = seriesPrime.id;
-  let fixRounding = (serieEl.stats["selected"].missPerWeight ?? 0) == 1 ? 1 : 0;
+  const {series, seriesPrime} = serieEl;
+  const key = seriesPrime.id;
+  const fixRounding =
+    (serieEl.stats['selected'].missPerWeight ?? 0) == 1 ? 1 : 0;
 
   useLayoutEffect(() => {
     if (checked) {
@@ -58,24 +59,24 @@ const SeriesListItem: FC<
   // }, [state.seriesDict]);
 
   return (
-    <Box style={{ ...style }} key={key}>
+    <Box style={{...style}} key={key}>
       {
         // isScrolling ? seriesPrime.title :
         <ButtonBase
           sx={{
-            contentVisibility: "auto",
-            display: "grid",
-            gridTemplateColumns: "1fr  32%",
+            contentVisibility: 'auto',
+            display: 'grid',
+            gridTemplateColumns: '1fr  32%',
             // gridTemplateRows: "25% auto auto",
             gridTemplateAreas: "'content stats'",
-            alignItems: "stretch",
+            alignItems: 'stretch',
 
-            height: checked ? "calc(100% - 6px)" : "calc(100% - 10px)",
-            width: checked ? "calc(100% - 16px)" : "calc(100% - 20px)",
-            m: checked ? "3px 8px 3px 8px" : "5px 10px 5px 10px",
+            height: checked ? 'calc(100% - 6px)' : 'calc(100% - 10px)',
+            width: checked ? 'calc(100% - 16px)' : 'calc(100% - 20px)',
+            m: checked ? '3px 8px 3px 8px' : '5px 10px 5px 10px',
 
-            border: checked ? "3px solid" : "1px solid",
-            borderColor: checked ? "primary.main" : `grey.500`,
+            border: checked ? '3px solid' : '1px solid',
+            borderColor: checked ? 'primary.main' : 'grey.500',
             // background: isScrolling
             //   ? undefined
             //   : `url(${
@@ -84,56 +85,56 @@ const SeriesListItem: FC<
             background: `url(${
               seriesPrime.bannerImage ?? seriesPrime.cover
             }) no-repeat center center`,
-            backgroundSize: "cover",
-            color: "white",
+            backgroundSize: 'cover',
+            color: 'white',
 
             // boxShadow: 3,
 
-            borderRadius: "10px",
+            borderRadius: '10px',
             boxShadow: `inset 0 0 0 2000px ${
-              checked ? "rgba(0, 0, 0, 0.3)" : "rgba(0, 0, 0, 0.4)"
+              checked ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.4)'
             }`,
-            overflow: "hidden",
-            textAlign: "left",
+            overflow: 'hidden',
+            textAlign: 'left',
           }}
           key={key}
           onClick={() => {
             // addState({ id: key, state: [checked, setChecked], series: series });
             // handleToggle(key)
-            setState((state) => {
-              return { ...state, seriesSelected: serieEl };
+            setState(state => {
+              return {...state, seriesSelected: serieEl};
             });
             navigate(serieEl.seriesPrime.id); //Very Important the order otherwise loop condition in router!
           }}
         >
           <Box
             sx={{
-              gridArea: "content",
-              placeSelf: "stretch",
+              gridArea: 'content',
+              placeSelf: 'stretch',
 
-              display: "grid",
-              gridTemplateRows: "1fr 45px",
+              display: 'grid',
+              gridTemplateRows: '1fr 45px',
               gridTemplateAreas: "'title' 'bot-stat'",
-              gap: "1px",
+              gap: '1px',
               // height:"100%",
-              overflow: "hidden",
+              overflow: 'hidden',
             }}
           >
             <Typography
               sx={{
-                pt: "10px",
-                pr: "10px",
-                pl: "20px",
-                pb: "20px",
-                gridArea: "title",
+                pt: '10px',
+                pr: '10px',
+                pl: '20px',
+                pb: '20px',
+                gridArea: 'title',
                 // placeSelf: "stretch",
                 // placeSelf: "center",
-                overflow: "hidden",
+                overflow: 'hidden',
 
-                display: "-webkit-box",
+                display: '-webkit-box',
 
                 WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
+                WebkitBoxOrient: 'vertical',
               }}
               variant="h6"
             >
@@ -142,45 +143,45 @@ const SeriesListItem: FC<
 
             <Box
               sx={{
-                gridArea: "bot-stat",
-                placeSelf: "stretch",
+                gridArea: 'bot-stat',
+                placeSelf: 'stretch',
                 // bgcolor: "gray",
                 // h:"100%",
                 // w:"100%",
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                pl: "10px",
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                pl: '10px',
               }}
             >
               {isScrolling
                 ? undefined
                 : (Object.keys(serieEl.stats) as (keyof statsType)[]).map(
-                    (format) => {
-                      if (format != "selected" && serieEl.stats[format].tot) {
+                    format => {
+                      if (format != 'selected' && serieEl.stats[format].tot) {
                         return (
                           <Box
                             key={format}
                             sx={{
-                              display: "flex",
-                              flexWrap: "wrap",
-                              alignItems: "center",
-                              justifyContent: "center",
+                              display: 'flex',
+                              flexWrap: 'wrap',
+                              alignItems: 'center',
+                              justifyContent: 'center',
 
-                              mr: "6px",
-                              mb: "5px",
+                              mr: '6px',
+                              mb: '5px',
                               color:
                                 serieEl.stats[format].tot -
                                 serieEl.stats[format].got
-                                  ? "gray"
-                                  : "primary.main",
-                              width: "40px",
-                              height: "40px",
-                              bgcolor: "white",
+                                  ? 'gray'
+                                  : 'primary.main',
+                              width: '40px',
+                              height: '40px',
+                              bgcolor: 'white',
                               // bgcolor:"rgba(255,255,255,0.9)",
                               // backdropFilter: "blur(5px)",
                               // clipPath: "circle(15px at center)",
-                              borderRadius: "50px",
+                              borderRadius: '50px',
                               // textAlign: "center",
                             }}
                           >
@@ -201,6 +202,7 @@ const SeriesListItem: FC<
                           </Box>
                         );
                       }
+                      return;
                     }
                   )}
             </Box>
@@ -208,125 +210,125 @@ const SeriesListItem: FC<
 
           <Box
             sx={{
-              gridArea: "stats",
+              gridArea: 'stats',
               // placeSelf: "stretch",
 
-              display: "grid",
-              gridTemplateRows: "75% auto",
+              display: 'grid',
+              gridTemplateRows: '75% auto',
               gridTemplateAreas: "'pie' 'weight'",
-              alignItems: "center",
-              justifyItems: "center",
+              alignItems: 'center',
+              justifyItems: 'center',
 
               // bgcolor: "white",
-              width: "100%",
+              width: '100%',
             }}
           >
             <DoubleProgressWithContent
               value1={
-                (serieEl.stats["selected"].gotPerWeight ?? 0) - fixRounding
+                (serieEl.stats['selected'].gotPerWeight ?? 0) - fixRounding
               }
-              value2={serieEl.stats["selected"].planPerWeight ?? 0}
+              value2={serieEl.stats['selected'].planPerWeight ?? 0}
               size={80}
               sx={{
-                bgcolor: "rgba(0,2,2,0.2)",
-                gridArea: "pie",
-                backdropFilter: "blur(5px)",
-                borderRadius: "30px",
-                p: "5px",
+                bgcolor: 'rgba(0,2,2,0.2)',
+                gridArea: 'pie',
+                backdropFilter: 'blur(5px)',
+                borderRadius: '30px',
+                p: '5px',
               }}
             >
               <Typography>
-                {serieEl.status == "PLAN_TO_COMPLETE" ||
-                serieEl.status == "COMPLETE"
+                {serieEl.status == 'PLAN_TO_COMPLETE' ||
+                serieEl.status == 'COMPLETE'
                   ? 100
-                  : (serieEl.stats["selected"].gotPerWeight ?? 0) -
+                  : (serieEl.stats['selected'].gotPerWeight ?? 0) -
                     fixRounding +
-                    (serieEl.stats["selected"].planPerWeight ?? 0)}
+                    (serieEl.stats['selected'].planPerWeight ?? 0)}
               </Typography>
             </DoubleProgressWithContent>
             <Box
               sx={{
-                width: "100%",
-                display: "flex",
-                justifyContent: " space-evenly",
+                width: '100%',
+                display: 'flex',
+                justifyContent: ' space-evenly',
               }}
             >
-              {serieEl.stats["selected"].planWeight ? (
+              {serieEl.stats['selected'].planWeight ? (
                 <Tooltip
                   placement="right"
                   title={
-                    serieEl.stats["selected"].planWeight
-                      ? `${serieEl.stats["selected"].planWeight} minutes planned`
-                      : "You did it!"
+                    serieEl.stats['selected'].planWeight
+                      ? `${serieEl.stats['selected'].planWeight} minutes planned`
+                      : 'You did it!'
                   }
                   disableInteractive
                 >
                   <Box
                     sx={{
-                      bgcolor: "rgba(0,2,2,0.2)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      bgcolor: 'rgba(0,2,2,0.2)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
 
-                      color: "secondary.main",
-                      backdropFilter: "blur(10px)",
-                      p: "2px 8px",
-                      borderRadius: "10px",
+                      color: 'secondary.main',
+                      backdropFilter: 'blur(10px)',
+                      p: '2px 8px',
+                      borderRadius: '10px',
                       fontWeight: 600,
                     }}
                   >
-                    <AccessTimeIcon sx={{ mr: "3px" }} />
-                    {serieEl.stats["selected"].planWeight}
+                    <AccessTimeIcon sx={{mr: '3px'}} />
+                    {serieEl.stats['selected'].planWeight}
                   </Box>
                 </Tooltip>
               ) : undefined}
-              {serieEl.stats["selected"].missWeight ? (
+              {serieEl.stats['selected'].missWeight ? (
                 <Tooltip
                   placement="right"
                   title={
-                    serieEl.stats["selected"].missWeight
-                      ? `${serieEl.stats["selected"].missWeight} minutes missing`
-                      : "You did it!"
+                    serieEl.stats['selected'].missWeight
+                      ? `${serieEl.stats['selected'].missWeight} minutes missing`
+                      : 'You did it!'
                   }
                   disableInteractive
                 >
                   <Box
                     sx={{
-                      bgcolor: "rgba(0,2,2,0.2)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      bgcolor: 'rgba(0,2,2,0.2)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
 
-                      color: "white",
-                      backdropFilter: "blur(10px)",
-                      p: "2px 8px",
-                      borderRadius: "10px",
+                      color: 'white',
+                      backdropFilter: 'blur(10px)',
+                      p: '2px 8px',
+                      borderRadius: '10px',
                       fontWeight: 600,
                     }}
                   >
-                    <AccessTimeIcon sx={{ mr: "3px" }} />
-                    {serieEl.stats["selected"].missWeight}
+                    <AccessTimeIcon sx={{mr: '3px'}} />
+                    {serieEl.stats['selected'].missWeight}
                   </Box>
                 </Tooltip>
               ) : undefined}
-              {(serieEl.stats["selected"].gotPerWeight ?? 0) - fixRounding ==
+              {(serieEl.stats['selected'].gotPerWeight ?? 0) - fixRounding ==
               100 ? (
                 <Box
                   sx={{
-                    bgcolor: "rgba(0,2,2,0.2)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    bgcolor: 'rgba(0,2,2,0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
 
-                    color: "primary.main",
-                    backdropFilter: "blur(10px)",
-                    p: "2px 8px",
-                    borderRadius: "10px",
+                    color: 'primary.main',
+                    backdropFilter: 'blur(10px)',
+                    p: '2px 8px',
+                    borderRadius: '10px',
                     fontWeight: 600,
                   }}
                 >
-                  <CheckCircleOutlineRoundedIcon sx={{ mr: "3px" }} />
-                  {"You did it!"}
+                  <CheckCircleOutlineRoundedIcon sx={{mr: '3px'}} />
+                  {'You did it!'}
                 </Box>
               ) : undefined}
             </Box>

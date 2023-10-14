@@ -1,26 +1,26 @@
-import { Box, BoxProps } from "@mui/material";
-import React, { FC, useState } from "react";
+import {Box, BoxProps} from '@mui/material';
+import React, {FC, useState} from 'react';
 
-import { random } from "lodash";
-import { memo } from "react-tracked";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { FixedSizeGrid } from "react-window";
-import SeriesListItemB from "./SeriesListItemB";
-import SeriesListItemM from "./SeriesListItemM";
-import { useSharedState } from "./Store";
-import { seriesListElementType } from "./Types";
-import { useMediaQuery } from "./lib/Hooks";
+import {random} from 'lodash';
+import {memo} from 'react-tracked';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import {FixedSizeGrid} from 'react-window';
+import SeriesListItemB from './SeriesListItemB';
+import SeriesListItemM from './SeriesListItemM';
+import {useSharedState} from './Store';
+import {seriesListElementType} from './Types';
+import {useMediaQuery} from './lib/Hooks';
 
 type props = {
   seriesList?: seriesListElementType[];
 };
-const SeriesListSlide: FC<BoxProps & props> = ({ seriesList, ...boxProps }) => {
+const SeriesListSlide: FC<BoxProps & props> = ({seriesList, ...boxProps}) => {
   // console.log(seriesList?.length);
   // const listRef = React.createRef<FixedSizeList<any>>();
   const gridRef = React.createRef<FixedSizeGrid<any>>();
   const outerRef = React.createRef();
   const [state, setState] = useSharedState();
-  const isMobile = useMediaQuery("(max-width: 600px)");
+  const isMobile = useMediaQuery('(max-width: 600px)');
   // const [seriesList, setSeriesList] = useState<seriesListElementType[]>(
   //   seriesList ?? []
   // );
@@ -39,13 +39,13 @@ const SeriesListSlide: FC<BoxProps & props> = ({ seriesList, ...boxProps }) => {
     rowIndex,
   }: {
     columnIndex: number;
-    data: { seriesList: seriesListElementType[] };
+    data: {seriesList: seriesListElementType[]};
     rowIndex: number;
   }): string {
     if (
       !data.seriesList[
         columnIndex +
-          rowIndex * parseInt(state.userOptions.listLayout.split(".")[1])
+          rowIndex * parseInt(state.userOptions.listLayout.split('.')[1])
       ]
     )
       return random(100000).toString();
@@ -54,8 +54,8 @@ const SeriesListSlide: FC<BoxProps & props> = ({ seriesList, ...boxProps }) => {
     const key =
       data.seriesList[
         columnIndex +
-          rowIndex * parseInt(state.userOptions.listLayout.split(".")[1])
-      ].seriesPrime.id ?? "1";
+          rowIndex * parseInt(state.userOptions.listLayout.split('.')[1])
+      ].seriesPrime.id ?? '1';
 
     // Return a value that uniquely identifies this item.
     return key;
@@ -65,36 +65,36 @@ const SeriesListSlide: FC<BoxProps & props> = ({ seriesList, ...boxProps }) => {
       {...boxProps}
       sx={{
         ...boxProps.sx,
-        height: "100%",
+        height: '100%',
         // height: "100%",
         // scrollbarWidth: "none",
-        scrollbarGutter: "stable",
+        scrollbarGutter: 'stable',
       }}
     >
       {seriesList ? (
         <AutoSizer>
-          {({ height, width }) => (
-            <FixedSizeGrid<{ seriesList: seriesListElementType[] }>
+          {({height, width}) => (
+            <FixedSizeGrid<{seriesList: seriesListElementType[]}>
               // className="serie-list"
-              style={{ overflowX: "hidden" }}
+              style={{overflowX: 'hidden'}}
               ref={gridRef}
               height={height}
               width={width}
               columnWidth={
                 (width - (isMobile ? 0 : 13)) /
-                parseInt(state.userOptions.listLayout.split(".")[1])
+                parseInt(state.userOptions.listLayout.split('.')[1])
               }
               rowHeight={
-                parseInt(state.userOptions.listLayout.split(".")[1]) == 1
+                parseInt(state.userOptions.listLayout.split('.')[1]) == 1
                   ? 130
                   : (61 * (width - 20)) /
-                    parseInt(state.userOptions.listLayout.split(".")[1]) /
+                    parseInt(state.userOptions.listLayout.split('.')[1]) /
                     43
               }
-              columnCount={parseInt(state.userOptions.listLayout.split(".")[1])}
+              columnCount={parseInt(state.userOptions.listLayout.split('.')[1])}
               rowCount={Math.ceil(
                 (seriesList?.length ?? 0) /
-                  parseInt(state.userOptions.listLayout.split(".")[1])
+                  parseInt(state.userOptions.listLayout.split('.')[1])
               )}
               itemData={{
                 seriesList: seriesList,
@@ -105,7 +105,7 @@ const SeriesListSlide: FC<BoxProps & props> = ({ seriesList, ...boxProps }) => {
               // outerElementType={CustomScrollbarsVirtualList}
               // outerRef={outerRef}
             >
-              {state.userOptions.listLayout == "g.1"
+              {state.userOptions.listLayout == 'g.1'
                 ? SeriesListItemB
                 : SeriesListItemM}
             </FixedSizeGrid>

@@ -1,23 +1,17 @@
-import React, {
-  FC
-} from "react";
+import React, {FC} from 'react';
 // import useAutocomplete from '@mui/material/useAutocomplete';
 
-import xor from "lodash/xor";
-import { FilterGroup } from "./FilterGroup";
-import { useSharedState } from "./Store";
-import {
-  formatsType
-} from "./Types";
-import {
-  FORMATS
-} from "./Utils";
+import xor from 'lodash/xor';
+import {FilterGroup} from './FilterGroup';
+import {useSharedState} from './Store';
+import {formatsType} from './Types';
+import {FORMATS} from './Utils';
 
 const CyFilterMenu: FC = () => {
   const [state, setState] = useSharedState();
 
-  function handleClick(tag: typeof state.userOptions.cyFilter[number]) {
-    setState((state) => {
+  function handleClick(tag: (typeof state.userOptions.cyFilter)[number]) {
+    setState(state => {
       return {
         ...state,
         userOptions: {
@@ -27,8 +21,8 @@ const CyFilterMenu: FC = () => {
       };
     });
   }
-  function isSelected(tag: typeof state.userOptions.cyFilter[number]) {
-    return state.userOptions.cyFilter.includes(tag) ? undefined : "outlined";
+  function isSelected(tag: (typeof state.userOptions.cyFilter)[number]) {
+    return state.userOptions.cyFilter.includes(tag) ? undefined : 'outlined';
   }
 
   // useEffect(() => {
@@ -40,18 +34,18 @@ const CyFilterMenu: FC = () => {
 
   return (
     <FilterGroup
-      name={"Formats to hide"}
+      name={'Formats to hide'}
       chips={[
-        ...new Set(
-          [...(state.seriesSelected?.series.nodes.map((n) => n.format)??[]),
+        ...new Set([
+          ...(state.seriesSelected?.series.nodes.map(n => n.format) ?? []),
           ...(state.userOptions.cyShowHidden
-            ? state.seriesSelected?.serieComplete.nodes.map((n) => n.format)??[]
-            : [])]
-        ),
+            ? state.seriesSelected?.serieComplete.nodes.map(n => n.format) ?? []
+            : []),
+        ]),
       ]}
       stateArray="cyFilter"
       dataset={FORMATS}
-      sx={{ mt: 0 }}
+      sx={{mt: 0}}
       // disabled={state.userOptions.smartCompletion}
     />
   );

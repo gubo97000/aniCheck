@@ -5,7 +5,7 @@ import {
   CircularProgress,
   Tooltip,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
 import React, {
   useState,
   useRef,
@@ -14,16 +14,16 @@ import React, {
   useEffect,
   useMemo,
   FC,
-} from "react";
-import { render } from "react-dom";
-import * as vis from "vis-network";
-import cytoscape from "cytoscape";
+} from 'react';
+import {render} from 'react-dom';
+import * as vis from 'vis-network';
+import cytoscape from 'cytoscape';
 
-import { useQuery, gql } from "@apollo/client";
-import Loader from "./Loader";
-import { keycharm } from "vis-network";
-import { seriesListElementType } from "./Types";
-import { useSharedState } from "./Store";
+import {useQuery, gql} from '@apollo/client';
+import Loader from './Loader';
+import {keycharm} from 'vis-network';
+import {seriesListElementType} from './Types';
+import {useSharedState} from './Store';
 
 interface props {
   value1: number;
@@ -41,13 +41,13 @@ const DoubleProgressWithContent: FC<props> = ({
   children,
 }) => {
   return (
-    <Box sx={{ ...sx, position: "relative", display: "inline-flex" }}>
+    <Box sx={{...sx, position: 'relative', display: 'inline-flex'}}>
       <Tooltip
         placement="right"
         title={
-          `${value2 ? `${value2}% Planned` : ""}` +
-          `${value1 && value2 ? " / " : ""}` +
-          `${value1 ? `${value1}% Completed` : ""}`
+          `${value2 ? `${value2}% Planned` : ''}` +
+          `${value1 && value2 ? ' / ' : ''}` +
+          `${value1 ? `${value1}% Completed` : ''}`
         }
         disableInteractive
       >
@@ -57,19 +57,19 @@ const DoubleProgressWithContent: FC<props> = ({
           value={value1}
           size={size ?? 40}
           thickness={5}
-          sx={{ zIndex: 1 }}
+          sx={{zIndex: 1}}
         />
       </Tooltip>
       <Box
         sx={{
-          position: "absolute",
+          position: 'absolute',
           top: 0,
           left: 0,
           bottom: 0,
           right: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <CircularProgress
@@ -79,22 +79,22 @@ const DoubleProgressWithContent: FC<props> = ({
           size={(size ?? 40) - 2}
           thickness={4.0}
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         />
 
         <Box
           sx={{
-            position: "absolute",
+            position: 'absolute',
             top: 0,
             left: 0,
             bottom: 0,
             right: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           {children}

@@ -5,40 +5,40 @@ import React, {
   useContext,
   useEffect,
   FC,
-} from "react";
-import { render } from "react-dom";
-import * as vis from "vis-network";
-import cytoscape from "cytoscape";
-import CytoscapeComponent from "react-cytoscapejs";
-import { useSharedState } from "./Store";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import { globalStateType } from "./Types";
-import { book } from "./cytoIcons";
-import Stack from "@mui/material/Stack";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
+} from 'react';
+import {render} from 'react-dom';
+import * as vis from 'vis-network';
+import cytoscape from 'cytoscape';
+import CytoscapeComponent from 'react-cytoscapejs';
+import {useSharedState} from './Store';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import {globalStateType} from './Types';
+import {book} from './cytoIcons';
+import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 
-import cola from "cytoscape-cola";
-import klay from "cytoscape-klay";
-import dagre from "cytoscape-dagre";
+import cola from 'cytoscape-cola';
+import klay from 'cytoscape-klay';
+import dagre from 'cytoscape-dagre';
 // import elk from "cytoscape-elk";
-import popper from "cytoscape-popper";
-import fcose from "cytoscape-fcose";
-import nodeHtmlLabel from "cytoscape-node-html-label";
-import { renderToString } from "react-dom/server";
-import GraphNode from "./GraphNode";
-import { dataForCyto, getCyLayout, getCyStyle } from "./Utils";
-import Badge from "@mui/material/Badge";
-import { BoxProps } from "@mui/material/Box";
-import Box from "@mui/material/Box";
-import CyToolbar from "./CyToolbar";
+import popper from 'cytoscape-popper';
+import fcose from 'cytoscape-fcose';
+import nodeHtmlLabel from 'cytoscape-node-html-label';
+import {renderToString} from 'react-dom/server';
+import GraphNode from './GraphNode';
+import {dataForCyto, getCyLayout, getCyStyle} from './Utils';
+import Badge from '@mui/material/Badge';
+import {BoxProps} from '@mui/material/Box';
+import Box from '@mui/material/Box';
+import CyToolbar from './CyToolbar';
 
-const Viz: FC<BoxProps> = (boxProps) => {
+const Viz: FC<BoxProps> = boxProps => {
   // const graphBox = useRef(null)
   const [state, setState] = useSharedState();
 
-  let cyRef = useRef(null);
+  const cyRef = useRef(null);
   const initCytoscape = () => {
     try {
       cytoscape.use(nodeHtmlLabel);
@@ -50,7 +50,7 @@ const Viz: FC<BoxProps> = (boxProps) => {
       // cytoscape.use(fcose);
     } catch (error) {}
 
-    let cy = cytoscape({
+    const cy = cytoscape({
       headless: false,
       container: cyRef.current,
       wheelSensitivity: 0.3,
@@ -59,35 +59,35 @@ const Viz: FC<BoxProps> = (boxProps) => {
         {
           // node a
           data: {
-            id: "a",
-            title: "Welcome to AniCheck!",
-            startDate: "2020-02-01",
-            format: "helo",
+            id: 'a',
+            title: 'Welcome to AniCheck!',
+            startDate: '2020-02-01',
+            format: 'helo',
           },
         },
         {
           // node b
           data: {
-            id: "b",
-            title: "Insert a username then click on a serie!",
-            startDate: "2020-02-01",
-            format: "HELO",
+            id: 'b',
+            title: 'Insert a username then click on a serie!',
+            startDate: '2020-02-01',
+            format: 'HELO',
           },
         },
         {
           // edge ab
-          data: { id: "ab", source: "a", target: "b" },
+          data: {id: 'ab', source: 'a', target: 'b'},
         },
       ],
       style: [
         {
-          selector: "node",
+          selector: 'node',
           style: {
             // "label": 'data(title)',
             width: 200,
             height: 60,
-            "background-color": "white",
-            shape: "rectangle",
+            'background-color': 'white',
+            shape: 'rectangle',
           },
         },
 
@@ -110,34 +110,34 @@ const Viz: FC<BoxProps> = (boxProps) => {
         //   }
         // },
         {
-          selector: "edge",
+          selector: 'edge',
           style: {
-            "curve-style": "unbundled-bezier",
+            'curve-style': 'unbundled-bezier',
             // 'curve-style': "bezier",
             width: 2,
-            "target-arrow-shape": "triangle",
+            'target-arrow-shape': 'triangle',
             // 'line-color': '#ffaaaa',
             // 'target-arrow-color': '#ffaaaa',
-            "target-label": "data(relation)",
-            "target-text-offset": 35,
+            'target-label': 'data(relation)',
+            'target-text-offset': 35,
           },
         },
         {
           selector: 'edge[relation= "SEQUEL"]',
           style: {
             width: 5,
-            "line-color": "blue",
-            "target-arrow-color": "blue",
+            'line-color': 'blue',
+            'target-arrow-color': 'blue',
           },
         },
         {
           selector: 'edge[relation= "ADAPTATION"],edge[relation= "SOURCE"]',
           style: {
-            "line-style": "dashed",
-            "line-dash-pattern": [10],
+            'line-style': 'dashed',
+            'line-dash-pattern': [10],
             width: 1,
-            "line-color": "cyan",
-            "target-arrow-color": "cyan",
+            'line-color': 'cyan',
+            'target-arrow-color': 'cyan',
           },
         },
         // {
@@ -179,19 +179,19 @@ const Viz: FC<BoxProps> = (boxProps) => {
         //   }
         // },
         {
-          selector: ".hidden",
+          selector: '.hidden',
           style: {
-            display: "none",
+            display: 'none',
           },
         },
       ],
-      layout: { name: "cose" },
+      layout: {name: 'cose'},
     });
-    cy.on("cxttapend", "node", (evt) => {
-      console.log("cxttapend on node");
-      window.open(evt.target.data("siteUrl"), "_blank");
+    cy.on('cxttapend', 'node', evt => {
+      console.log('cxttapend on node');
+      window.open(evt.target.data('siteUrl'), '_blank');
     });
-    cy.on("tap", "node,edge", (evt) => {
+    cy.on('tap', 'node,edge', evt => {
       console.log(evt.target.data());
     });
 
@@ -199,19 +199,19 @@ const Viz: FC<BoxProps> = (boxProps) => {
     (cy as any).nodeHtmlLabel(
       [
         {
-          query: "node", // cytoscape query selector
-          halign: "center", // title vertical position. Can be 'left',''center, 'right'
-          valign: "center", // title vertical position. Can be 'top',''center, 'bottom'
-          halignBox: "center", // title vertical position. Can be 'left',''center, 'right'
-          valignBox: "center", // title relative box vertical position. Can be 'top',''center, 'bottom'
-          cssClass: "", // any classes will be as attribute of <div> container for every title
+          query: 'node', // cytoscape query selector
+          halign: 'center', // title vertical position. Can be 'left',''center, 'right'
+          valign: 'center', // title vertical position. Can be 'top',''center, 'bottom'
+          halignBox: 'center', // title vertical position. Can be 'left',''center, 'right'
+          valignBox: 'center', // title relative box vertical position. Can be 'top',''center, 'bottom'
+          cssClass: '', // any classes will be as attribute of <div> container for every title
           tpl(data: any) {
             return renderToString(<GraphNode data={data} />);
           },
         },
         {
-          query: "node:hidden",
-          tpl: () => "",
+          query: 'node:hidden',
+          tpl: () => '',
         },
       ],
       {
@@ -222,14 +222,14 @@ const Viz: FC<BoxProps> = (boxProps) => {
   };
 
   useEffect(() => {
-    setState((state) => {
-      return { ...state, cyViz: initCytoscape() };
+    setState(state => {
+      return {...state, cyViz: initCytoscape()};
     });
   }, []);
 
   useEffect(() => {
-    setState((state) => {
-      state.cyViz=initCytoscape(); //TODO: This is the hackest hack ever because otherwise cyViz f disappear (not really) and app crash
+    setState(state => {
+      state.cyViz = initCytoscape(); //TODO: This is the hackest hack ever because otherwise cyViz f disappear (not really) and app crash
       if (state.seriesSelected && state.cyViz) {
         console.log(state.seriesSelected);
         state.cyViz.elements().remove();
@@ -247,12 +247,12 @@ const Viz: FC<BoxProps> = (boxProps) => {
         state.cyViz.elements().makeLayout(getCyLayout(state)).run();
 
         state.cyViz?.fit(undefined, 50);
-        state.cyViz?.panBy({ x: -35, y: 0 });
+        state.cyViz?.panBy({x: -35, y: 0});
       }
 
       return {
         ...state,
-        userOptions: { ...state.userOptions, cyShowHidden: false },
+        userOptions: {...state.userOptions, cyShowHidden: false},
       };
     });
   }, [state.seriesSelected]);
@@ -269,41 +269,41 @@ const Viz: FC<BoxProps> = (boxProps) => {
   // }, [state.userOptions.cyLayout]);
 
   useEffect(() => {
-    setState((state) => {
+    setState(state => {
       if (state.seriesSelected && state.cyViz) {
         applyFilter(state.cyViz);
         state.cyViz?.center();
         state.cyViz.elements().makeLayout(getCyLayout(state)).run();
 
         state.cyViz?.fit(undefined, 50);
-        state.cyViz?.panBy({ x: -35, y: 0 });
+        state.cyViz?.panBy({x: -35, y: 0});
       }
 
-      return { ...state };
+      return {...state};
     });
   }, [state.userOptions.cyFilter, state.userOptions.cyShowHidden]);
 
   const applyFilter = (cyViz: cytoscape.Core) => {
     //Restore all hidden nodes
-    cyViz.elements().removeClass("hidden");
+    cyViz.elements().removeClass('hidden');
     //Add or Not Extra Elements
     if (state.seriesSelected?.serieComplete) {
       state.userOptions.cyShowHidden
         ? // ? cyViz.filter(".not-counted").removeClass("hidden")
           cyViz.add(dataForCyto(state.seriesSelected.serieComplete, true))
         : // : cyViz.filter(".not-counted").addClass("hidden");
-          cyViz.filter(".not-counted").remove();
+          cyViz.filter('.not-counted').remove();
     }
     //Apply filters
     if (state.userOptions.cyFilter) {
       //Iterate all nodes and edges and add class hidden if inside cyFilter Array
       cyViz
-        .filter((el) => {
+        .filter(el => {
           return Object.values(el.data()).some((e: any) => {
             return state.userOptions.cyFilter.includes(e);
           });
         })
-        .addClass("hidden");
+        .addClass('hidden');
     }
   };
 
@@ -311,13 +311,13 @@ const Viz: FC<BoxProps> = (boxProps) => {
     <Box
       {...boxProps}
       sx={{
-        position: "relative",
-        display: { xs: "none", sm: "block" },
+        position: 'relative',
+        display: {xs: 'none', sm: 'block'},
       }}
     >
       <Box
         ref={cyRef}
-        style={{ width: "100%", height: "100vh", overflow: "hidden" }}
+        style={{width: '100%', height: '100vh', overflow: 'hidden'}}
       />
       <CyToolbar />
     </Box>

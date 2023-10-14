@@ -1,7 +1,7 @@
-import cytoscape from "cytoscape";
-import React from "react";
-import { avoidNodes } from "./ProblematicNodes";
-import { useSharedState } from "./Store";
+import cytoscape from 'cytoscape';
+import React from 'react';
+import {avoidNodes} from './ProblematicNodes';
+import {useSharedState} from './Store';
 import {
   formatsBulkTermsType,
   formatsType,
@@ -14,35 +14,35 @@ import {
   statsType,
   statusType,
   userOptionType,
-} from "./Types";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
-import TvIcon from "@mui/icons-material/Tv";
-import MusicVideoIcon from "@mui/icons-material/MusicVideo";
-import BookIcon from "@mui/icons-material/Book";
-import TheatersIcon from "@mui/icons-material/Theaters";
-import AlbumRoundedIcon from "@mui/icons-material/AlbumRounded";
-import LanguageRoundedIcon from "@mui/icons-material/LanguageRounded";
-import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
-import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
-import AdjustRoundedIcon from "@mui/icons-material/AdjustRounded";
-import CloudCircleIcon from "@mui/icons-material/CloudCircle";
-import PlayCircleOutlineRoundedIcon from "@mui/icons-material/PlayCircleOutlineRounded";
-import PauseCircleOutlineRoundedIcon from "@mui/icons-material/PauseCircleOutlineRounded";
-import { isCachesAvailable } from "./lib/CacheUtils";
-import { random } from "lodash";
+} from './Types';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import TvIcon from '@mui/icons-material/Tv';
+import MusicVideoIcon from '@mui/icons-material/MusicVideo';
+import BookIcon from '@mui/icons-material/Book';
+import TheatersIcon from '@mui/icons-material/Theaters';
+import AlbumRoundedIcon from '@mui/icons-material/AlbumRounded';
+import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded';
+import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
+import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
+import AdjustRoundedIcon from '@mui/icons-material/AdjustRounded';
+import CloudCircleIcon from '@mui/icons-material/CloudCircle';
+import PlayCircleOutlineRoundedIcon from '@mui/icons-material/PlayCircleOutlineRounded';
+import PauseCircleOutlineRoundedIcon from '@mui/icons-material/PauseCircleOutlineRounded';
+import {isCachesAvailable} from './lib/CacheUtils';
+import {random} from 'lodash';
 
 /// CONSTANTS
 export const FORMATS_IDS: formatsType[] = [
-  "TV",
-  "TV_SHORT",
-  "MOVIE",
-  "SPECIAL",
-  "OVA",
-  "ONA",
-  "MUSIC",
-  "MANGA",
-  "ONE_SHOT",
-  "NOVEL",
+  'TV',
+  'TV_SHORT',
+  'MOVIE',
+  'SPECIAL',
+  'OVA',
+  'ONA',
+  'MUSIC',
+  'MANGA',
+  'ONE_SHOT',
+  'NOVEL',
 ];
 export const FORMATS: {
   [key in formatsType]: {
@@ -53,102 +53,102 @@ export const FORMATS: {
   };
 } = {
   TV: {
-    id: "TV",
-    label: "TV",
+    id: 'TV',
+    label: 'TV',
     icon: <TvIcon />,
-    tooltip: "Anime broadcast on television",
+    tooltip: 'Anime broadcast on television',
   },
   TV_SHORT: {
-    id: "TV_SHORT",
-    label: "TV Short",
+    id: 'TV_SHORT',
+    label: 'TV Short',
     icon: <TvIcon />,
     tooltip:
-      "Anime which are under 15 minutes in length and broadcast on television",
+      'Anime which are under 15 minutes in length and broadcast on television',
   },
   MOVIE: {
-    id: "MOVIE",
-    label: "Movie",
+    id: 'MOVIE',
+    label: 'Movie',
     icon: <TheatersIcon />,
-    tooltip: "Anime movies with a theatrical release",
+    tooltip: 'Anime movies with a theatrical release',
   },
   SPECIAL: {
-    id: "SPECIAL",
-    label: "Special",
+    id: 'SPECIAL',
+    label: 'Special',
     icon: <TvIcon />,
     tooltip:
-      "Special episodes that have been included in DVD/Blu-ray releases, picture dramas, pilots, etc",
+      'Special episodes that have been included in DVD/Blu-ray releases, picture dramas, pilots, etc',
   },
   OVA: {
-    id: "OVA",
-    label: "OVA",
+    id: 'OVA',
+    label: 'OVA',
     icon: <AlbumRoundedIcon />,
     tooltip:
-      "(Original Video Animation) Anime that have been released directly on DVD/Blu-ray without originally going through a theatrical release or television broadcast",
+      '(Original Video Animation) Anime that have been released directly on DVD/Blu-ray without originally going through a theatrical release or television broadcast',
   },
   ONA: {
-    id: "ONA",
-    label: "ONA",
+    id: 'ONA',
+    label: 'ONA',
     icon: <LanguageRoundedIcon />,
     tooltip:
-      "(Original Net Animation) Anime that have been originally released online or are only available through streaming services.",
+      '(Original Net Animation) Anime that have been originally released online or are only available through streaming services.',
   },
   MUSIC: {
-    id: "MUSIC",
-    label: "Music",
+    id: 'MUSIC',
+    label: 'Music',
     icon: <MusicVideoIcon />,
-    tooltip: "Short anime released as a music video",
+    tooltip: 'Short anime released as a music video',
   },
   MANGA: {
-    id: "MANGA",
-    label: "Manga",
+    id: 'MANGA',
+    label: 'Manga',
     icon: <MenuBookIcon />,
-    tooltip: "Professionally published manga with more than one chapter",
+    tooltip: 'Professionally published manga with more than one chapter',
   },
   NOVEL: {
-    id: "NOVEL",
-    label: "Novel",
+    id: 'NOVEL',
+    label: 'Novel',
     icon: <BookIcon />,
-    tooltip: "Written books released as a series of light novels",
+    tooltip: 'Written books released as a series of light novels',
   },
   ONE_SHOT: {
-    id: "ONE_SHOT",
-    label: "One Shot",
+    id: 'ONE_SHOT',
+    label: 'One Shot',
     icon: <MenuBookIcon />,
-    tooltip: "Manga with just one chapter",
+    tooltip: 'Manga with just one chapter',
   },
 };
-export const COLOR_CODES: { [key: string]: string } = {
-  blue: "#3DB4F2",
-  purple: "#C063FF",
-  green: "#4CCA51",
-  orange: "#EF881A",
-  red: "#E13333",
-  pink: "#FC9DD6",
-  gray: "#677B94",
+export const COLOR_CODES: {[key: string]: string} = {
+  blue: '#3DB4F2',
+  purple: '#C063FF',
+  green: '#4CCA51',
+  orange: '#EF881A',
+  red: '#E13333',
+  pink: '#FC9DD6',
+  gray: '#677B94',
 };
 //Order is important for priority
 export const RELATIONS: relationsType[] = [
-  "CHARACTER",
-  "SEQUEL",
-  "SIDE_STORY",
-  "SOURCE",
-  "ALTERNATIVE",
-  "SPIN_OFF",
-  "SUMMARY",
-  "COMPILATION",
-  "CONTAINS",
-  "PREQUEL",
-  "ADAPTATION",
-  "PARENT",
-  "OTHER",
+  'CHARACTER',
+  'SEQUEL',
+  'SIDE_STORY',
+  'SOURCE',
+  'ALTERNATIVE',
+  'SPIN_OFF',
+  'SUMMARY',
+  'COMPILATION',
+  'CONTAINS',
+  'PREQUEL',
+  'ADAPTATION',
+  'PARENT',
+  'OTHER',
 ];
 //use this to quickly get relation Priority
 export const relationPriority = (() => {
-  let dict: { [key: string]: number } = {};
+  const dict: {[key: string]: number} = {};
   RELATIONS.map((v, i) => {
     dict[v] = i;
   });
-  return dict as { [key in relationsType]: number };
+  return dict as {[key in relationsType]: number};
 })();
 
 //Completion Status Dict
@@ -158,56 +158,56 @@ export const STATUSES: {
     label: string;
     icon: React.ReactElement;
     tooltip: string;
-    color: "primary" | "secondary" | "default" | undefined;
+    color: 'primary' | 'secondary' | 'default' | undefined;
   };
 } = {
   CURRENT: {
-    id: "CURRENT",
-    label: "Watching",
+    id: 'CURRENT',
+    label: 'Watching',
     icon: <PlayCircleOutlineRoundedIcon />,
-    tooltip: "Currently watching",
-    color: "secondary",
+    tooltip: 'Currently watching',
+    color: 'secondary',
   },
   PLANNING: {
-    id: "PLANNING",
-    label: "Plan To Watch",
+    id: 'PLANNING',
+    label: 'Plan To Watch',
     icon: <CloudCircleIcon />,
-    tooltip: "Planning to watch the anime",
-    color: "secondary",
+    tooltip: 'Planning to watch the anime',
+    color: 'secondary',
   },
   COMPLETED: {
-    id: "COMPLETED",
-    label: "Completed",
+    id: 'COMPLETED',
+    label: 'Completed',
     icon: <CheckCircleOutlineRoundedIcon />,
-    tooltip: "Completly watched",
-    color: "primary",
+    tooltip: 'Completly watched',
+    color: 'primary',
   },
   DROPPED: {
-    id: "DROPPED",
-    label: "Dropped",
+    id: 'DROPPED',
+    label: 'Dropped',
     icon: <CheckCircleOutlineRoundedIcon />,
     tooltip: "Looks like you didn't like it!",
-    color: "primary",
+    color: 'primary',
   },
   PAUSED: {
-    id: "PAUSED",
-    label: "Paused",
+    id: 'PAUSED',
+    label: 'Paused',
     icon: <PauseCircleOutlineRoundedIcon />,
-    tooltip: "Taking a pause?",
-    color: "secondary",
+    tooltip: 'Taking a pause?',
+    color: 'secondary',
   },
   REPEATING: {
-    id: "REPEATING",
-    label: "Repeating",
+    id: 'REPEATING',
+    label: 'Repeating',
     icon: <CheckCircleOutlineRoundedIcon />,
-    tooltip: "You must really like this one!",
-    color: "primary",
+    tooltip: 'You must really like this one!',
+    color: 'primary',
   },
   NO: {
-    id: "NO",
-    label: "Missing",
+    id: 'NO',
+    label: 'Missing',
     icon: <AdjustRoundedIcon />,
-    tooltip: "NO",
+    tooltip: 'NO',
     color: undefined,
   },
 };
@@ -218,100 +218,100 @@ export const RELEASE_STATUS: {
     label: string;
     icon: React.ReactElement;
     tooltip: string;
-    color: "primary" | "secondary" | "default" | undefined;
+    color: 'primary' | 'secondary' | 'default' | undefined;
   };
 } = {
   FINISHED: {
-    id: "FINISHED",
-    label: "Finished",
+    id: 'FINISHED',
+    label: 'Finished',
     icon: <CloudCircleIcon />,
-    tooltip: "Has completed and is no longer being released",
-    color: "secondary",
+    tooltip: 'Has completed and is no longer being released',
+    color: 'secondary',
   },
   RELEASING: {
-    id: "RELEASING",
-    label: "Releasing",
+    id: 'RELEASING',
+    label: 'Releasing',
     icon: <CloudCircleIcon />,
-    tooltip: "Currently releasing",
-    color: "secondary",
+    tooltip: 'Currently releasing',
+    color: 'secondary',
   },
   NOT_YET_RELEASED: {
-    id: "NOT_YET_RELEASED",
-    label: "Not Yet Released",
+    id: 'NOT_YET_RELEASED',
+    label: 'Not Yet Released',
     icon: <CheckCircleOutlineRoundedIcon />,
-    tooltip: "To be released at a later date",
-    color: "primary",
+    tooltip: 'To be released at a later date',
+    color: 'primary',
   },
   CANCELLED: {
-    id: "CANCELLED",
-    label: "Cancelled",
+    id: 'CANCELLED',
+    label: 'Cancelled',
     icon: <CheckCircleOutlineRoundedIcon />,
-    tooltip: "Ended before the work could be finished",
-    color: "primary",
+    tooltip: 'Ended before the work could be finished',
+    color: 'primary',
   },
   HIATUS: {
-    id: "HIATUS",
-    label: "Hiatus",
+    id: 'HIATUS',
+    label: 'Hiatus',
     icon: <CloudCircleIcon />,
     tooltip:
-      "Is currently paused from releasing and will resume at a later date",
-    color: "secondary",
+      'Is currently paused from releasing and will resume at a later date',
+    color: 'secondary',
   },
   UNKNOWN: {
-    id: "UNKNOWN",
-    label: "Unknown",
+    id: 'UNKNOWN',
+    label: 'Unknown',
     icon: <CloudCircleIcon />,
-    tooltip: "A true mistery!",
-    color: "secondary",
+    tooltip: 'A true mistery!',
+    color: 'secondary',
   },
 };
 
 /// Sort Functions
 export function sortWeight(
-  rankedItems: { item: seriesListElementType; [key: string]: any }[],
+  rankedItems: {item: seriesListElementType; [key: string]: any}[],
   invert: boolean
 ) {
   return rankedItems.sort((itm1, itm2) => {
     return invert
-      ? (itm1.item.stats["selected"].missWeight ?? 0) -
-          (itm2.item.stats["selected"].missWeight ?? 0)
-      : (itm2.item.stats["selected"].missWeight ?? 0) -
-          (itm1.item.stats["selected"].missWeight ?? 0);
+      ? (itm1.item.stats['selected'].missWeight ?? 0) -
+          (itm2.item.stats['selected'].missWeight ?? 0)
+      : (itm2.item.stats['selected'].missWeight ?? 0) -
+          (itm1.item.stats['selected'].missWeight ?? 0);
   });
 }
 
 export function sortWeightPer(
-  rankedItems: { item: seriesListElementType; [key: string]: any }[],
+  rankedItems: {item: seriesListElementType; [key: string]: any}[],
   invert: boolean
 ) {
   return rankedItems.sort((itm1, itm2) => {
-    let weight1 =
-      (itm1.item.stats["selected"].gotPerWeight ?? 0) +
-      (itm1.item.stats["selected"].planPerWeight ?? 0);
-    let weight2 =
-      (itm2.item.stats["selected"].gotPerWeight ?? 0) +
-      (itm2.item.stats["selected"].planPerWeight ?? 0);
+    const weight1 =
+      (itm1.item.stats['selected'].gotPerWeight ?? 0) +
+      (itm1.item.stats['selected'].planPerWeight ?? 0);
+    const weight2 =
+      (itm2.item.stats['selected'].gotPerWeight ?? 0) +
+      (itm2.item.stats['selected'].planPerWeight ?? 0);
     return (invert ? -1 : 1) * (weight1 - weight2);
   });
 }
 
 export function sortComplete(
-  rankedItems: { item: seriesListElementType; [key: string]: any }[],
+  rankedItems: {item: seriesListElementType; [key: string]: any}[],
   invert: boolean
 ) {
   return rankedItems.sort((itm1, itm2) => {
-    let weight1 =
-      (itm1.item.stats["selected"]?.gotPer ?? 0) +
-      (itm1.item.stats["selected"]?.planPer ?? 0);
-    let weight2 =
-      (itm2.item.stats["selected"]?.gotPer ?? 0) +
-      (itm2.item.stats["selected"]?.planPer ?? 0);
+    const weight1 =
+      (itm1.item.stats['selected']?.gotPer ?? 0) +
+      (itm1.item.stats['selected']?.planPer ?? 0);
+    const weight2 =
+      (itm2.item.stats['selected']?.gotPer ?? 0) +
+      (itm2.item.stats['selected']?.planPer ?? 0);
     return (invert ? -1 : 1) * (weight1 - weight2);
   });
 }
 
 export function sortAlphabetical(
-  rankedItems: { item: seriesListElementType; [key: string]: any }[],
+  rankedItems: {item: seriesListElementType; [key: string]: any}[],
   invert: boolean
 ) {
   // console.log(rankedItems);
@@ -330,19 +330,19 @@ export function sortSize(rankedItems: any[], invert: boolean) {
 
 export function getSortFc(tag: string) {
   switch (tag) {
-    case "weight%":
+    case 'weight%':
       return sortWeightPer;
 
-    case "complete%":
+    case 'complete%':
       return sortComplete;
 
-    case "alphabetical":
+    case 'alphabetical':
       return sortAlphabetical;
 
-    case "size":
+    case 'size':
       return sortSize;
 
-    case "missWeight":
+    case 'missWeight':
       return sortWeight;
 
     default:
@@ -362,13 +362,13 @@ export function convertBulkTerm(
   userOptions: userOptionType
 ) {
   switch (term) {
-    case "anime":
+    case 'anime':
       return userOptions.animeComposition;
 
-    case "manga":
+    case 'manga':
       return userOptions.mangaComposition;
 
-    case "novel":
+    case 'novel':
       return userOptions.novelComposition;
 
     default:
@@ -377,14 +377,14 @@ export function convertBulkTerm(
 }
 
 export function getBulkStat(formatArr: formatsType[], stats: statsType) {
-  let tot: number = 0;
-  let miss: number = 0;
-  let got: number = 0;
-  let plan: number = 0;
-  let totWeight: number = 0;
-  let missWeight: number = 0;
-  let gotWeight: number = 0;
-  let planWeight: number = 0;
+  let tot = 0;
+  let miss = 0;
+  let got = 0;
+  let plan = 0;
+  let totWeight = 0;
+  let missWeight = 0;
+  let gotWeight = 0;
+  let planWeight = 0;
 
   for (const format of formatArr) {
     tot += stats[format]?.tot ?? 0;
@@ -414,7 +414,7 @@ export function getBulkStat(formatArr: formatsType[], stats: statsType) {
  * @returns A state to set
  */
 export const updateCompletion = (state: globalStateType) => {
-  let globalStats: globalStateType["globalStats"] = {
+  const globalStats: globalStateType['globalStats'] = {
     tot: Object.keys(state.seriesDict).length,
     got: 0,
     miss: 0,
@@ -424,18 +424,18 @@ export const updateCompletion = (state: globalStateType) => {
   //Smart Completion Mode
   if (state.userOptions.smartCompletion) {
     for (const [id, value] of Object.entries(state.seriesDict)) {
-      let serieTot: number = 0;
-      let serieMiss: number = 0;
-      let serieGot: number = 0;
-      let seriePlan: number = 0;
-      let serieTotWeight: number = 0;
-      let serieMissWeight: number = 0;
-      let serieGotWeight: number = 0;
-      let seriePlanWeight: number = 0;
+      let serieTot = 0;
+      let serieMiss = 0;
+      let serieGot = 0;
+      let seriePlan = 0;
+      let serieTotWeight = 0;
+      let serieMissWeight = 0;
+      let serieGotWeight = 0;
+      let seriePlanWeight = 0;
       let formatsIncluded: formatsType[] = [];
 
-      for (const bulkTerm of ["anime", "manga", "novel"] as const) {
-        let {
+      for (const bulkTerm of ['anime', 'manga', 'novel'] as const) {
+        const {
           got,
           miss,
           tot,
@@ -467,7 +467,7 @@ export const updateCompletion = (state: globalStateType) => {
         }
       }
       //Saving Computed Stats
-      state.seriesDict[id].stats["selected"] = {
+      state.seriesDict[id].stats['selected'] = {
         tot: serieTot,
         miss: serieMiss,
         got: serieGot,
@@ -489,23 +489,23 @@ export const updateCompletion = (state: globalStateType) => {
       //Update Global Completion
       if (serieTot != 0) {
         if (serieGot == serieTot) {
-          state.seriesDict[id].status = "COMPLETE";
+          state.seriesDict[id].status = 'COMPLETE';
           globalStats.got += 1;
         } else if (serieGot + seriePlan == serieTot) {
-          state.seriesDict[id].status = "PLAN_TO_COMPLETE";
+          state.seriesDict[id].status = 'PLAN_TO_COMPLETE';
           globalStats.plan += 1;
         } else {
-          state.seriesDict[id].status = "NOT_COMPLETE";
+          state.seriesDict[id].status = 'NOT_COMPLETE';
           globalStats.miss += 1;
         }
       } else {
-        state.seriesDict[id].status = "ERR";
+        state.seriesDict[id].status = 'ERR';
       }
     }
   } else {
     //All selected format Mode
     for (const [id, value] of Object.entries(state.seriesDict)) {
-      let {
+      const {
         got,
         plan,
         miss,
@@ -515,7 +515,7 @@ export const updateCompletion = (state: globalStateType) => {
         gotWeight,
         planWeight,
       } = getBulkStat(state.userOptions.completion, value.stats);
-      state.seriesDict[id].stats["selected"] = {
+      state.seriesDict[id].stats['selected'] = {
         tot: tot,
         got: got,
         miss: miss,
@@ -536,17 +536,17 @@ export const updateCompletion = (state: globalStateType) => {
       //Update Global Completion
       if (tot != 0) {
         if (got == tot) {
-          state.seriesDict[id].status = "COMPLETE";
+          state.seriesDict[id].status = 'COMPLETE';
           globalStats.got += 1;
         } else if (got + plan == tot) {
-          state.seriesDict[id].status = "PLAN_TO_COMPLETE";
+          state.seriesDict[id].status = 'PLAN_TO_COMPLETE';
           globalStats.plan += 1;
         } else {
-          state.seriesDict[id].status = "NOT_COMPLETE";
+          state.seriesDict[id].status = 'NOT_COMPLETE';
           globalStats.miss += 1;
         }
       } else {
-        state.seriesDict[id].status = "ERR";
+        state.seriesDict[id].status = 'ERR';
       }
     }
   }
@@ -554,7 +554,7 @@ export const updateCompletion = (state: globalStateType) => {
 
   return {
     ...state,
-    seriesDict: { ...state.seriesDict },
+    seriesDict: {...state.seriesDict},
     globalStats: globalStats,
     seriesDictFlag: random(100000000000),
   };
@@ -571,24 +571,24 @@ export const updateCompletion = (state: globalStateType) => {
  */
 export const computeData = (
   data: any[],
-  relationPriority: { [key: string]: number },
+  relationPriority: {[key: string]: number},
   problematicEles: string[]
 ) => {
-  console.log("ComputeData");
-  const cy = cytoscape({ headless: true });
+  console.log('ComputeData');
+  const cy = cytoscape({headless: true});
 
   const avoidEles = () => {
     return problematicEles
-      .map((id) => {
+      .map(id => {
         return `#${id}`;
       })
-      .join(", ");
+      .join(', ');
   };
   const parseNode = (node: any) => {
     // node.nextAiringEpisode ? console.log(node) : null
     const compWeight = (node: any) => {
       //Calculating the weight of the element
-      if (node.status == "NOT_YET_RELEASED") return 1; //To avoid 100% weighted completion
+      if (node.status == 'NOT_YET_RELEASED') return 1; //To avoid 100% weighted completion
       if (node.chapters) return node.chapters * 5;
       if (node.volumes) return node.volumes * 50;
       if (node.episodes && node.duration) return node.episodes * node.duration;
@@ -598,25 +598,25 @@ export const computeData = (
 
       //THE APPROXIMATION ZONE
       //Releasing not in List, API won't let me get nextAiringEpisode
-      let strDate = Object.values(node.startDate)
-        .filter((e) => {
-          return e != "FuzzyDate" && e;
+      const strDate = Object.values(node.startDate)
+        .filter(e => {
+          return e != 'FuzzyDate' && e;
         })
-        .join("-");
-      let days = (Date.now() - Date.parse(strDate)) / 8.64e7; //Get days passed from start date
-      if (node.format == "MANGA") return Math.round(days / 8.2) * 5; //8.2 for approximation to One Piece episodes count
-      if (node.format == "TV") return Math.round(days / 8.2) * 20;
+        .join('-');
+      const days = (Date.now() - Date.parse(strDate)) / 8.64e7; //Get days passed from start date
+      if (node.format == 'MANGA') return Math.round(days / 8.2) * 5; //8.2 for approximation to One Piece episodes count
+      if (node.format == 'TV') return Math.round(days / 8.2) * 20;
       return Math.round(days / 8.2) * 20;
     };
 
     return {
       id: node.id,
-      status: "NO",
-      airStatus: node.status ?? "",
-      format: node.format ?? "SPECIAL",
+      status: 'NO',
+      airStatus: node.status ?? '',
+      format: node.format ?? 'SPECIAL',
       title: node.title.userPreferred,
       titles: [...Object.values(node.title), ...node.synonyms].filter(
-        (v) => !["MediaTitle", null].includes(v)
+        v => !['MediaTitle', null].includes(v)
       ),
       siteUrl: node.siteUrl,
       bannerImage: node.bannerImage,
@@ -628,33 +628,33 @@ export const computeData = (
       // du: node.duration,
       compWeight: compWeight(node),
       startDate: Object.values(node.startDate)
-        .filter((e) => {
-          return e != "FuzzyDate" && e;
+        .filter(e => {
+          return e != 'FuzzyDate' && e;
         })
-        .join("-"),
+        .join('-'),
     };
   };
 
   const loadList = (data: any) => {
-    let nodes = new Map();
-    let edges = new Map();
+    const nodes = new Map();
+    const edges = new Map();
     console.log(data);
-    for (let list of data) {
-      for (let entry of list.entries) {
+    for (const list of data) {
+      for (const entry of list.entries) {
         nodes.set(entry.media.id, {
-          data: { ...parseNode(entry.media), status: entry.status },
+          data: {...parseNode(entry.media), status: entry.status},
         });
-        for (let node of entry.media.relations.nodes) {
+        for (const node of entry.media.relations.nodes) {
           if (!nodes.get(node.id)) {
             nodes.set(node.id, {
-              data: { ...parseNode(node), status: "NO" },
+              data: {...parseNode(node), status: 'NO'},
             });
           }
         }
-        for (let edge of entry.media.relations.edges) {
+        for (const edge of entry.media.relations.edges) {
           edges.set(edge.id, {
             data: {
-              id: "L" + edge.id,
+              id: 'L' + edge.id,
               source: entry.media.id,
               target: edge.node.id,
               relation: edge.relationType,
@@ -671,42 +671,42 @@ export const computeData = (
   console.log(nodes, edges);
   // cy.elements().remove()
   cy.add(Array.from(nodes.values()).concat(Array.from(edges.values())));
-  let components = cy.elements().components();
+  const components = cy.elements().components();
 
   //Split components with problematic connections and nodes
-  let cleanedComponents: {
+  const cleanedComponents: {
     series: cytoscape.CollectionReturnValue;
     serieComplete: cytoscape.CollectionReturnValue;
   }[] = [];
-  components.map((serieComplete) => {
+  components.map(serieComplete => {
     //Remove parallel edges
     let edgesToKeep = cy.collection();
-    serieComplete.edges().map((edge) => {
-      let bestEdge = edge.parallelEdges().sort((ed1, ed2) => {
+    serieComplete.edges().map(edge => {
+      const bestEdge = edge.parallelEdges().sort((ed1, ed2) => {
         return (
-          relationPriority[ed1.data("relation")] -
-          relationPriority[ed2.data("relation")]
+          relationPriority[ed1.data('relation')] -
+          relationPriority[ed2.data('relation')]
         );
       })[0];
       //Invert some edges for better layout
-      switch (bestEdge.data("relation")) {
-        case "ADAPTATION":
+      switch (bestEdge.data('relation')) {
+        case 'ADAPTATION':
           bestEdge.move({
-            source: bestEdge.data("target"),
-            target: bestEdge.data("source"),
+            source: bestEdge.data('target'),
+            target: bestEdge.data('source'),
           });
           bestEdge.data({
-            relation: "SOURCE",
+            relation: 'SOURCE',
           });
           break;
 
-        case "PREQUEL":
+        case 'PREQUEL':
           bestEdge.move({
-            source: bestEdge.data("target"),
-            target: bestEdge.data("source"),
+            source: bestEdge.data('target'),
+            target: bestEdge.data('source'),
           });
           bestEdge.data({
-            relation: "SEQUEL",
+            relation: 'SEQUEL',
           });
           break;
 
@@ -716,15 +716,15 @@ export const computeData = (
       edgesToKeep = edgesToKeep.union(bestEdge);
     });
     serieComplete = serieComplete.nodes().union(edgesToKeep);
-    edgesToKeep.map((e) => {
+    edgesToKeep.map(e => {
       e.restore();
     });
 
     serieComplete
-      .filter(`node, edge[relation!='CHARACTER']`)
+      .filter("node, edge[relation!='CHARACTER']")
       .difference(avoidEles())
       .components()
-      .map((seriePart) => {
+      .map(seriePart => {
         //Avoid unwatched orphan nodes after split
         if (
           seriePart.nodes().length !=
@@ -740,12 +740,12 @@ export const computeData = (
   });
 
   //Create the representative of the serie
-  let seriesListSorted = cleanedComponents.map((series) => {
-    let serieSorted = series.series.sort((item1, item2) => {
+  const seriesListSorted = cleanedComponents.map(series => {
+    const serieSorted = series.series.sort((item1, item2) => {
       // let num1 = parseInt(item1.data("id"))
       // let num2 = parseInt(item2.data("id"))
-      let num1 = parseInt(item1.data("popularity"));
-      let num2 = parseInt(item2.data("popularity"));
+      const num1 = parseInt(item1.data('popularity'));
+      const num2 = parseInt(item2.data('popularity'));
       // let num1 = Date.parse(item1.data("startDate"))
       // let num2 = Date.parse(item2.data("startDate"))
       if (isNaN(num1)) {
@@ -764,22 +764,22 @@ export const computeData = (
   });
 
   //Compute Stats
-  let seriesList = seriesListSorted.map((serie) => {
-    let stat: { [key in formatsType]?: statsType[formatsType | "selected"] } =
+  const seriesList = seriesListSorted.map(serie => {
+    const stat: {[key in formatsType]?: statsType[formatsType | 'selected']} =
       {};
-    for (let format of [
-      "TV",
-      "TV_SHORT",
-      "MOVIE",
-      "SPECIAL",
-      "OVA",
-      "ONA",
-      "MUSIC",
-      "MANGA",
-      "NOVEL",
-      "ONE_SHOT",
+    for (const format of [
+      'TV',
+      'TV_SHORT',
+      'MOVIE',
+      'SPECIAL',
+      'OVA',
+      'ONA',
+      'MUSIC',
+      'MANGA',
+      'NOVEL',
+      'ONE_SHOT',
     ] as const) {
-      let formatEl = serie.series
+      const formatEl = serie.series
         .nodes()
         .filter(`node[format='${format}'][airStatus!="CANCELLED"]`); //TODO: This is a possible fix for the CANCELLED bug 🐛
       // if (serie.seriesPrime.data("id") == 21093) {
@@ -799,30 +799,30 @@ export const computeData = (
             "node[status='PLANNING'],node[status='CURRENT'],node[status='PAUSED']"
           ).length ?? 0,
         totWeight: formatEl
-          .map((e) => {
-            return e.data("compWeight");
+          .map(e => {
+            return e.data('compWeight');
           })
           ?.reduce?.((a: number, b: number) => a + b, 0),
         missWeight: formatEl
           .filter("node[status='NO']")
-          .map((e) => {
-            return e.data("compWeight");
+          .map(e => {
+            return e.data('compWeight');
           })
           ?.reduce?.((a: number, b: number) => a + b, 0),
         gotWeight: formatEl
           .filter(
             "node[status='COMPLETED'],node[status='DROPPED'],node[status='REPEATING']"
           )
-          .map((e) => {
-            return e.data("compWeight");
+          .map(e => {
+            return e.data('compWeight');
           })
           ?.reduce?.((a: number, b: number) => a + b, 0),
         planWeight: formatEl
           .filter(
             "node[status='PLANNING'],node[status='CURRENT'],node[status='PAUSED']"
           )
-          .map((e) => {
-            return e.data("compWeight");
+          .map(e => {
+            return e.data('compWeight');
           })
           ?.reduce?.((a: number, b: number) => a + b, 0),
         // per: Math.round((formatEl.filter("node[status!='NO']").length / formatEl.length) * 100),
@@ -831,23 +831,23 @@ export const computeData = (
     return {
       ...serie,
       stats: stat as statsType,
-      status: "ERR" as serieStatusType,
+      status: 'ERR' as serieStatusType,
     };
   });
 
   //Creating Serializable Dict
-  let seriesDict: { [key: string]: seriesListElementType } = {};
-  seriesList.map((serie) => {
-    seriesDict[serie.seriesPrime.data("id")] = {
+  const seriesDict: {[key: string]: seriesListElementType} = {};
+  seriesList.map(serie => {
+    seriesDict[serie.seriesPrime.data('id')] = {
       ...serie,
       seriesPrime: serie.seriesPrime.data(),
       series: {
-        nodes: serie.series.nodes().map((e) => e.data()),
-        edges: serie.series.edges().map((e) => e.data()),
+        nodes: serie.series.nodes().map(e => e.data()),
+        edges: serie.series.edges().map(e => e.data()),
       },
       serieComplete: {
-        nodes: serie.serieComplete.nodes().map((e) => e.data()),
-        edges: serie.serieComplete.edges().map((e) => e.data()),
+        nodes: serie.serieComplete.nodes().map(e => e.data()),
+        edges: serie.serieComplete.edges().map(e => e.data()),
       },
     };
   });
@@ -859,15 +859,15 @@ export const computeData = (
  * Transform serie {edge, node} format to array [{data: ___ },...] for cytoscape
  */
 export const dataForCyto = (
-  serie: seriesListElementType["series"],
+  serie: seriesListElementType['series'],
   notCounted = false
 ) => {
   if (notCounted)
-    return [...serie.nodes, ...serie.edges].map((el) => {
-      return { data: el, classes: ["not-counted"] };
+    return [...serie.nodes, ...serie.edges].map(el => {
+      return {data: el, classes: ['not-counted']};
     });
-  return [...serie.nodes, ...serie.edges].map((el) => {
-    return { data: el };
+  return [...serie.nodes, ...serie.edges].map(el => {
+    return {data: el};
   });
 };
 
@@ -875,39 +875,39 @@ export const dataForCyto = (
 export const getCyLayout = (state: globalStateType) => {
   if (state.seriesSelected) {
     switch (state.userOptions.cyLayout) {
-      case "breathfirst":
+      case 'breathfirst':
         return {
-          name: "breadthfirst",
+          name: 'breadthfirst',
           roots: [state.seriesSelected.seriesPrime.id],
         };
 
-      case "klay":
+      case 'klay':
         (state.cyViz?.style() as any)
-          .selector("edge")
-          .style("curve-style", "bezier");
+          .selector('edge')
+          .style('curve-style', 'bezier');
         return {
-          name: "klay",
+          name: 'klay',
           // animate: true,
           nodeDimensionsIncludeLabels: true,
           klay: {
             // addUnnecessaryBendpoints: true,
-            edgeRouting: "POLYLINE", // Defines how edges are routed (POLYLINE, ORTHOGONAL, SPLINES)
+            edgeRouting: 'POLYLINE', // Defines how edges are routed (POLYLINE, ORTHOGONAL, SPLINES)
             layoutHierarchy: false,
             spacing: 40, // Overall setting for the minimal amount of space to be left between objects
             // nodeLayering:'LONGEST_PATH',
-            nodeLayering: "NETWORK_SIMPLEX",
+            nodeLayering: 'NETWORK_SIMPLEX',
 
             mergeEdges: true,
             thoroughness: 10, // How much effort should be spent to produce a nice layout...
           },
         } as any;
 
-      case "dagre":
+      case 'dagre':
         (state.cyViz?.style() as any)
-          .selector("edge")
-          .style("curve-style", "bezier");
+          .selector('edge')
+          .style('curve-style', 'bezier');
         return {
-          name: "dagre",
+          name: 'dagre',
           // animate: true,
           nodeDimensionsIncludeLabels: true,
 
@@ -917,12 +917,12 @@ export const getCyLayout = (state: globalStateType) => {
           // ranker: 'longest-path', // 'network-simplex', 'tight-tree' or 'longest-path'
         } as any;
 
-      case "elk":
+      case 'elk':
         (state.cyViz?.style() as any)
-          .selector("edge")
-          .style("curve-style", "bezier");
+          .selector('edge')
+          .style('curve-style', 'bezier');
         return {
-          name: "elk",
+          name: 'elk',
           // animate: true,
           nodeDimensionsIncludeLabels: true,
 
@@ -931,9 +931,9 @@ export const getCyLayout = (state: globalStateType) => {
           // padding: 10
         } as any;
 
-      case "cola":
+      case 'cola':
         return {
-          name: "cola",
+          name: 'cola',
           animate: true,
           nodeSpacing: () => {
             return 50;
@@ -945,9 +945,9 @@ export const getCyLayout = (state: globalStateType) => {
           // padding: 10
         } as any;
 
-      case "fcose":
+      case 'fcose':
         return {
-          name: "fcose",
+          name: 'fcose',
 
           // nodeDimensionsIncludeLabels: true,
           animate: true,
@@ -961,7 +961,7 @@ export const getCyLayout = (state: globalStateType) => {
 
       default:
         return {
-          name: "random",
+          name: 'random',
           roots: [state.seriesSelected.seriesPrime.id],
           // directed: true,
           // padding: 10
@@ -970,12 +970,12 @@ export const getCyLayout = (state: globalStateType) => {
   }
 
   return {
-    name: "random",
+    name: 'random',
   };
 };
 
 export const getCyStyle = (state: globalStateType) => {
-  let style: cytoscape.Stylesheet[] = [];
+  const style: cytoscape.Stylesheet[] = [];
   // {
   //     selector:
   // }

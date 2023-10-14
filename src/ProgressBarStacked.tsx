@@ -6,7 +6,7 @@ import {
   Tooltip,
   Typography,
   useTheme,
-} from "@mui/material";
+} from '@mui/material';
 import React, {
   useState,
   useRef,
@@ -15,7 +15,7 @@ import React, {
   useEffect,
   useMemo,
   FC,
-} from "react";
+} from 'react';
 
 interface props {
   data: Array<any>;
@@ -24,19 +24,19 @@ interface props {
   children?: React.ReactNode;
 }
 
-const ProgressBarStacked: FC<props> = ({ data, size, sx, children }) => {
+const ProgressBarStacked: FC<props> = ({data, size, sx, children}) => {
   const theme = useTheme();
   return (
     <Box
       sx={{
         ...sx,
         // height: "100%",
-        width: "100%",
-        display: "flex",
+        width: '100%',
+        display: 'flex',
         // flexDirection: "column-reverse",
-        flexDirection: "row-reverse",
-        alignContent: "stretch",
-        transform: "rotate(180deg)",
+        flexDirection: 'row-reverse',
+        alignContent: 'stretch',
+        transform: 'rotate(180deg)',
         // gap: "2px",
         // backgroundColor: "white",
         // borderRadius: "20px",
@@ -62,19 +62,19 @@ const ProgressBarStacked: FC<props> = ({ data, size, sx, children }) => {
           sx={{
             flex: 1,
             // width: "20px",
-            height: "10px",
+            height: '10px',
             borderBottom: `3px solid ${
               [
                 theme.palette.primary.main,
                 theme.palette.secondary.main,
-                "lightgray",
+                'lightgray',
               ][index % 3]
             }`,
             // backgroundColor: [theme.palette.primary.main, theme.palette.secondary.main, "lightgray"][index % 3],
-            backgroundColor: "transparent",
+            backgroundColor: 'transparent',
             // minHeight: "16%",
-            minWidth: "16%",
-            display: value == 0 ? "none" : "block",
+            minWidth: '16%',
+            display: value == 0 ? 'none' : 'block',
             //   height: `${value > 20 ? value : 20}%`,
             //   maxHeight: `${value > 20 ? value : 20}%`,
             // maxHeight: `${value}%`,
@@ -86,10 +86,10 @@ const ProgressBarStacked: FC<props> = ({ data, size, sx, children }) => {
               [
                 theme.palette.primary.main,
                 theme.palette.secondary.main,
-                "lightgray",
+                'lightgray',
               ][index % 3]
             }`,
-            alignItems: "center",
+            alignItems: 'center',
           }}
         ></Box>
       ))}

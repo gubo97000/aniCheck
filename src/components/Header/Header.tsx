@@ -1,16 +1,16 @@
-import { Avatar, IconButton } from "@mui/material";
-import React, { FC } from "react";
-import siteIcon from "/pwaicon.png";
+import {Avatar, IconButton} from '@mui/material';
+import React, {FC} from 'react';
+import siteIcon from '/pwaicon.png';
 
 // import div from "@mui/material/div";
-import LinearProgress from "@mui/material/LinearProgress";
-import Typography from "@mui/material/Typography";
-import { useSharedState } from "~/Store";
-import LoaderHead from "~/LoaderHead";
-import StatusTabs from "~/StatusTabs";
-import { useSearchParams } from "react-router-dom";
-import SearchField from "~components/Header/SearchField";
-import { ArrowBack } from "@mui/icons-material";
+import LinearProgress from '@mui/material/LinearProgress';
+import Typography from '@mui/material/Typography';
+import {useSharedState} from '~/Store';
+import LoaderHead from '~/LoaderHead';
+import StatusTabs from '~/StatusTabs';
+import {useSearchParams} from 'react-router-dom';
+import SearchField from '~components/Header/SearchField';
+import {ArrowBack} from '@mui/icons-material';
 
 const Header: FC = () => {
   const [state, setState] = useSharedState();
@@ -19,47 +19,47 @@ const Header: FC = () => {
     <div>
       <div
         style={{
-          position: "relative",
-          display: "grid",
-          gridTemplateRows: "50px 70px",
-          gridTemplateColumns: "50px 200px 1fr",
+          position: 'relative',
+          display: 'grid',
+          gridTemplateRows: '50px 70px',
+          gridTemplateColumns: '50px 200px 1fr',
           gridTemplateAreas:
             "'icon user head' 'statusTabs statusTabs statusTabs'",
-          alignItems: "end",
+          alignItems: 'end',
 
           background: `url(${state.user.cover}) no-repeat center center`,
 
-          backgroundSize: "cover",
+          backgroundSize: 'cover',
           // borderRadius:"5px",
-          overflow: "hidden",
+          overflow: 'hidden',
           // divShadow: "inset 0 -50px 10px -10px rgba(0, 0, 0, 0.4)",
         }}
       >
         <div //Shadow
           style={{
-            position: "absolute",
+            position: 'absolute',
             // background:
             //   "linear-gradient(180deg,rgba(6,13,34,0) 40%,rgba(6,13,34,.6))",
             //black with opacity
-            background: "#000000A0",
-            width: "100%",
-            height: "100%",
-            zIndex: "0",
+            background: '#000000A0',
+            width: '100%',
+            height: '100%',
+            zIndex: '0',
           }}
         />
         <LoaderHead
           style={{
-            gridArea: "head",
+            gridArea: 'head',
           }}
         />
-        {searchParams.get("s") != null ? (
+        {searchParams.get('s') != null ? (
           <>
             <div
               style={{
-                gridArea: "icon",
-                display: "grid",
-                height: "100%",
-                placeItems: "center",
+                gridArea: 'icon',
+                display: 'grid',
+                height: '100%',
+                placeItems: 'center',
               }}
             >
               <IconButton
@@ -73,11 +73,11 @@ const Header: FC = () => {
             </div>
             <div
               style={{
-                gridArea: "user",
-                display: "flex",
-                placeItems: "center",
-                height: "100%",
-                width: "100%",
+                gridArea: 'user',
+                display: 'flex',
+                placeItems: 'center',
+                height: '100%',
+                width: '100%',
               }}
             >
               <SearchField />
@@ -87,13 +87,13 @@ const Header: FC = () => {
           <>
             <div
               style={{
-                gridArea: "icon",
+                gridArea: 'icon',
                 // placeSelf: "strech strech",
-                height: "100%",
+                height: '100%',
                 // margin: "0 0 0 5px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <Avatar
@@ -106,34 +106,34 @@ const Header: FC = () => {
             </div>
             <div
               style={{
-                gridArea: "user",
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
+                gridArea: 'user',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
               }}
             >
               <div
                 style={{
                   // placeSelf: "center start",
-                  marginLeft: "2%",
-                  zIndex: "1",
-                  alignItems: "center",
+                  marginLeft: '2%',
+                  zIndex: '1',
+                  alignItems: 'center',
                 }}
               >
                 <Typography
                   color="white"
                   variant="h5"
-                  style={{ marginTop: "auto" }}
+                  style={{marginTop: 'auto'}}
                 >
-                  {state.user.name ?? "AniCheck"}
+                  {state.user.name ?? 'AniCheck'}
                 </Typography>
               </div>
             </div>
           </>
         )}
-        <StatusTabs style={{ gridArea: "statusTabs" }} />
+        <StatusTabs style={{gridArea: 'statusTabs'}} />
       </div>
-      {state.status[0] == "loading" ? <LinearProgress /> : undefined}
+      {state.status[0] == 'loading' ? <LinearProgress /> : undefined}
     </div>
   );
 };

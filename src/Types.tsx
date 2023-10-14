@@ -1,49 +1,49 @@
 export type formatsType =
-  | "TV"
-  | "TV_SHORT"
-  | "MOVIE"
-  | "SPECIAL"
-  | "OVA"
-  | "ONA"
-  | "MUSIC"
-  | "MANGA"
-  | "NOVEL"
-  | "ONE_SHOT";
+  | 'TV'
+  | 'TV_SHORT'
+  | 'MOVIE'
+  | 'SPECIAL'
+  | 'OVA'
+  | 'ONA'
+  | 'MUSIC'
+  | 'MANGA'
+  | 'NOVEL'
+  | 'ONE_SHOT';
 export type serieStatusType =
-  | "COMPLETE"
-  | "PLAN_TO_COMPLETE"
-  | "NOT_COMPLETE"
-  | "ERR";
+  | 'COMPLETE'
+  | 'PLAN_TO_COMPLETE'
+  | 'NOT_COMPLETE'
+  | 'ERR';
 export type relationsType =
-  | "CHARACTER"
-  | "SEQUEL"
-  | "SIDE_STORY"
-  | "SOURCE"
-  | "ALTERNATIVE"
-  | "SPIN_OFF"
-  | "SUMMARY"
-  | "COMPILATION"
-  | "CONTAINS"
-  | "PREQUEL"
-  | "ADAPTATION"
-  | "PARENT"
-  | "OTHER";
+  | 'CHARACTER'
+  | 'SEQUEL'
+  | 'SIDE_STORY'
+  | 'SOURCE'
+  | 'ALTERNATIVE'
+  | 'SPIN_OFF'
+  | 'SUMMARY'
+  | 'COMPILATION'
+  | 'CONTAINS'
+  | 'PREQUEL'
+  | 'ADAPTATION'
+  | 'PARENT'
+  | 'OTHER';
 export type statusType =
-  | "CURRENT"
-  | "PLANNING"
-  | "COMPLETED"
-  | "DROPPED"
-  | "PAUSED"
-  | "REPEATING"
-  | "NO";
+  | 'CURRENT'
+  | 'PLANNING'
+  | 'COMPLETED'
+  | 'DROPPED'
+  | 'PAUSED'
+  | 'REPEATING'
+  | 'NO';
 export type releaseStatusType =
-  | "FINISHED"
-  | "RELEASING"
-  | "NOT_YET_RELEASED"
-  | "CANCELLED"
-  | "HIATUS"
-  | "UNKNOWN";
-export type formatsBulkTermsType = "anime" | "manga" | "novel";
+  | 'FINISHED'
+  | 'RELEASING'
+  | 'NOT_YET_RELEASED'
+  | 'CANCELLED'
+  | 'HIATUS'
+  | 'UNKNOWN';
+export type formatsBulkTermsType = 'anime' | 'manga' | 'novel';
 
 export type globalStateType = {
   // cy: cytoscape.Core;
@@ -52,23 +52,23 @@ export type globalStateType = {
   // modalInfoOpenState?: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
   modalInfoOpenState?: boolean;
   seriesSelected?: seriesListElementType;
-  seriesDict: { [key: string]: seriesListElementType };
+  seriesDict: {[key: string]: seriesListElementType};
   seriesDictFlag: number;
   seriesByStatus: Partial<{
     [key in Partial<serieStatusType>]: seriesListElementType[];
   }>;
   cyViz?: cytoscape.Core;
-  globalStats: statsType[formatsType | "selected"];
-  status: ["ok" | "loading" | "error" | "success", string];
+  globalStats: statsType[formatsType | 'selected'];
+  status: ['ok' | 'loading' | 'error' | 'success', string];
   user: userType;
   usersHist: string[];
   seriesToRender?: seriesListElementType[];
-  tempInfo: { usingCache: boolean };
+  tempInfo: {usingCache: boolean};
 };
 
 export type userOptionType = {
-  themeMode: "light" | "dark" | "auto";
-  vizMode: "graph" | "list";
+  themeMode: 'light' | 'dark' | 'auto';
+  vizMode: 'graph' | 'list';
   listLayout: string;
   sort: sortType;
   smartCompletion: boolean;
@@ -86,12 +86,12 @@ export type userOptionType = {
 };
 
 export type sortType = {
-  type: "complete%" | "weight%" | "alphabetical" | "size" | "missWeight";
+  type: 'complete%' | 'weight%' | 'alphabetical' | 'size' | 'missWeight';
   inverted: boolean;
 };
 
 export type statsType = {
-  [key in formatsType | "selected"]: {
+  [key in formatsType | 'selected']: {
     tot: number;
     miss: number;
     got: number;
@@ -110,11 +110,11 @@ export type statsType = {
 
 export type seriesListElementType = {
   seriesPrime: NodeType;
-  series: { nodes: NodeType[]; edges: EdgeType[] };
+  series: {nodes: NodeType[]; edges: EdgeType[]};
   stats: statsType;
   formatsIncluded?: formatsType[];
   status: serieStatusType;
-  serieComplete: { nodes: NodeType[]; edges: EdgeType[] };
+  serieComplete: {nodes: NodeType[]; edges: EdgeType[]};
 };
 
 export type NodeType = {

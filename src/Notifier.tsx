@@ -1,14 +1,14 @@
-import Button from "@mui/material/Button";
-import Snackbar from "@mui/material/Snackbar";
-import React, { FC } from "react";
-import { useSharedState } from "./Store";
-import { useUpdateWorker } from "./lib/useUpdateWorker";
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import React, {FC} from 'react';
+import {useSharedState} from './Store';
+import {useUpdateWorker} from './lib/useUpdateWorker';
 
 const Notifier: FC = () => {
-  const { run, status, error, setStatus, result } = useUpdateWorker();
+  const {run, status, error, setStatus, result} = useUpdateWorker();
   const [state, setState] = useSharedState();
   const [open, setOpen] = React.useState(false);
-  const [msg, setMsg] = React.useState("");
+  const [msg, setMsg] = React.useState('');
   const [time, setTime] = React.useState<number | null>(null);
   // const { getLists } = useAPIs();
   // const test = useTestWorker();
@@ -16,18 +16,18 @@ const Notifier: FC = () => {
   //Hook check if the data displayed is cached once
   React.useEffect(() => {
     if (state.tempInfo.usingCache) {
-      setState((s) => {
+      setState(s => {
         return {
           ...s,
-          status: ["loading", "✨ Updating Data"],
-          tempInfo: { usingCache: false },
+          status: ['loading', '✨ Updating Data'],
+          tempInfo: {usingCache: false},
         };
       });
       setOpen(true);
       setMsg(state.status[1]);
       setTimeout(() => {
-        console.log("Getting new data for", state.user.name);
-        run("fullUpdate", { user: state.user.name! });
+        console.log('Getting new data for', state.user.name);
+        run('fullUpdate', {user: state.user.name!});
       }, 4000);
     }
   }, []);
@@ -35,13 +35,13 @@ const Notifier: FC = () => {
   //Update global status every status update from the worker
   React.useEffect(() => {
     if (!status) return;
-    setState((s) => {
+    setState(s => {
       return {
         ...s,
         status: status,
       };
     });
-    if (status[0] === "success") {
+    if (status[0] === 'success') {
       setTime(3000);
     }
     setOpen(true);
@@ -58,14 +58,14 @@ const Notifier: FC = () => {
     event: React.SyntheticEvent | Event,
     reason?: string
   ) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
     setOpen(false);
     setTime(null);
-    setState((s) => ({
+    setState(s => ({
       ...s,
-      status: ["ok", " "],
+      status: ['ok', ' '],
     }));
   };
 
@@ -74,7 +74,7 @@ const Notifier: FC = () => {
   return (
     <>
       <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
         open={open}
         autoHideDuration={time}
         onClose={handleClose}

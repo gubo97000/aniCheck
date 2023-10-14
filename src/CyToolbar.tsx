@@ -1,47 +1,47 @@
-import React, { useState, useEffect, useMemo, FC } from "react";
+import React, {useState, useEffect, useMemo, FC} from 'react';
 
-import { useQuery, gql } from "@apollo/client";
-import { useSharedState } from "./Store";
-import { BoxProps } from "@mui/material/Box";
-import Box from "@mui/material/Box";
-import InfoModal from "./InfoModal";
-import AccountTreeRoundedIcon from "@mui/icons-material/AccountTreeRounded";
-import { Stack, Button, Badge, Divider, Tooltip } from "@mui/material";
-import { getCyLayout } from "./Utils";
-import IconButton from "@mui/material/IconButton";
-import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
-import FilterAltRoundedIcon from "@mui/icons-material/FilterAltRounded";
-import CenterFocusStrongRoundedIcon from "@mui/icons-material/CenterFocusStrongRounded";
-import Popper from "@mui/material/Popper";
-import CyFilterMenu from "./CyFilterMenu";
-import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
-import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
+import {useQuery, gql} from '@apollo/client';
+import {useSharedState} from './Store';
+import {BoxProps} from '@mui/material/Box';
+import Box from '@mui/material/Box';
+import InfoModal from './InfoModal';
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
+import {Stack, Button, Badge, Divider, Tooltip} from '@mui/material';
+import {getCyLayout} from './Utils';
+import IconButton from '@mui/material/IconButton';
+import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
+import CenterFocusStrongRoundedIcon from '@mui/icons-material/CenterFocusStrongRounded';
+import Popper from '@mui/material/Popper';
+import CyFilterMenu from './CyFilterMenu';
+import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
+import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 type props = {
   // badge: number;
 };
 
-const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
+const CyToolbar: FC<props & BoxProps> = ({...boxProps}) => {
   const [state, setState] = useSharedState();
   const [extraBadge, setExtraBadge] = useState(0);
   const [filterBadge, setFilterBadge] = useState(0);
 
   const handleClickLayout = (layoutTag: string) => {
-    setState((state) => {
-      let tempState = {
+    setState(state => {
+      const tempState = {
         ...state,
-        userOptions: { ...state.userOptions, cyLayout: layoutTag },
+        userOptions: {...state.userOptions, cyLayout: layoutTag},
       };
       state.cyViz?.elements().makeLayout(getCyLayout(tempState)).run();
       state.cyViz?.fit(undefined, 50);
-      state.cyViz?.panBy({ x: -35, y: 0 });
+      state.cyViz?.panBy({x: -35, y: 0});
       return tempState;
     });
   };
 
   const isSelectedLayout = (layoutTag: string) => {
-    return state.userOptions.cyLayout == layoutTag ? "primary" : "default";
+    return state.userOptions.cyLayout == layoutTag ? 'primary' : 'default';
   };
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -51,7 +51,7 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
   };
 
   useEffect(() => {
-    setState((state) => {
+    setState(state => {
       setExtraBadge(() => {
         if (!state.userOptions.cyShowHidden && state.seriesSelected) {
           return state.seriesSelected?.serieComplete.nodes.length;
@@ -60,10 +60,10 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
       });
 
       setFilterBadge(() => {
-        return state.cyViz?.filter(".hidden").length ?? 0;
+        return state.cyViz?.filter('.hidden').length ?? 0;
       });
 
-      return { ...state };
+      return {...state};
     });
   }, [
     state.cyViz,
@@ -95,24 +95,24 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
     >
       <Box
         sx={{
-          position: "absolute",
-          top: "calc(20% - 60px)",
-          right: "20px",
-          bgcolor:"background.paper",
+          position: 'absolute',
+          top: 'calc(20% - 60px)',
+          right: '20px',
+          bgcolor: 'background.paper',
           boxShadow: 1,
-          borderRadius: "50px",
+          borderRadius: '50px',
         }}
       >
         <Tooltip
           title={
-            state.userOptions.cyShowNav ? "Hide Side Nav" : "Show Side Nav"
+            state.userOptions.cyShowNav ? 'Hide Side Nav' : 'Show Side Nav'
           }
           placement="left"
           disableInteractive
         >
           <IconButton
             onClick={() => {
-              setState((state) => {
+              setState(state => {
                 return {
                   ...state,
                   userOptions: {
@@ -122,7 +122,8 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
                 };
               });
             }}
-            size="large">
+            size="large"
+          >
             {state.userOptions.cyShowNav ? (
               <ArrowForwardIosRoundedIcon />
             ) : (
@@ -133,12 +134,12 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
       </Box>
       <Stack
         sx={{
-          position: "absolute",
-          top: "20%",
-          right: "20px",
-          bgcolor:"background.paper",
+          position: 'absolute',
+          top: '20%',
+          right: '20px',
+          bgcolor: 'background.paper',
           boxShadow: 1,
-          borderRadius: "10px",
+          borderRadius: '10px',
         }}
         spacing={0.5}
       >
@@ -146,29 +147,32 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
           <IconButton
             onClick={() => {
               state.cyViz?.fit(undefined, 50);
-              state.cyViz?.panBy({ x: -35, y: 0 });
+              state.cyViz?.panBy({x: -35, y: 0});
             }}
-            size="large">
+            size="large"
+          >
             <CenterFocusStrongRoundedIcon />
           </IconButton>
         </Tooltip>
         <Divider />
         <Tooltip title="Horizontal Layout" placement="left" disableInteractive>
           <IconButton
-            onClick={() => handleClickLayout("klay")}
-            color={isSelectedLayout("klay")}
-            size="large">
+            onClick={() => handleClickLayout('klay')}
+            color={isSelectedLayout('klay')}
+            size="large"
+          >
             <AccountTreeRoundedIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title="Vertical Layout" placement="left" disableInteractive>
           <IconButton
             sx={{
-              transform: "rotate(90deg)",
+              transform: 'rotate(90deg)',
             }}
-            onClick={() => handleClickLayout("dagre")}
-            color={isSelectedLayout("dagre")}
-            size="large">
+            onClick={() => handleClickLayout('dagre')}
+            color={isSelectedLayout('dagre')}
+            size="large"
+          >
             <AccountTreeRoundedIcon />
           </IconButton>
         </Tooltip>
@@ -188,9 +192,9 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
           <Tooltip
             title={
               state.seriesSelected?.serieComplete.nodes.length == 0
-                ? "No related series"
+                ? 'No related series'
                 : state.userOptions.cyShowHidden
-                ? "Showing Related"
+                ? 'Showing Related'
                 : `Show ${extraBadge} Related Elements`
             }
             placement="left"
@@ -199,7 +203,7 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
             <Badge badgeContent={extraBadge} color="primary">
               <IconButton
                 onClick={() => {
-                  setState((state) => {
+                  setState(state => {
                     return {
                       ...state,
                       userOptions: {
@@ -209,9 +213,10 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
                     };
                   });
                 }}
-                color={state.userOptions.cyShowHidden ? "primary" : "default"}
+                color={state.userOptions.cyShowHidden ? 'primary' : 'default'}
                 disabled={state.seriesSelected?.serieComplete.nodes.length == 0}
-                size="large">
+                size="large"
+              >
                 <AddCircleRoundedIcon />
               </IconButton>
             </Badge>
@@ -226,7 +231,7 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
           <Box>
             <Tooltip
               title={
-                filterBadge ? `Hiding ${filterBadge} Nodes` : "Filter Nodes"
+                filterBadge ? `Hiding ${filterBadge} Nodes` : 'Filter Nodes'
               }
               placement="left"
               disableInteractive
@@ -236,10 +241,11 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
                   onClick={handleClickFilter}
                   color={
                     state.userOptions.cyFilter.length != 0
-                      ? "primary"
-                      : "default"
+                      ? 'primary'
+                      : 'default'
                   }
-                  size="large">
+                  size="large"
+                >
                   <FilterAltRoundedIcon />
                 </IconButton>
               </Badge>
@@ -251,16 +257,16 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
               disablePortal={false}
               modifiers={[
                 {
-                  name: "flip",
+                  name: 'flip',
                   enabled: true,
                   options: {
                     altBoundary: true,
-                    rootBoundary: "viewport",
+                    rootBoundary: 'viewport',
                     padding: 8,
                   },
                 },
                 {
-                  name: "preventOverflow",
+                  name: 'preventOverflow',
                   enabled: true,
                   options: {
                     altAxis: true,
@@ -271,7 +277,7 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
                   },
                 },
                 {
-                  name: "arrow",
+                  name: 'arrow',
                   enabled: true,
                   options: {
                     element: anchorEl,
@@ -281,10 +287,10 @@ const CyToolbar: FC<props & BoxProps> = ({ ...boxProps }) => {
             >
               <Box
                 sx={{
-                  bgcolor: "white",
+                  bgcolor: 'white',
                   p: 2,
-                  borderRadius: "10px",
-                  width: "300px",
+                  borderRadius: '10px',
+                  width: '300px',
                   boxShadow: 1,
                 }}
               >

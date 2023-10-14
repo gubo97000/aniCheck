@@ -6,42 +6,42 @@ import React, {
   useEffect,
   useMemo,
   FC,
-} from "react";
-import { render } from "react-dom";
-import * as vis from "vis-network";
-import cytoscape from "cytoscape";
+} from 'react';
+import {render} from 'react-dom';
+import * as vis from 'vis-network';
+import cytoscape from 'cytoscape';
 
-import { useQuery, gql } from "@apollo/client";
-import { useSharedState } from "./Store";
-import Loader from "./Loader";
-import { keycharm } from "vis-network";
-import { globalStateType } from "./Types";
-import { FixedSizeList } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
-import SearchBox from "./SearchBox";
-import SeriesList from "./SeriesList";
-import OptionsModal from "./OptionsModal";
-import StatusFilter from "./StatusFilter";
-import { BoxProps } from "@mui/material/Box";
-import Box from "@mui/material/Box";
-import InfoModal from "./InfoModal";
-import AniChika from "./AniChika";
-import { Outlet } from "react-router-dom";
-import StatusTabs from "./StatusTabs";
-import Header from "./components/Header/Header";
+import {useQuery, gql} from '@apollo/client';
+import {useSharedState} from './Store';
+import Loader from './Loader';
+import {keycharm} from 'vis-network';
+import {globalStateType} from './Types';
+import {FixedSizeList} from 'react-window';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import SearchBox from './SearchBox';
+import SeriesList from './SeriesList';
+import OptionsModal from './OptionsModal';
+import StatusFilter from './StatusFilter';
+import {BoxProps} from '@mui/material/Box';
+import Box from '@mui/material/Box';
+import InfoModal from './InfoModal';
+import AniChika from './AniChika';
+import {Outlet} from 'react-router-dom';
+import StatusTabs from './StatusTabs';
+import Header from './components/Header/Header';
 
-const Nav: FC<BoxProps> = (boxProps) => {
+const Nav: FC<BoxProps> = boxProps => {
   const [state, setState] = useSharedState();
 
   return (
     <Box
       {...boxProps}
       sx={{
-        gridTemplateRows: "auto 1fr",
+        gridTemplateRows: 'auto 1fr',
         gridTemplateAreas: "'top' 'content'",
         display: state.userOptions.cyShowNav
-          ? "grid"
-          : { xs: "grid", sm: "none" },
+          ? 'grid'
+          : {xs: 'grid', sm: 'none'},
         boxShadow: 1,
         ...boxProps.sx,
       }}
@@ -49,14 +49,14 @@ const Nav: FC<BoxProps> = (boxProps) => {
     >
       <OptionsModal />
       <InfoModal />
-      <Box sx={{ gridArea: "top" }}>
+      <Box sx={{gridArea: 'top'}}>
         {/* <Loader /> */}
         <Header />
         {/* {Object.keys(state.seriesDict).length ? <SearchBox /> : undefined} */}
         {/* {Object.keys(state.seriesDict).length ? <StatusFilter /> : undefined} */}
         {/* {Object.keys(state.seriesDict).length ? <StatusTabs /> : undefined} */}
       </Box>
-      <Box sx={{ gridArea: "content" }}>
+      <Box sx={{gridArea: 'content'}}>
         {/* {Object.keys(state.seriesDict).length ? <SeriesList /> : <AniChika />} */}
         {Object.keys(state.seriesDict).length ? <Outlet /> : <AniChika />}
       </Box>

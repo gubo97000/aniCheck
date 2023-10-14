@@ -1,8 +1,8 @@
-import { computeData } from "./Utils";
+import {computeData} from './Utils';
 
 export const wComputeData = (
   data: any[],
-  relationPriority: { [key: string]: number },
+  relationPriority: {[key: string]: number},
   problematicEles: string[]
 ) => {
   return computeData(data, relationPriority, problematicEles);

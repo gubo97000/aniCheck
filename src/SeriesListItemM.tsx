@@ -1,4 +1,4 @@
-import { Box, Tooltip, Typography } from "@mui/material";
+import {Box, Tooltip, Typography} from '@mui/material';
 import React, {
   useState,
   useRef,
@@ -8,36 +8,36 @@ import React, {
   useMemo,
   FC,
   memo,
-} from "react";
-import { render } from "react-dom";
-import * as vis from "vis-network";
-import cytoscape from "cytoscape";
+} from 'react';
+import {render} from 'react-dom';
+import * as vis from 'vis-network';
+import cytoscape from 'cytoscape';
 
-import { useQuery, gql } from "@apollo/client";
-import Loader from "./Loader";
-import { keycharm } from "vis-network";
-import { seriesListElementType, statsType } from "./Types";
-import { useSharedState } from "./Store";
-import DoubleProgressWithContent from "./DoubleProgressWithContent";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import { GridChildComponentProps, ListChildComponentProps } from "react-window";
-import ButtonBase from "@mui/material/ButtonBase";
-import { FORMATS } from "./Utils";
-import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
-import ProgressBarStacked from "./ProgressBarStacked";
-import { useNavigate } from "react-router-dom";
+import {useQuery, gql} from '@apollo/client';
+import Loader from './Loader';
+import {keycharm} from 'vis-network';
+import {seriesListElementType, statsType} from './Types';
+import {useSharedState} from './Store';
+import DoubleProgressWithContent from './DoubleProgressWithContent';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import {GridChildComponentProps, ListChildComponentProps} from 'react-window';
+import ButtonBase from '@mui/material/ButtonBase';
+import {FORMATS} from './Utils';
+import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
+import ProgressBarStacked from './ProgressBarStacked';
+import {useNavigate} from 'react-router-dom';
 
 const SeriesListItemM: FC<
-  GridChildComponentProps<{ seriesList: seriesListElementType[] }>
-> = ({ columnIndex, rowIndex, style, isScrolling, data }) => {
+  GridChildComponentProps<{seriesList: seriesListElementType[]}>
+> = ({columnIndex, rowIndex, style, isScrolling, data}) => {
   const [state, setState] = useSharedState();
   const [checked, setChecked] = useState(false);
   const navigate = useNavigate();
   isScrolling = true;
-  let serieEl = data.seriesList[columnIndex + rowIndex * 4];
+  const serieEl = data.seriesList[columnIndex + rowIndex * 4];
   if (!serieEl) return <div></div>;
-  let { series, seriesPrime } = serieEl;
-  let key = seriesPrime.id;
+  const {series, seriesPrime} = serieEl;
+  const key = seriesPrime.id;
 
   useLayoutEffect(() => {
     if (checked) {
@@ -56,7 +56,7 @@ const SeriesListItemM: FC<
   // }, [state.seriesDict]);
 
   return (
-    <Box style={{ ...style, display: "grid", placeItems: "center" }} key={key}>
+    <Box style={{...style, display: 'grid', placeItems: 'center'}} key={key}>
       {
         // isScrolling ? seriesPrime.title :
         <ButtonBase
@@ -66,38 +66,39 @@ const SeriesListItemM: FC<
             // //gridTemplateRows: "25% auto auto",
             // gridTemplateAreas: "'content stats'",
             // alignItems: "stretch",
-            aspectRatio: "43/61",
-            height: `calc(95% - ${checked ? "0px" : "4px"})`,
+            aspectRatio: '43/61',
+            height: `calc(95% - ${checked ? '0px' : '4px'})`,
             // width: `calc(95% - ${checked ? "0px" : "4px"})`,
             // m: checked ? "3px 8px 3px 8px" : "5px 10px 5px 10px",
-            m: "auto",
-            border: checked ? "2px solid" : "0px solid",
-            borderColor: checked ? "primary.main" : `grey.500`,
+            m: 'auto',
+            border: checked ? '2px solid' : '0px solid',
+            borderColor: checked ? 'primary.main' : 'grey.500',
             // background: isScrolling
             //   ? undefined
             //   : `url(${
             //       seriesPrime.bannerImage ?? seriesPrime.cover
             //     }) no-repeat center center`,
             background: `url(${seriesPrime.cover}) no-repeat center center`,
-            backgroundSize: "cover",
-            color: "white",
+            backgroundSize: 'cover',
+            color: 'white',
 
             // boxShadow: 3,
 
-            borderRadius: "5px",
+            borderRadius: '5px',
             // boxShadow: `inset 0 0 0 2000px ${
             //   checked ? "rgba(0, 0, 0, 0.3)" : "rgba(0, 0, 0, 0.4)"
             // }`,
-            boxShadow: `inset 0px 35px 20px -30px black, inset 0px -65px 60px -30px black`,
-            overflow: "hidden",
-            textAlign: "left",
+            boxShadow:
+              'inset 0px 35px 20px -30px black, inset 0px -65px 60px -30px black',
+            overflow: 'hidden',
+            textAlign: 'left',
           }}
           key={key}
           onClick={() => {
             // addState({ id: key, state: [checked, setChecked], series: series });
             // handleToggle(key)
-            setState((state) => {
-              return { ...state, seriesSelected: serieEl };
+            setState(state => {
+              return {...state, seriesSelected: serieEl};
             });
             navigate(`${key}`);
           }}
@@ -105,15 +106,15 @@ const SeriesListItemM: FC<
           <Box
             sx={{
               // gridArea: "content",
-              placeSelf: "end start",
-              margin: "0px 4px",
-              width: "100%",
+              placeSelf: 'end start',
+              margin: '0px 4px',
+              width: '100%',
               // display: "grid",
-              gridTemplateRows: "1fr 45px",
+              gridTemplateRows: '1fr 45px',
               gridTemplateAreas: "'title' 'bot-stat'",
-              gap: "1px",
+              gap: '1px',
               // height:"100%",
-              overflow: "hidden",
+              overflow: 'hidden',
             }}
           >
             <Typography
@@ -121,11 +122,11 @@ const SeriesListItemM: FC<
                 // gridArea: "title",
                 // placeSelf: "stretch",
                 // placeSelf: "center",
-                width: "100%",
-                overflow: "hidden",
-                display: "-webkit-box",
+                width: '100%',
+                overflow: 'hidden',
+                display: '-webkit-box',
                 WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
+                WebkitBoxOrient: 'vertical',
               }}
               variant="subtitle2"
             >
@@ -134,15 +135,15 @@ const SeriesListItemM: FC<
 
             <ProgressBarStacked
               data={[
-                serieEl.stats["selected"].gotPerWeight ?? 0,
-                serieEl.stats["selected"].planPerWeight ?? 0,
-                serieEl.stats["selected"].missPerWeight ?? 0,
+                serieEl.stats['selected'].gotPerWeight ?? 0,
+                serieEl.stats['selected'].planPerWeight ?? 0,
+                serieEl.stats['selected'].missPerWeight ?? 0,
               ]}
               sx={{
-                position: "absolute",
+                position: 'absolute',
                 // top: "89%",
-                top: "0px",
-                left: "0px",
+                top: '0px',
+                left: '0px',
               }}
             />
 

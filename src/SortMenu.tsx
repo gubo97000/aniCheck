@@ -14,7 +14,7 @@ import {
   RadioGroup,
   TextField,
   useAutocomplete,
-} from "@mui/material";
+} from '@mui/material';
 import React, {
   useState,
   useRef,
@@ -25,31 +25,31 @@ import React, {
   FC,
   Children,
   isValidElement,
-} from "react";
+} from 'react';
 // import useAutocomplete from '@mui/material/useAutocomplete';
-import { render } from "react-dom";
-import * as vis from "vis-network";
-import cytoscape from "cytoscape";
-import { useQuery, gql } from "@apollo/client";
-import { useSharedState } from "./Store";
-import { globalStateType, seriesListElementType, sortType } from "./Types";
-import { sortAlphabetical, sortComplete } from "./Utils";
-import SortRoundedIcon from "@mui/icons-material/SortRounded";
-import NorthRoundedIcon from "@mui/icons-material/NorthRounded";
-import SouthRoundedIcon from "@mui/icons-material/SouthRounded";
-import { BoxProps } from "@mui/material/Box";
-import { useStateWithLocalStorage } from "./lib/Hooks";
+import {render} from 'react-dom';
+import * as vis from 'vis-network';
+import cytoscape from 'cytoscape';
+import {useQuery, gql} from '@apollo/client';
+import {useSharedState} from './Store';
+import {globalStateType, seriesListElementType, sortType} from './Types';
+import {sortAlphabetical, sortComplete} from './Utils';
+import SortRoundedIcon from '@mui/icons-material/SortRounded';
+import NorthRoundedIcon from '@mui/icons-material/NorthRounded';
+import SouthRoundedIcon from '@mui/icons-material/SouthRounded';
+import {BoxProps} from '@mui/material/Box';
+import {useStateWithLocalStorage} from './lib/Hooks';
 
-const SortMenu: FC<BoxProps> = (boxProps) => {
+const SortMenu: FC<BoxProps> = boxProps => {
   const [state, setState] = useSharedState();
   // console.log(state.userOptions.sort)
   const [sort, setSort] = useStateWithLocalStorage<sortType>(
-    "sort",
+    'sort',
     state.userOptions.sort
   );
   useEffect(() => {
-    setState((state) => {
-      return { ...state, userOptions: { ...state.userOptions, sort: sort } };
+    setState(state => {
+      return {...state, userOptions: {...state.userOptions, sort: sort}};
     });
   }, [sort]);
 
@@ -61,12 +61,12 @@ const SortMenu: FC<BoxProps> = (boxProps) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleSelection = (chosenType: sortType["type"]) => {
+  const handleSelection = (chosenType: sortType['type']) => {
     //If already chosen: invert
     if (sort.type == chosenType) {
-      setSort({ type: chosenType, inverted: !sort.inverted });
+      setSort({type: chosenType, inverted: !sort.inverted});
     } else {
-      setSort({ ...sort, type: chosenType });
+      setSort({...sort, type: chosenType});
     }
     // setAnchorEl(null);
   };
@@ -77,9 +77,9 @@ const SortMenu: FC<BoxProps> = (boxProps) => {
         id="sort-button"
         aria-controls="sort-menu"
         aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
+        aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        sx={{ color: "primary.main" }}
+        sx={{color: 'primary.main'}}
         size="medium"
       >
         <SortRoundedIcon />
@@ -90,15 +90,15 @@ const SortMenu: FC<BoxProps> = (boxProps) => {
         open={open}
         onClose={handleClose}
         MenuListProps={{
-          "aria-labelledby": "sort-button",
+          'aria-labelledby': 'sort-button',
         }}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
+          vertical: 'bottom',
+          horizontal: 'left',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
+          vertical: 'top',
+          horizontal: 'left',
         }}
       >
         {/* <MenuItem
@@ -110,24 +110,24 @@ const SortMenu: FC<BoxProps> = (boxProps) => {
         </MenuItem> */}
 
         <MenuItem
-          selected={sort.type == "weight%"}
-          onClick={() => handleSelection("weight%")}
+          selected={sort.type == 'weight%'}
+          onClick={() => handleSelection('weight%')}
         >
           {sort.inverted ? <NorthRoundedIcon /> : <SouthRoundedIcon />}
           Weighted Complete %
         </MenuItem>
 
         <MenuItem
-          selected={sort.type == "alphabetical"}
-          onClick={() => handleSelection("alphabetical")}
+          selected={sort.type == 'alphabetical'}
+          onClick={() => handleSelection('alphabetical')}
         >
           {sort.inverted ? <NorthRoundedIcon /> : <SouthRoundedIcon />}
           Alphabetical
         </MenuItem>
 
         <MenuItem
-          selected={sort.type == "missWeight"}
-          onClick={() => handleSelection("missWeight")}
+          selected={sort.type == 'missWeight'}
+          onClick={() => handleSelection('missWeight')}
         >
           {sort.inverted ? <NorthRoundedIcon /> : <SouthRoundedIcon />}
           Time To Complete
