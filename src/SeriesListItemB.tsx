@@ -1,29 +1,15 @@
 import {Box, Tooltip, Typography} from '@mui/material';
-import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  useMemo,
-  FC,
-} from 'react';
-import {render} from 'react-dom';
-import * as vis from 'vis-network';
-import cytoscape from 'cytoscape';
+import React, {FC, useLayoutEffect, useState} from 'react';
 
-import {useQuery, gql} from '@apollo/client';
-import Loader from './Loader';
-import {keycharm} from 'vis-network';
-import {seriesListElementType, statsType} from './Types';
-import {useSharedState} from './Store';
-import DoubleProgressWithContent from './DoubleProgressWithContent';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import {GridChildComponentProps, ListChildComponentProps} from 'react-window';
-import ButtonBase from '@mui/material/ButtonBase';
-import {FORMATS} from './Utils';
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
+import ButtonBase from '@mui/material/ButtonBase';
 import {useNavigate} from 'react-router-dom';
+import {GridChildComponentProps} from 'react-window';
+import DoubleProgressWithContent from './DoubleProgressWithContent';
+import {useSharedState} from './Store';
+import {seriesListElementType, statsType} from './Types';
+import {FORMATS} from './Utils';
 
 const SeriesListItem: FC<
   GridChildComponentProps<{seriesList: seriesListElementType[]}>
@@ -40,15 +26,15 @@ const SeriesListItem: FC<
   const {series, seriesPrime} = serieEl;
   const key = seriesPrime.id;
   const fixRounding =
-    (serieEl.stats['selected'].missPerWeight ?? 0) == 1 ? 1 : 0;
+    (serieEl.stats['selected'].missPerWeight ?? 0) === 1 ? 1 : 0;
 
   useLayoutEffect(() => {
     if (checked) {
-      if (state.seriesSelected?.seriesPrime.id != key) {
+      if (state.seriesSelected?.seriesPrime.id !== key) {
         setChecked(false);
       }
     } else {
-      if (state.seriesSelected?.seriesPrime.id == key) {
+      if (state.seriesSelected?.seriesPrime.id === key) {
         setChecked(true);
       }
     }
@@ -104,7 +90,7 @@ const SeriesListItem: FC<
             setState(state => {
               return {...state, seriesSelected: serieEl};
             });
-            navigate(serieEl.seriesPrime.id); //Very Important the order otherwise loop condition in router!
+            navigate({pathname: `${key}`, search: location.search}); //Very Important the order otherwise loop condition in router!
           }}
         >
           <Box
@@ -158,7 +144,7 @@ const SeriesListItem: FC<
                 ? undefined
                 : (Object.keys(serieEl.stats) as (keyof statsType)[]).map(
                     format => {
-                      if (format != 'selected' && serieEl.stats[format].tot) {
+                      if (format !== 'selected' && serieEl.stats[format].tot) {
                         return (
                           <Box
                             key={format}
@@ -238,8 +224,8 @@ const SeriesListItem: FC<
               }}
             >
               <Typography>
-                {serieEl.status == 'PLAN_TO_COMPLETE' ||
-                serieEl.status == 'COMPLETE'
+                {serieEl.status === 'PLAN_TO_COMPLETE' ||
+                serieEl.status === 'COMPLETE'
                   ? 100
                   : (serieEl.stats['selected'].gotPerWeight ?? 0) -
                     fixRounding +
@@ -311,7 +297,7 @@ const SeriesListItem: FC<
                   </Box>
                 </Tooltip>
               ) : undefined}
-              {(serieEl.stats['selected'].gotPerWeight ?? 0) - fixRounding ==
+              {(serieEl.stats['selected'].gotPerWeight ?? 0) - fixRounding ===
               100 ? (
                 <Box
                   sx={{
