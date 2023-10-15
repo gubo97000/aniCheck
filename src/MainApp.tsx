@@ -23,8 +23,8 @@ const MainApp: FC<BoxProps> = boxProps => {
       {isMobile ? (
         <Box sx={{bgcolor: 'background.default', height: '100%'}}>
           {/* 🐛 If domain is changed check if this is still ok */}
-          {location.pathname.split('/').length == 3 ? (
-            state.userOptions.vizMode == 'graph' ? (
+          {location.pathname.split('/').length === 3 ? (
+            state.userOptions.vizMode === 'graph' ? (
               <Viz
                 sx={{
                   height: '100vh',
@@ -88,7 +88,7 @@ const MainApp: FC<BoxProps> = boxProps => {
             position: 'relative',
           }}
         >
-          {state.userOptions.vizMode == 'graph' ? (
+          {state.userOptions.vizMode === 'graph' ? (
             <Viz
               sx={{
                 gridArea: 'viz',
@@ -101,7 +101,7 @@ const MainApp: FC<BoxProps> = boxProps => {
               }}
             />
           )}
-          {state.userOptions.vizMode == 'graph' ? (
+          {state.userOptions.vizMode === 'graph' ? (
             <Chip
               sx={{gridArea: 'viz', position: 'absolute', top: 10, right: 10}}
               label={'List View'}

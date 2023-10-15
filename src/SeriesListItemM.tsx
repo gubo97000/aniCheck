@@ -1,31 +1,12 @@
-import {Box, Tooltip, Typography} from '@mui/material';
-import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  useMemo,
-  FC,
-  memo,
-} from 'react';
-import {render} from 'react-dom';
-import * as vis from 'vis-network';
-import cytoscape from 'cytoscape';
+import {Box, Typography} from '@mui/material';
+import React, {FC, memo, useLayoutEffect, useState} from 'react';
 
-import {useQuery, gql} from '@apollo/client';
-import Loader from './Loader';
-import {keycharm} from 'vis-network';
-import {seriesListElementType, statsType} from './Types';
-import {useSharedState} from './Store';
-import DoubleProgressWithContent from './DoubleProgressWithContent';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import {GridChildComponentProps, ListChildComponentProps} from 'react-window';
 import ButtonBase from '@mui/material/ButtonBase';
-import {FORMATS} from './Utils';
-import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
-import ProgressBarStacked from './ProgressBarStacked';
 import {useNavigate} from 'react-router-dom';
+import {GridChildComponentProps} from 'react-window';
+import ProgressBarStacked from './ProgressBarStacked';
+import {useSharedState} from './Store';
+import {seriesListElementType} from './Types';
 
 const SeriesListItemM: FC<
   GridChildComponentProps<{seriesList: seriesListElementType[]}>
@@ -41,11 +22,11 @@ const SeriesListItemM: FC<
 
   useLayoutEffect(() => {
     if (checked) {
-      if (state.seriesSelected?.seriesPrime.id != key) {
+      if (state.seriesSelected?.seriesPrime.id !== key) {
         setChecked(false);
       }
     } else {
-      if (state.seriesSelected?.seriesPrime.id == key) {
+      if (state.seriesSelected?.seriesPrime.id === key) {
         setChecked(true);
       }
     }
@@ -100,7 +81,7 @@ const SeriesListItemM: FC<
             setState(state => {
               return {...state, seriesSelected: serieEl};
             });
-            navigate(`${key}`);
+            navigate({pathname: `${key}`, search: location.search});
           }}
         >
           <Box
@@ -146,195 +127,7 @@ const SeriesListItemM: FC<
                 left: '0px',
               }}
             />
-
-            {/* </Box> */}
-            {/* <Box
-              sx={{
-                gridArea: "bot-stat",
-                placeSelf: "stretch",
-                // bgcolor: "gray",
-                // h:"100%",
-                // w:"100%",
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                pl: "10px",
-              }}
-            >
-              {isScrolling
-                ? undefined
-                : (Object.keys(serieEl.stats) as (keyof statsType)[]).map(
-                    (format) => {
-                      if (format != "selected" && serieEl.stats[format].tot) {
-                        return (
-                          <Box
-                            key={format}
-                            sx={{
-                              display: "flex",
-                              flexWrap: "wrap",
-                              alignItems: "center",
-                              justifyContent: "center",
-
-                              mr: "6px",
-                              mb: "5px",
-                              color:
-                                serieEl.stats[format].tot -
-                                serieEl.stats[format].got
-                                  ? "gray"
-                                  : "primary.main",
-                              width: "40px",
-                              height: "40px",
-                              bgcolor: "white",
-                              // bgcolor:"rgba(255,255,255,0.9)",
-                              // backdropFilter: "blur(5px)",
-                              // clipPath: "circle(15px at center)",
-                              borderRadius: "50px",
-                              // textAlign: "center",
-                            }}
-                          >
-                            <DoubleProgressWithContent
-                              value1={Math.floor(
-                                (serieEl.stats[format].got /
-                                  serieEl.stats[format].tot) *
-                                  100
-                              )}
-                              value2={Math.floor(
-                                (serieEl.stats[format].plan /
-                                  serieEl.stats[format].tot) *
-                                  100
-                              )}
-                            >
-                              {FORMATS[format].icon}
-                            </DoubleProgressWithContent>
-                          </Box>
-                        );
-                      }
-                    }
-                  )}
-            </Box> */}
           </Box>
-
-          {/* <Box
-            sx={{
-              gridArea: "stats",
-              // placeSelf: "stretch",
-
-              display: "grid",
-              gridTemplateRows: "75% auto",
-              gridTemplateAreas: "'pie' 'weight'",
-              alignItems: "center",
-              justifyItems: "center",
-
-              // bgcolor: "white",
-              width: "100%",
-            }}
-          >
-            <DoubleProgressWithContent
-              value1={serieEl.stats["selected"].gotPerWeight ?? 0}
-              value2={serieEl.stats["selected"].planPerWeight ?? 0}
-              size={80}
-              sx={{
-                bgcolor: "rgba(0,2,2,0.2)",
-                gridArea: "pie",
-                backdropFilter: "blur(5px)",
-                borderRadius: "30px",
-                p: "5px",
-              }}
-            >
-              <Typography>
-                {serieEl.status == "PLAN_TO_COMPLETE" ||
-                serieEl.status == "COMPLETE"
-                  ? 100
-                  : (serieEl.stats["selected"].gotPerWeight ?? 0) +
-                    (serieEl.stats["selected"].planPerWeight ?? 0)}
-              </Typography>
-            </DoubleProgressWithContent>
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                justifyContent: " space-evenly",
-              }}
-            >
-              {serieEl.stats["selected"].planWeight ? (
-                <Tooltip
-                  placement="right"
-                  title={
-                    serieEl.stats["selected"].planWeight
-                      ? `${serieEl.stats["selected"].planWeight} minutes planned`
-                      : "You did it!"
-                  }
-                  disableInteractive
-                >
-                  <Box
-                    sx={{
-                      bgcolor: "rgba(0,2,2,0.2)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-
-                      color: "secondary.main",
-                      backdropFilter: "blur(10px)",
-                      p: "2px 8px",
-                      borderRadius: "10px",
-                      fontWeight: 600,
-                    }}
-                  >
-                    <AccessTimeIcon sx={{ mr: "3px" }} />
-                    {serieEl.stats["selected"].planWeight}
-                  </Box>
-                </Tooltip>
-              ) : undefined}
-              {serieEl.stats["selected"].missWeight ? (
-                <Tooltip
-                  placement="right"
-                  title={
-                    serieEl.stats["selected"].missWeight
-                      ? `${serieEl.stats["selected"].missWeight} minutes missing`
-                      : "You did it!"
-                  }
-                  disableInteractive
-                >
-                  <Box
-                    sx={{
-                      bgcolor: "rgba(0,2,2,0.2)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-
-                      color: "white",
-                      backdropFilter: "blur(10px)",
-                      p: "2px 8px",
-                      borderRadius: "10px",
-                      fontWeight: 600,
-                    }}
-                  >
-                    <AccessTimeIcon sx={{ mr: "3px" }} />
-                    {serieEl.stats["selected"].missWeight}
-                  </Box>
-                </Tooltip>
-              ) : undefined}
-              {serieEl.stats["selected"].gotPerWeight == 100 ? (
-                <Box
-                  sx={{
-                    bgcolor: "rgba(0,2,2,0.2)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-
-                    color: "primary.main",
-                    backdropFilter: "blur(10px)",
-                    p: "2px 8px",
-                    borderRadius: "10px",
-                    fontWeight: 600,
-                  }}
-                >
-                  <CheckCircleOutlineRoundedIcon sx={{ mr: "3px" }} />
-                  {"You did it!"}
-                </Box>
-              ) : undefined}
-            </Box>
-          </Box> */}
         </ButtonBase>
       }
     </Box>

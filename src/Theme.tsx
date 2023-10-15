@@ -1,17 +1,12 @@
-import {
-  PaletteMode,
-  ThemeProvider,
-  StyledEngineProvider,
-  useAutocomplete,
-} from '@mui/material';
+import {PaletteMode, ThemeProvider, StyledEngineProvider} from '@mui/material';
 import React, {FC, Children, isValidElement, ReactNode} from 'react';
 // import useAutocomplete from '@mui/material/useAutocomplete';
-
-import {useSharedState} from './Store';
 
 import {createTheme} from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Color from 'color';
+
+import {useSharedState} from './Store';
 
 // declare module '@mui/styles/defaultTheme' {
 //   // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -32,7 +27,7 @@ const Theme: FC<{children: ReactNode}> = ({children}) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   const mode = (() => {
-    if (state.userOptions.themeMode == 'auto') {
+    if (state.userOptions.themeMode === 'auto') {
       return prefersDarkMode ? 'dark' : ('light' as PaletteMode);
     } else {
       return state.userOptions.themeMode as PaletteMode;
@@ -59,8 +54,8 @@ const Theme: FC<{children: ReactNode}> = ({children}) => {
           .string(),
       },
       background: {
-        default: mode == 'light' ? '#EDF1F5' : '#121212',
-        paper: mode == 'light' ? 'white' : '#303030',
+        default: mode === 'light' ? '#EDF1F5' : '#121212',
+        paper: mode === 'light' ? 'white' : '#303030',
         // paper:"#EDF1F5",
       },
     },

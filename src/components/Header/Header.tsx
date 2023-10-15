@@ -3,20 +3,20 @@ import React, {FC} from 'react';
 import siteIcon from '/pwaicon.png';
 
 // import div from "@mui/material/div";
+import {ArrowBack} from '@mui/icons-material';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import {useSharedState} from '~/Store';
+import {useSearchParams} from 'react-router-dom';
 import LoaderHead from '~/LoaderHead';
 import StatusTabs from '~/StatusTabs';
-import {useSearchParams} from 'react-router-dom';
+import {useSharedState} from '~/Store';
 import SearchField from '~components/Header/SearchField';
-import {ArrowBack} from '@mui/icons-material';
 
 const Header: FC = () => {
   const [state, setState] = useSharedState();
   const [searchParams, setSearchParams] = useSearchParams();
   return (
-    <div>
+    <div data-mui-color-scheme="dark">
       <div
         style={{
           position: 'relative',
@@ -52,7 +52,7 @@ const Header: FC = () => {
             gridArea: 'head',
           }}
         />
-        {searchParams.get('s') != null ? (
+        {searchParams.get('s') !== null ? (
           <>
             <div
               style={{
@@ -133,7 +133,7 @@ const Header: FC = () => {
         )}
         <StatusTabs style={{gridArea: 'statusTabs'}} />
       </div>
-      {state.status[0] == 'loading' ? <LinearProgress /> : undefined}
+      {state.status[0] === 'loading' ? <LinearProgress /> : undefined}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import {Box} from '@mui/material';
+import {Box, useColorScheme} from '@mui/material';
 import React, {FC, useEffect} from 'react';
 
 import MenuItem from '@mui/material/MenuItem';
@@ -10,17 +10,10 @@ import {updateCompletion} from './Utils';
 
 const GeneralOptionsMenu: FC = () => {
   const [state, setState] = useSharedState();
+  const {mode, setMode} = useColorScheme();
 
   const handleChangeTheme = (event: SelectChangeEvent) => {
-    setState(state => {
-      return {
-        ...state,
-        userOptions: {
-          ...state.userOptions,
-          themeMode: event.target.value as userOptionType['themeMode'],
-        },
-      };
-    });
+    setMode(event.target.value as 'light' | 'dark' | 'system');
   };
   const handleChangeViz = (event: SelectChangeEvent) => {
     setState(state => {
@@ -53,11 +46,11 @@ const GeneralOptionsMenu: FC = () => {
           <Select
             labelId="select-theme"
             id="select-theme"
-            value={state.userOptions.themeMode}
+            value={mode}
             onChange={handleChangeTheme}
             sx={{width: '100px'}}
           >
-            <MenuItem value={'auto'}>Auto</MenuItem>
+            <MenuItem value={'system'}>System</MenuItem>
             <MenuItem value={'light'}>Light</MenuItem>
             <MenuItem value={'dark'}>Dark</MenuItem>
           </Select>
