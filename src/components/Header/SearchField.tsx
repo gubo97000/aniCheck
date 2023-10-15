@@ -1,4 +1,5 @@
-import {Input} from '@mui/material';
+import {ClearRounded} from '@mui/icons-material';
+import {IconButton, Input, InputAdornment} from '@mui/material';
 import React, {FC, useEffect, useState} from 'react';
 // import useAutocomplete from '@mui/material/useAutocomplete';
 
@@ -7,7 +8,7 @@ import {useSharedState} from '~/Store';
 import {seriesListElementType} from '~/Types';
 import {useDebounce} from '~lib/Hooks';
 
-const SearchField: FC = ({}) => {
+const SearchField: FC = () => {
   // console.log(props.children.props.children.props)
   const [state, setState] = useSharedState();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -29,6 +30,20 @@ const SearchField: FC = ({}) => {
       value={query}
       placeholder="Search..."
       autoFocus
+      endAdornment={
+        <InputAdornment position="end">
+          {query ? (
+            <IconButton
+              onClick={() => {
+                setQuery('');
+              }}
+              size="large"
+            >
+              <ClearRounded />
+            </IconButton>
+          ) : undefined}
+        </InputAdornment>
+      }
     />
   );
 };

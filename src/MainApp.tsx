@@ -139,9 +139,9 @@ const MainApp: FC<BoxProps> = boxProps => {
           />
         </Box>
       )}
-      <Notifier />;
-      <ManagerWorkerResult />;
-      <ManagerSeriesDict />;
+      <Notifier />
+      <ManagerWorkerResult />
+      <ManagerSeriesDict />
     </>
   );
 };

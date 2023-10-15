@@ -43,7 +43,7 @@ const MainRouting: FC<BoxProps> = boxProps => {
         <Route
           path=":userId"
           loader={({params}) => {
-            if (state.user.name != params.userId) return redirect('/');
+            if (state.user.name !== params.userId) return redirect('/');
             return null;
           }}
           // element={<SeriesList />}
