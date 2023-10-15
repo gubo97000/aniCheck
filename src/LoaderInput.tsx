@@ -157,42 +157,42 @@ const LoaderInput: FC<BoxProps> = ({...boxProps}) => {
     // onCompleted: syncCompute,
   });
 
-  useEffect(() => {
-    let status: globalStateType['status'][0] = 'ok';
-    let log: globalStateType['status'][1] = ' ';
-    if (statusUser.loading) {
-      status = 'loading';
-      log = 'Loading User Info';
-    } else if (statusAnime.loading) {
-      status = 'loading';
-      log = 'Loading your Anime List';
-    } else if (statusManga.loading) {
-      status = 'loading';
-      log = 'Loading your Manga List';
-    } else if (statusWorker == 'RUNNING') {
-      status = 'loading';
-      log = 'Computing received data';
-    } else if (statusUser.error) {
-      status = 'error';
-      log = statusUser.error.message;
-    } else if (statusAnime.error) {
-      status = 'error';
-      log = statusAnime.error.message;
-    } else if (statusManga.error) {
-      status = 'error';
-      log = statusManga.error.message;
-    }
-    setState(state => {
-      return {...state, status: [status, log]};
-    });
-  }, [statusUser, statusAnime, statusManga, statusWorker]);
+  // useEffect(() => {
+  //   let status: globalStateType['status'][0] = 'ok';
+  //   let log: globalStateType['status'][1] = ' ';
+  //   if (statusUser.loading) {
+  //     status = 'loading';
+  //     log = 'Loading User Info';
+  //   } else if (statusAnime.loading) {
+  //     status = 'loading';
+  //     log = 'Loading your Anime List';
+  //   } else if (statusManga.loading) {
+  //     status = 'loading';
+  //     log = 'Loading your Manga List';
+  //   } else if (statusWorker == 'RUNNING') {
+  //     status = 'loading';
+  //     log = 'Computing received data';
+  //   } else if (statusUser.error) {
+  //     status = 'error';
+  //     log = statusUser.error.message;
+  //   } else if (statusAnime.error) {
+  //     status = 'error';
+  //     log = statusAnime.error.message;
+  //   } else if (statusManga.error) {
+  //     status = 'error';
+  //     log = statusManga.error.message;
+  //   }
+  //   setState(state => {
+  //     return {...state, status: [status, log]};
+  //   });
+  // }, [statusUser, statusAnime, statusManga, statusWorker]);
 
   return (
     <Box {...boxProps}>
       <FormControl
         sx={{m: 1, width: '100%'}}
         variant="standard"
-        error={state.status[0] == 'error'}
+        error={state.status[0] === 'error'}
       >
         <Input
           sx={{
@@ -207,14 +207,14 @@ const LoaderInput: FC<BoxProps> = ({...boxProps}) => {
             setUsr(event.target.value);
           }}
           onKeyPress={ev => {
-            if (ev.key == 'Enter' && state.status[0] != 'loading') {
+            if (ev.key === 'Enter' && state.status[0] !== 'loading') {
               navigate(usr);
               startQuery();
             }
           }}
           endAdornment={
             <InputAdornment position="end">
-              {state.status[0] == 'loading' ? (
+              {state.status[0] === 'loading' ? (
                 <CircularProgress />
               ) : (
                 <IconButton
@@ -232,7 +232,7 @@ const LoaderInput: FC<BoxProps> = ({...boxProps}) => {
           }
         />
         <FormHelperText
-          error={state.status[0] == 'error'}
+          error={state.status[0] === 'error'}
           id="standard-weight-helper-text"
           sx={{}}
         >

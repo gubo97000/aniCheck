@@ -1,33 +1,11 @@
-import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  useMemo,
-  FC,
-} from 'react';
-import {render} from 'react-dom';
-import * as vis from 'vis-network';
-import cytoscape from 'cytoscape';
+import React, {FC} from 'react';
 
-import {useQuery, gql} from '@apollo/client';
-import {useSharedState} from './Store';
-import Loader from './Loader';
-import {keycharm} from 'vis-network';
-import {globalStateType} from './Types';
-import {FixedSizeList} from 'react-window';
-import AutoSizer from 'react-virtualized-auto-sizer';
-import SearchBox from './SearchBox';
-import SeriesList from './SeriesList';
-import OptionsModal from './OptionsModal';
-import StatusFilter from './StatusFilter';
-import {BoxProps} from '@mui/material/Box';
-import Box from '@mui/material/Box';
-import InfoModal from './InfoModal';
-import AniChika from './AniChika';
+import Box, {BoxProps} from '@mui/material/Box';
 import {Outlet} from 'react-router-dom';
-import StatusTabs from './StatusTabs';
+import AniChika from './AniChika';
+import InfoModal from './InfoModal';
+import OptionsModal from './OptionsModal';
+import {useSharedState} from './Store';
 import Header from './components/Header/Header';
 
 const Nav: FC<BoxProps> = boxProps => {

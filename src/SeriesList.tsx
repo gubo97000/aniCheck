@@ -1,31 +1,13 @@
 import {Box, BoxProps} from '@mui/material';
-import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  useMemo,
-  FC,
-  useCallback,
-} from 'react';
-import {render} from 'react-dom';
-import * as vis from 'vis-network';
-import cytoscape from 'cytoscape';
+import React, {FC, useEffect, useState} from 'react';
 
-import {useQuery, gql} from '@apollo/client';
-import {useSharedState} from './Store';
-import Loader from './Loader';
-import {keycharm} from 'vis-network';
-import {globalStateType, seriesListElementType} from './Types';
-import {FixedSizeGrid, FixedSizeList} from 'react-window';
+import {random} from 'lodash';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import SearchBox from './SearchBox';
-import {dataForCyto} from './Utils';
+import {FixedSizeGrid} from 'react-window';
 import SeriesListItemB from './SeriesListItemB';
 import SeriesListItemM from './SeriesListItemM';
-import {Scrollbars} from 'react-custom-scrollbars-2';
-import {random} from 'lodash';
+import {useSharedState} from './Store';
+import {seriesListElementType} from './Types';
 import {useMediaQuery} from './lib/Hooks';
 
 const SeriesList: FC<BoxProps> = boxProps => {
@@ -108,7 +90,7 @@ const SeriesList: FC<BoxProps> = boxProps => {
                 parseInt(state.userOptions.listLayout.split('.')[1])
               }
               rowHeight={
-                parseInt(state.userOptions.listLayout.split('.')[1]) == 1
+                parseInt(state.userOptions.listLayout.split('.')[1]) === 1
                   ? 130
                   : (61 * (width - 20)) /
                     parseInt(state.userOptions.listLayout.split('.')[1]) /
@@ -128,7 +110,7 @@ const SeriesList: FC<BoxProps> = boxProps => {
               // outerElementType={CustomScrollbarsVirtualList}
               // outerRef={outerRef}
             >
-              {state.userOptions.listLayout == 'g.1'
+              {state.userOptions.listLayout === 'g.1'
                 ? SeriesListItemB
                 : SeriesListItemM}
             </FixedSizeGrid>
