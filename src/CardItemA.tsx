@@ -78,8 +78,8 @@ const CardItemA: FC<props & BoxProps> = ({node, ...boxProps}) => {
             variant="filled"
             label={(() => {
               if (['MANGA', 'NOVEL', 'ONE_SHOT'].includes(node.format)) {
-                if (node.status == 'CURRENT') return 'Reading';
-                if (node.status == 'PLANNING') return 'Plan To Read';
+                if (node.status === 'CURRENT') return 'Reading';
+                if (node.status === 'PLANNING') return 'Plan To Read';
               }
               return STATUSES[node.status].label;
             })()}

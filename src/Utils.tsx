@@ -212,7 +212,7 @@ export const STATUSES: {
   },
 };
 //Release Status Dict
-export const RELEASE_STATUS: {
+const _RELEASE_STATUS: {
   [key in releaseStatusType]: {
     id: key;
     label: string;
@@ -265,6 +265,14 @@ export const RELEASE_STATUS: {
     color: 'secondary',
   },
 };
+// Preventing errors when accessing unknown status
+export const RELEASE_STATUS = new Proxy(_RELEASE_STATUS, {
+  get: function (target, prop, receiver) {
+    return prop in target
+      ? target[prop as releaseStatusType]
+      : target['UNKNOWN'];
+  },
+});
 
 /// Sort Functions
 export function sortWeight(
@@ -448,7 +456,7 @@ export const updateCompletion = (state: globalStateType) => {
           convertBulkTerm(bulkTerm, state.userOptions),
           value.stats
         );
-        if (got != 0 || plan != 0) {
+        if (got !== 0 || plan !== 0) {
           //Add stats only if got at least one for bulk term
           serieTot += tot;
           serieMiss += miss;
@@ -487,11 +495,11 @@ export const updateCompletion = (state: globalStateType) => {
       state.seriesDict[id].formatsIncluded = formatsIncluded;
 
       //Update Global Completion
-      if (serieTot != 0) {
-        if (serieGot == serieTot) {
+      if (serieTot !== 0) {
+        if (serieGot === serieTot) {
           state.seriesDict[id].status = 'COMPLETE';
           globalStats.got += 1;
-        } else if (serieGot + seriePlan == serieTot) {
+        } else if (serieGot + seriePlan === serieTot) {
           state.seriesDict[id].status = 'PLAN_TO_COMPLETE';
           globalStats.plan += 1;
         } else {
@@ -534,11 +542,11 @@ export const updateCompletion = (state: globalStateType) => {
       state.seriesDict[id].formatsIncluded = state.userOptions.completion;
 
       //Update Global Completion
-      if (tot != 0) {
-        if (got == tot) {
+      if (tot !== 0) {
+        if (got === tot) {
           state.seriesDict[id].status = 'COMPLETE';
           globalStats.got += 1;
-        } else if (got + plan == tot) {
+        } else if (got + plan === tot) {
           state.seriesDict[id].status = 'PLAN_TO_COMPLETE';
           globalStats.plan += 1;
         } else {
@@ -588,7 +596,7 @@ export const computeData = (
     // node.nextAiringEpisode ? console.log(node) : null
     const compWeight = (node: any) => {
       //Calculating the weight of the element
-      if (node.status == 'NOT_YET_RELEASED') return 1; //To avoid 100% weighted completion
+      if (node.status === 'NOT_YET_RELEASED') return 1; //To avoid 100% weighted completion
       if (node.chapters) return node.chapters * 5;
       if (node.volumes) return node.volumes * 50;
       if (node.episodes && node.duration) return node.episodes * node.duration;
@@ -600,12 +608,12 @@ export const computeData = (
       //Releasing not in List, API won't let me get nextAiringEpisode
       const strDate = Object.values(node.startDate)
         .filter(e => {
-          return e != 'FuzzyDate' && e;
+          return e !== 'FuzzyDate' && e;
         })
         .join('-');
       const days = (Date.now() - Date.parse(strDate)) / 8.64e7; //Get days passed from start date
-      if (node.format == 'MANGA') return Math.round(days / 8.2) * 5; //8.2 for approximation to One Piece episodes count
-      if (node.format == 'TV') return Math.round(days / 8.2) * 20;
+      if (node.format === 'MANGA') return Math.round(days / 8.2) * 5; //8.2 for approximation to One Piece episodes count
+      if (node.format === 'TV') return Math.round(days / 8.2) * 20;
       return Math.round(days / 8.2) * 20;
     };
 
@@ -629,7 +637,7 @@ export const computeData = (
       compWeight: compWeight(node),
       startDate: Object.values(node.startDate)
         .filter(e => {
-          return e != 'FuzzyDate' && e;
+          return e !== 'FuzzyDate' && e;
         })
         .join('-'),
     };
@@ -727,7 +735,7 @@ export const computeData = (
       .map(seriePart => {
         //Avoid unwatched orphan nodes after split
         if (
-          seriePart.nodes().length !=
+          seriePart.nodes().length !==
           seriePart.filter("node[status='NO']").length
         ) {
           // Finally save serie in list
