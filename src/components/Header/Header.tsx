@@ -21,10 +21,10 @@ const Header: FC = () => {
         style={{
           position: 'relative',
           display: 'grid',
-          gridTemplateRows: '50px 70px',
+          gridTemplateRows: 'env(safe-area-inset-top) 50px 70px',
           gridTemplateColumns: '50px 200px 1fr',
           gridTemplateAreas:
-            "'icon user head' 'statusTabs statusTabs statusTabs'",
+            "'- - -' 'icon user head' 'statusTabs statusTabs statusTabs'",
           alignItems: 'end',
 
           background: `url(${state.user.cover}) no-repeat center center`,

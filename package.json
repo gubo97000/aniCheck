@@ -69,6 +69,7 @@
     "vite": "^4.4.9",
     "vite-aliases": "^0.11.3",
     "vite-plugin-comlink": "^3.0.2",
+    "vite-plugin-mkcert": "^1.16.0",
     "vite-plugin-pwa": "^0.16.5"
   }
 }

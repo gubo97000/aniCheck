@@ -5,14 +5,21 @@ import {comlink} from 'vite-plugin-comlink';
 // import path from "path";
 import {fileURLToPath} from 'url';
 import {ViteAliases} from 'vite-aliases';
+import mkcert from 'vite-plugin-mkcert';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // server: {
+  //   https: true,
+  // },
   plugins: [
     react(),
     ViteAliases({
       useAbsolute: true,
     }),
+    // mkcert({
+    //   // hosts:
+    // }),
     VitePWA({
       // mode: "development",
       // strategies: 'injectManifest',
@@ -23,7 +30,7 @@ export default defineConfig({
         name: 'AniCheck',
         short_name: 'AniCheck',
         description: 'Check you Anime/Manga completion status',
-        display: 'fullscreen',
+        display: 'standalone',
         start_url: '/?standalone=true',
         icons: [
           {
@@ -53,6 +60,7 @@ export default defineConfig({
   worker: {
     plugins: [comlink()],
   },
+
   // resolve: {
   //   alias: [
   //     {
