@@ -27,22 +27,23 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "noEmitOnError": false,
     // "noImplicitAny": false,
     "jsx": "react",
+    "baseUrl": ".",
     "paths": {
       "~components/*": [
-        "/home/gubo97000/GProject/aniCheck/src/components/*"
+        "src/components/*"
       ],
       "~lib/*": [
-        "/home/gubo97000/GProject/aniCheck/src/lib/*"
+        "src/lib/*"
       ],
       "~/*": [
-        "/home/gubo97000/GProject/aniCheck/src/*"
+        "src/*"
       ]
     }
   },
@@ -51,6 +52,7 @@
     "node_modules/vite-plugin-pwa/client.d.ts"
   ],
   "exclude": [
+    "./node_modules",
     "./src/service-worker.ts"
   ]
 }

@@ -5,11 +5,7 @@ import {ApolloClient, InMemoryCache} from '@apollo/client';
 import {ApolloProvider} from '@apollo/client/react';
 import './index.css';
 import {SharedStateProvider} from './Store';
-// import { ThemeProvider, Theme, StyledEngineProvider } from "@mui/material/styles";
-// import Theme from './Theme';
 import {ThemeCss as Theme} from './ThemeCss';
-
-import {registerSW} from 'virtual:pwa-register';
 
 import {
   createBrowserRouter,
@@ -37,14 +33,14 @@ const router = createBrowserRouter(
   )
 );
 
-const updateSW = registerSW({
-  onNeedRefresh() {
-    // show a prompt to user
-  },
-  onOfflineReady() {
-    // show a ready to work offline to user
-  },
-});
+// const updateSW = registerSW({
+//   onNeedRefresh() {
+//     // show a prompt to user
+//   },
+//   onOfflineReady() {
+//     // show a ready to work offline to user
+//   },
+// });
 const container = document.getElementById('root');
 const root = createRoot(container!);
 root.render(
