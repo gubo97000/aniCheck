@@ -1,5 +1,5 @@
 import {Box, BoxProps} from '@mui/material';
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 
 import {random} from 'lodash';
 import {memo} from 'react-tracked';
@@ -85,7 +85,7 @@ const SeriesListSlide: FC<BoxProps & props> = ({seriesList, ...boxProps}) => {
                 parseInt(state.userOptions.listLayout.split('.')[1])
               }
               rowHeight={
-                parseInt(state.userOptions.listLayout.split('.')[1]) == 1
+                parseInt(state.userOptions.listLayout.split('.')[1]) === 1
                   ? 130
                   : (61 * (width - 20)) /
                     parseInt(state.userOptions.listLayout.split('.')[1]) /
@@ -105,7 +105,7 @@ const SeriesListSlide: FC<BoxProps & props> = ({seriesList, ...boxProps}) => {
               // outerElementType={CustomScrollbarsVirtualList}
               // outerRef={outerRef}
             >
-              {state.userOptions.listLayout == 'g.1'
+              {state.userOptions.listLayout === 'g.1'
                 ? SeriesListItemB
                 : SeriesListItemM}
             </FixedSizeGrid>

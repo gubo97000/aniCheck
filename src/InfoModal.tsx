@@ -1,10 +1,10 @@
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import React, {FC, useEffect, useRef, useState} from 'react';
-import {useSharedState} from './Store';
+import React, {FC, useEffect, useState} from 'react';
 import ReactMarkdown from 'react-markdown';
-import infoText from './info.md?raw';
 import gfm from 'remark-gfm';
+import {useSharedState} from './Store';
+import infoText from './info.md?raw';
 
 const InfoModal: FC = () => {
   const [state, setState] = useSharedState();

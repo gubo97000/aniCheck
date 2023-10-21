@@ -1,9 +1,9 @@
-import {FC, useCallback, useEffect} from 'react';
+import {FC, useEffect} from 'react';
 import {useSharedState} from './Store';
-import {useUpdateWorker} from './lib/useUpdateWorker';
+import {globalStateType} from './Types';
 import {updateCompletion} from './Utils';
 import {isCachesAvailable} from './lib/CacheUtils';
-import {globalStateType} from './Types';
+import {useUpdateWorker} from './lib/useUpdateWorker';
 
 //Ideally this component should be the only one processing the result from the worker
 const ManagerWorkerResult: FC = () => {

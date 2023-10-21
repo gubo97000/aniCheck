@@ -1,47 +1,12 @@
-import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  FC,
-} from 'react';
-import {render} from 'react-dom';
-import * as vis from 'vis-network';
-import cytoscape from 'cytoscape';
-import CytoscapeComponent from 'react-cytoscapejs';
+import React, {FC} from 'react';
 import {useSharedState} from './Store';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import {formatsBulkTermsType, globalStateType} from './Types';
-import {book} from './cytoIcons';
-import Stack from '@mui/material/Stack';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
+import {formatsBulkTermsType} from './Types';
 
-import cola from 'cytoscape-cola';
-import klay from 'cytoscape-klay';
-import dagre from 'cytoscape-dagre';
 // import elk from "cytoscape-elk";
-import popper from 'cytoscape-popper';
-import fcose from 'cytoscape-fcose';
-import nodeHtmlLabel from 'cytoscape-node-html-label';
-import {renderToString} from 'react-dom/server';
-import GraphNode from './GraphNode';
-import {
-  convertBulkTerm,
-  dataForCyto,
-  FORMATS,
-  getCyLayout,
-  getCyStyle,
-} from './Utils';
-import Badge from '@mui/material/Badge';
-import {BoxProps} from '@mui/material/Box';
-import Box from '@mui/material/Box';
-import CyToolbar from './CyToolbar';
-import Icon from '@mui/material/Icon';
 import {Typography} from '@mui/material';
+import Box, {BoxProps} from '@mui/material/Box';
 import CardItemA from './CardItemA';
+import {convertBulkTerm} from './Utils';
 type props = {
   category: formatsBulkTermsType;
 };

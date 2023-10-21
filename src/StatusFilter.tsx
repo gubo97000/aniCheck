@@ -1,4 +1,4 @@
-import {Box, Button, ButtonProps, Tab, Tabs} from '@mui/material';
+import {Box, Button, ButtonProps} from '@mui/material';
 import React, {FC} from 'react';
 // import useAutocomplete from '@mui/material/useAutocomplete';
 
@@ -117,7 +117,7 @@ const StatusFilter: FC = () => {
         {(state.globalStats?.tot ?? 0) -
           ((state.globalStats?.got ?? 0) +
             (state.globalStats?.miss ?? 0) +
-            (state.globalStats?.plan ?? 0)) ==
+            (state.globalStats?.plan ?? 0)) ===
         0 ? undefined : (
           <FilterButton
             statusId="ERR"

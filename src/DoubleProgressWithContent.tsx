@@ -1,29 +1,5 @@
-import {
-  Avatar,
-  Box,
-  Checkbox,
-  CircularProgress,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  useMemo,
-  FC,
-} from 'react';
-import {render} from 'react-dom';
-import * as vis from 'vis-network';
-import cytoscape from 'cytoscape';
-
-import {useQuery, gql} from '@apollo/client';
-import Loader from './Loader';
-import {keycharm} from 'vis-network';
-import {seriesListElementType} from './Types';
-import {useSharedState} from './Store';
+import {Box, CircularProgress, Tooltip} from '@mui/material';
+import React, {FC} from 'react';
 
 interface props {
   value1: number;

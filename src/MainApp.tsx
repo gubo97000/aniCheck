@@ -1,16 +1,16 @@
-import {BoxProps, Box, Chip, useMediaQuery} from '@mui/material';
-import React, {FC} from 'react';
-import ListViz from './ListViz';
-import Nav from './Nav';
-import {useSharedState} from './Store';
-import Viz from './Viz';
 import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import ViewModuleRoundedIcon from '@mui/icons-material/ViewModuleRounded';
-import {Outlet, useLocation} from 'react-router-dom';
-import Notifier from './Notifier';
-import ManagerWorkerResult from './ManagerWorkerResult';
-import {useUpdateWorker} from './lib/useUpdateWorker';
+import {Box, BoxProps, Chip, useMediaQuery} from '@mui/material';
+import React, {FC} from 'react';
+import {useLocation} from 'react-router-dom';
+import ListViz from './ListViz';
 import ManagerSeriesDict from './ManagerSeriesDict';
+import ManagerWorkerResult from './ManagerWorkerResult';
+import Nav from './Nav';
+import Notifier from './Notifier';
+import {useSharedState} from './Store';
+import Viz from './Viz';
+import {useUpdateWorker} from './lib/useUpdateWorker';
 
 const MainApp: FC<BoxProps> = boxProps => {
   const [state, setState] = useSharedState();

@@ -1,9 +1,9 @@
-import {PaletteMode, ThemeProvider, StyledEngineProvider} from '@mui/material';
-import React, {FC, Children, isValidElement, ReactNode} from 'react';
-// import useAutocomplete from '@mui/material/useAutocomplete';
+import React, {FC, ReactNode} from 'react';
 
-import {experimental_extendTheme as extendTheme} from '@mui/material/styles';
-import {Experimental_CssVarsProvider as CssVarsProvider} from '@mui/material/styles';
+import {
+  Experimental_CssVarsProvider as CssVarsProvider,
+  experimental_extendTheme as extendTheme,
+} from '@mui/material/styles';
 
 import Color from 'color';
 

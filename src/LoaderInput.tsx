@@ -6,7 +6,7 @@ import {
   Input,
   InputAdornment,
 } from '@mui/material';
-import React, {FC, useCallback, useEffect} from 'react';
+import React, {FC, useCallback} from 'react';
 
 import {useLazyQuery} from '@apollo/client';
 import EastRounded from '@mui/icons-material/EastRounded';
@@ -15,7 +15,6 @@ import {useNavigate} from 'react-router-dom';
 import {problematicNodes} from './ProblematicNodes';
 import * as Queries from './Queries';
 import {useSharedState} from './Store';
-import {globalStateType} from './Types';
 import {
   COLOR_CODES,
   computeData,

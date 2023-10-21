@@ -1,17 +1,13 @@
 import {Box, BoxProps, IconButton} from '@mui/material';
 import React, {FC, useEffect, useState} from 'react';
 // import useAutocomplete from '@mui/material/useAutocomplete';
+import {LogoutOutlined} from '@mui/icons-material';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
-import {
-  Filter1Rounded,
-  LogoutOutlined,
-  SortOutlined,
-} from '@mui/icons-material';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
-import {initialState, useSharedState} from './Store';
-import {deleteCache} from './lib/CacheUtils';
 import {useSearchParams} from 'react-router-dom';
 import SortMenu from './SortMenu';
+import {initialState, useSharedState} from './Store';
+import {deleteCache} from './lib/CacheUtils';
 
 const LoaderHead: FC<BoxProps> = boxProps => {
   const [state, setState] = useSharedState();

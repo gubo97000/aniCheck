@@ -1,5 +1,9 @@
 {
     "extends": [
-        "./node_modules/gts"
+        "./node_modules/gts",
+        "plugin:react/recommended",
+    ],
+    "plugins": [
+        "react"
     ]
 }

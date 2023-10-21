@@ -1,12 +1,22 @@
+import AdjustRoundedIcon from '@mui/icons-material/AdjustRounded';
+import AlbumRoundedIcon from '@mui/icons-material/AlbumRounded';
+import BookIcon from '@mui/icons-material/Book';
+import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
+import CloudCircleIcon from '@mui/icons-material/CloudCircle';
+import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import MusicVideoIcon from '@mui/icons-material/MusicVideo';
+import PauseCircleOutlineRoundedIcon from '@mui/icons-material/PauseCircleOutlineRounded';
+import PlayCircleOutlineRoundedIcon from '@mui/icons-material/PlayCircleOutlineRounded';
+import TheatersIcon from '@mui/icons-material/Theaters';
+import TvIcon from '@mui/icons-material/Tv';
 import cytoscape from 'cytoscape';
+import {random} from 'lodash';
 import React from 'react';
-import {avoidNodes} from './ProblematicNodes';
-import {useSharedState} from './Store';
 import {
   formatsBulkTermsType,
   formatsType,
   globalStateType,
-  NodeType,
   relationsType,
   releaseStatusType,
   seriesListElementType,
@@ -15,21 +25,6 @@ import {
   statusType,
   userOptionType,
 } from './Types';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
-import TvIcon from '@mui/icons-material/Tv';
-import MusicVideoIcon from '@mui/icons-material/MusicVideo';
-import BookIcon from '@mui/icons-material/Book';
-import TheatersIcon from '@mui/icons-material/Theaters';
-import AlbumRoundedIcon from '@mui/icons-material/AlbumRounded';
-import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded';
-import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
-import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
-import AdjustRoundedIcon from '@mui/icons-material/AdjustRounded';
-import CloudCircleIcon from '@mui/icons-material/CloudCircle';
-import PlayCircleOutlineRoundedIcon from '@mui/icons-material/PlayCircleOutlineRounded';
-import PauseCircleOutlineRoundedIcon from '@mui/icons-material/PauseCircleOutlineRounded';
-import {isCachesAvailable} from './lib/CacheUtils';
-import {random} from 'lodash';
 
 /// CONSTANTS
 export const FORMATS_IDS: formatsType[] = [

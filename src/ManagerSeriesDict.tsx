@@ -1,11 +1,9 @@
-import {FC, useCallback, useEffect} from 'react';
-import {useSharedState} from './Store';
-import {useUpdateWorker} from './lib/useUpdateWorker';
-import {getSortFc, updateCompletion} from './Utils';
-import {isCachesAvailable} from './lib/CacheUtils';
-import {globalStateType, serieStatusType, seriesListElementType} from './Types';
-import {useSearchParams} from 'react-router-dom';
 import {matchSorter} from 'match-sorter';
+import {FC, useEffect} from 'react';
+import {useSearchParams} from 'react-router-dom';
+import {useSharedState} from './Store';
+import {serieStatusType, seriesListElementType} from './Types';
+import {getSortFc} from './Utils';
 import {SERIE_STATUS} from './lib/consts';
 
 //Ideally this component should be the only one processing the result from the worker

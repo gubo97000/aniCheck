@@ -1,21 +1,12 @@
 import {Box, Switch} from '@mui/material';
-import React, {useEffect, FC} from 'react';
-
-import {useSharedState} from './Store';
-import {formatsType} from './Types';
-import {
-  convertBulkTerm,
-  FORMATS,
-  FORMATS_IDS,
-  getBulkStat,
-  sortAlphabetical,
-  sortComplete,
-  updateCompletion,
-} from './Utils';
-import xor from 'lodash/xor';
 import Divider from '@mui/material/Divider';
+import xor from 'lodash/xor';
+import React, {FC, useEffect} from 'react';
 import {ButtonInputRow} from './ButtonInputRow';
 import {FilterGroup} from './FilterGroup';
+import {useSharedState} from './Store';
+import {formatsType} from './Types';
+import {FORMATS, FORMATS_IDS, updateCompletion} from './Utils';
 
 const CompletionMenu: FC = () => {
   const [state, setState] = useSharedState();

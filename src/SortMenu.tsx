@@ -1,43 +1,12 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Grid,
-  IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
-  Menu,
-  MenuItem,
-  RadioGroup,
-  TextField,
-  useAutocomplete,
-} from '@mui/material';
-import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  useMemo,
-  FC,
-  Children,
-  isValidElement,
-} from 'react';
+import {Box, IconButton, Menu, MenuItem} from '@mui/material';
+import React, {FC, useEffect} from 'react';
 // import useAutocomplete from '@mui/material/useAutocomplete';
-import {render} from 'react-dom';
-import * as vis from 'vis-network';
-import cytoscape from 'cytoscape';
-import {useQuery, gql} from '@apollo/client';
-import {useSharedState} from './Store';
-import {globalStateType, seriesListElementType, sortType} from './Types';
-import {sortAlphabetical, sortComplete} from './Utils';
-import SortRoundedIcon from '@mui/icons-material/SortRounded';
 import NorthRoundedIcon from '@mui/icons-material/NorthRounded';
+import SortRoundedIcon from '@mui/icons-material/SortRounded';
 import SouthRoundedIcon from '@mui/icons-material/SouthRounded';
 import {BoxProps} from '@mui/material/Box';
+import {useSharedState} from './Store';
+import {sortType} from './Types';
 import {useStateWithLocalStorage} from './lib/Hooks';
 
 const SortMenu: FC<BoxProps> = boxProps => {
@@ -63,7 +32,7 @@ const SortMenu: FC<BoxProps> = boxProps => {
   };
   const handleSelection = (chosenType: sortType['type']) => {
     //If already chosen: invert
-    if (sort.type == chosenType) {
+    if (sort.type === chosenType) {
       setSort({type: chosenType, inverted: !sort.inverted});
     } else {
       setSort({...sort, type: chosenType});
@@ -110,7 +79,7 @@ const SortMenu: FC<BoxProps> = boxProps => {
         </MenuItem> */}
 
         <MenuItem
-          selected={sort.type == 'weight%'}
+          selected={sort.type === 'weight%'}
           onClick={() => handleSelection('weight%')}
         >
           {sort.inverted ? <NorthRoundedIcon /> : <SouthRoundedIcon />}
@@ -118,7 +87,7 @@ const SortMenu: FC<BoxProps> = boxProps => {
         </MenuItem>
 
         <MenuItem
-          selected={sort.type == 'alphabetical'}
+          selected={sort.type === 'alphabetical'}
           onClick={() => handleSelection('alphabetical')}
         >
           {sort.inverted ? <NorthRoundedIcon /> : <SouthRoundedIcon />}
@@ -126,7 +95,7 @@ const SortMenu: FC<BoxProps> = boxProps => {
         </MenuItem>
 
         <MenuItem
-          selected={sort.type == 'missWeight'}
+          selected={sort.type === 'missWeight'}
           onClick={() => handleSelection('missWeight')}
         >
           {sort.inverted ? <NorthRoundedIcon /> : <SouthRoundedIcon />}

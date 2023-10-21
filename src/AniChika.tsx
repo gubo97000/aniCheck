@@ -1,7 +1,6 @@
-import React, {FC, useState} from 'react';
-
 import {Typography} from '@mui/material';
 import Box, {BoxProps} from '@mui/material/Box';
+import React, {FC, useState} from 'react';
 import LoaderInput from './LoaderInput';
 import {useSharedState} from './Store';
 

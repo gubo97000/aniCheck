@@ -1,24 +1,15 @@
-import {BoxProps, Box, Chip} from '@mui/material';
+import {BoxProps} from '@mui/material';
 import React, {FC} from 'react';
-import ListViz from './ListViz';
-import Nav from './Nav';
 import {useSharedState} from './Store';
-import Viz from './Viz';
-import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
-import ViewModuleRoundedIcon from '@mui/icons-material/ViewModuleRounded';
 // import { Outlet, Route } from "react-router-dom";
-import MainApp from './MainApp';
-import SeriesList from './SeriesList';
 import {
-  BrowserRouter,
   Route,
   RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
   redirect,
-  useLocation,
 } from 'react-router-dom';
-import {isNull} from 'lodash';
+import MainApp from './MainApp';
 import NavSlides from './NavSlides';
 
 const MainRouting: FC<BoxProps> = boxProps => {

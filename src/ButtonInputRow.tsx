@@ -1,19 +1,6 @@
-import {Box, BoxProps, Typography, useAutocomplete} from '@mui/material';
-import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  useMemo,
-  FC,
-  Children,
-  isValidElement,
-} from 'react';
+import {Box, BoxProps, Typography} from '@mui/material';
 import ButtonBase from '@mui/material/ButtonBase';
-import SelectAllRoundedIcon from '@mui/icons-material/SelectAllRounded';
-import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
-import Divider from '@mui/material/Divider';
+import React, {FC} from 'react';
 
 type props = {
   name: string;

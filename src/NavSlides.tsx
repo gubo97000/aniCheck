@@ -1,11 +1,9 @@
-import React, {FC, memo, useEffect, useMemo} from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
-import Nav from './Nav';
-import {useSharedState} from './Store';
-import {serieStatusType, seriesListElementType, statusType} from './Types';
-import SeriesListSlide from './SeriesListSlide';
-import {SERIE_STATUS} from './lib/consts';
+import React, {FC, useEffect} from 'react';
 import {getUntrackedObject} from 'react-tracked';
+import SeriesListSlide from './SeriesListSlide';
+import {useSharedState} from './Store';
+import {SERIE_STATUS} from './lib/consts';
 
 export const NavSlides: FC = () => {
   const [state, setState] = useSharedState();

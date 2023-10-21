@@ -1,8 +1,6 @@
 import {ClearRounded} from '@mui/icons-material';
 import {IconButton, Input, InputAdornment} from '@mui/material';
 import React, {FC, useEffect, useState} from 'react';
-// import useAutocomplete from '@mui/material/useAutocomplete';
-
 import {URLSearchParamsInit, useSearchParams} from 'react-router-dom';
 import {useSharedState} from '~/Store';
 import {seriesListElementType} from '~/Types';

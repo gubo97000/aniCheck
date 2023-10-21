@@ -1,14 +1,7 @@
-import cytoscape from 'cytoscape';
-import React, {
-  createContext,
-  FC,
-  useContext,
-  useReducer,
-  useState,
-} from 'react';
+import {useState} from 'react';
 import {createContainer} from 'react-tracked';
-import {globalStateType, userOptionType} from './Types';
-import {FORMATS_IDS, sortAlphabetical} from './Utils';
+import {globalStateType} from './Types';
+import {FORMATS_IDS} from './Utils';
 // import Reducer from './Reducer'
 
 export const initialState: globalStateType = {

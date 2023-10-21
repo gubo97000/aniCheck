@@ -1,19 +1,13 @@
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import React, {FC, useEffect, useState} from 'react';
-import {useSharedState} from './Store';
-import SortMenu from './SortMenu';
-import CompletionMenu from './CompletionMenu';
-import Paper from '@mui/material/Paper';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import CyFilterMenu from './CyFilterMenu';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Tab from '@mui/material/Tab';
+import React, {useEffect, useState} from 'react';
+import CompletionMenu from './CompletionMenu';
 import GeneralOptionsMenu from './GeneralOptionsMenu';
+import {useSharedState} from './Store';
 
 export default function OptionsModal() {
   const [state, setState] = useSharedState();

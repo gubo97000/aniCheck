@@ -1,22 +1,19 @@
-import React, {useState, useEffect, useMemo, FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 
-import {useQuery, gql} from '@apollo/client';
-import {useSharedState} from './Store';
-import {BoxProps} from '@mui/material/Box';
-import Box from '@mui/material/Box';
-import InfoModal from './InfoModal';
 import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
-import {Stack, Button, Badge, Divider, Tooltip} from '@mui/material';
-import {getCyLayout} from './Utils';
-import IconButton from '@mui/material/IconButton';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
-import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
-import CenterFocusStrongRoundedIcon from '@mui/icons-material/CenterFocusStrongRounded';
-import Popper from '@mui/material/Popper';
-import CyFilterMenu from './CyFilterMenu';
 import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
+import CenterFocusStrongRoundedIcon from '@mui/icons-material/CenterFocusStrongRounded';
+import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
+import {Badge, Divider, Stack, Tooltip} from '@mui/material';
+import Box, {BoxProps} from '@mui/material/Box';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+import IconButton from '@mui/material/IconButton';
+import Popper from '@mui/material/Popper';
+import CyFilterMenu from './CyFilterMenu';
+import {useSharedState} from './Store';
+import {getCyLayout} from './Utils';
 
 type props = {
   // badge: number;

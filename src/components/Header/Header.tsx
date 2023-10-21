@@ -1,16 +1,14 @@
-import {Avatar, IconButton} from '@mui/material';
-import React, {FC} from 'react';
-import siteIcon from '/pwaicon.png';
-
-// import div from "@mui/material/div";
 import {ArrowBack} from '@mui/icons-material';
+import {Avatar, IconButton} from '@mui/material';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
+import React, {FC} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import LoaderHead from '~/LoaderHead';
 import StatusTabs from '~/StatusTabs';
 import {useSharedState} from '~/Store';
 import SearchField from '~components/Header/SearchField';
+import siteIcon from '/pwaicon.png';
 
 const Header: FC = () => {
   const [state, setState] = useSharedState();

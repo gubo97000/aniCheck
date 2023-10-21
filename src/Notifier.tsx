@@ -1,4 +1,3 @@
-import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import React, {FC} from 'react';
 import {useSharedState} from './Store';

@@ -1,7 +1,5 @@
-import React, {FC} from 'react';
-// import useAutocomplete from '@mui/material/useAutocomplete';
-
 import xor from 'lodash/xor';
+import React, {FC} from 'react';
 import {FilterGroup} from './FilterGroup';
 import {useSharedState} from './Store';
 import {formatsType} from './Types';

@@ -1,5 +1,5 @@
-import type {} from '@mui/material/themeCssVarsAugmentation';
 import {Box, useTheme} from '@mui/material';
+import type {} from '@mui/material/themeCssVarsAugmentation';
 import React, {FC} from 'react';
 
 interface props {

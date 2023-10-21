@@ -1,40 +1,12 @@
-import {
-  Avatar,
-  Button,
-  CircularProgress,
-  FormControl,
-  FormHelperText,
-  Grid,
-  IconButton,
-  Input,
-  InputAdornment,
-  InputLabel,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
-  TextField,
-} from '@mui/material';
-import React, {
-  useState,
-  useRef,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  FC,
-} from 'react';
-import {render} from 'react-dom';
-import * as vis from 'vis-network';
-import cytoscape, {EdgeCollection} from 'cytoscape';
+import {Avatar} from '@mui/material';
+import React, {FC} from 'react';
 import siteIcon from '/pwaicon.png';
 
-import {parseAndCheckHttpResponse, useLazyQuery} from '@apollo/client';
-import {useSharedState} from './Store';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
-import LoaderHead from './LoaderHead';
 import Typography from '@mui/material/Typography';
+import LoaderHead from './LoaderHead';
+import {useSharedState} from './Store';
 
 const Loader: FC = () => {
   const [state, setState] = useSharedState();

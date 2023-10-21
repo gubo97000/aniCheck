@@ -1,4 +1,4 @@
-import {Box, Button, ButtonProps, Tab, Tabs} from '@mui/material';
+import {Tab, Tabs} from '@mui/material';
 import React, {FC} from 'react';
 // import useAutocomplete from '@mui/material/useAutocomplete';
 
@@ -6,8 +6,6 @@ import AdjustRoundedIcon from '@mui/icons-material/AdjustRounded';
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
 import CloudCircleIcon from '@mui/icons-material/CloudCircle';
 import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
-import Tooltip from '@mui/material/Tooltip';
-import without from 'lodash/without';
 import {useSharedState} from './Store';
 import {serieStatusType} from './Types';
 const NumberPill: FC<{children: React.ReactNode; color?: string}> = ({
@@ -104,7 +102,7 @@ const StatusTabs: FC<React.HTMLAttributes<HTMLDivElement>> = props => {
       {(state.globalStats?.tot ?? 0) -
         ((state.globalStats?.got ?? 0) +
           (state.globalStats?.miss ?? 0) +
-          (state.globalStats?.plan ?? 0)) ==
+          (state.globalStats?.plan ?? 0)) ===
       0 ? undefined : (
         <Tab
           sx={sx}

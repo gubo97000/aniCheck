@@ -1,7 +1,7 @@
-import {useState, useEffect, useCallback, Dispatch} from 'react';
+import {Dispatch, useEffect, useState} from 'react';
+import {singletonHook} from 'react-singleton-hook';
 import {useSharedState} from '../Store';
 import {talkingWorker} from './WebWorkersInterfaces';
-import {singletonHook} from 'react-singleton-hook';
 //sabre
 const IHateSingletonHookCreator = (
   action: 'fullUpdate',

@@ -1,14 +1,11 @@
-import {useState, useEffect, useCallback, useRef, useLayoutEffect} from 'react';
-import {useSharedState} from '../Store';
 import {useLazyQuery} from '@apollo/client';
-import {COLOR_CODES, relationPriority, updateCompletion} from '../Utils';
-import * as Queries from '../Queries';
+import {useCallback, useEffect, useState} from 'react';
 import {problematicNodes} from '../ProblematicNodes';
+import * as Queries from '../Queries';
+import {useSharedState} from '../Store';
 import {globalStateType} from '../Types';
-import {workerInstance, workerPort} from './WebWorkersInterfaces';
-import {createEndpoint, wrap} from 'comlink';
-import {use} from 'cytoscape';
-import {talkingWorker} from './WebWorkersInterfaces';
+import {COLOR_CODES, relationPriority, updateCompletion} from '../Utils';
+import {workerInstance} from './WebWorkersInterfaces';
 
 /// HOOKS
 //Local storage hook
