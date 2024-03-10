@@ -3,8 +3,8 @@
     "typescript.preferences.importModuleSpecifier": "non-relative",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true,
-        "source.organizeImports": true
+        "source.fixAll.eslint": "explicit",
+        "source.organizeImports": "explicit"
     },
     "eslint.rules.customizations": [
         { // AutoFixed anyway

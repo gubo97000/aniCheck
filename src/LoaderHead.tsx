@@ -1,4 +1,4 @@
-import {Box, BoxProps, IconButton} from '@mui/material';
+import {Box, BoxProps, IconButton, Tooltip} from '@mui/material';
 import React, {FC, useEffect, useState} from 'react';
 // import useAutocomplete from '@mui/material/useAutocomplete';
 import {LogoutOutlined} from '@mui/icons-material';
@@ -52,32 +52,34 @@ const LoaderHead: FC<BoxProps> = boxProps => {
       ) : undefined}
 
       {state.user.name ? (
-        <IconButton
-          sx={{
-            //   m: "3px",
-            p: '8px',
-            backdropFilter: 'blur(8px)',
-            bgcolor: 'rgba(255,255,255,0.5)',
-            gridArea: 'logout',
-            border: '1px solid',
-            borderColor: 'primary.main',
-            color: 'primary.main',
-            ':hover': {
-              bgcolor: 'rgba(255,255,255,0.3)',
-            },
-          }}
-          onClick={() => {
-            //Delete cache
-            deleteCache(state.user.name ?? '');
-            //Clear state
-            setState(initialState);
-            //Redirect to login
-            // window.location.href = "/aniCheck/";
-          }}
-          size="large"
-        >
-          <LogoutOutlined />
-        </IconButton>
+        <Tooltip title="Logout, SETTINGS WILL RESET">
+          <IconButton
+            sx={{
+              //   m: "3px",
+              p: '8px',
+              backdropFilter: 'blur(8px)',
+              bgcolor: 'rgba(255,255,255,0.5)',
+              gridArea: 'logout',
+              border: '1px solid',
+              borderColor: 'primary.main',
+              color: 'primary.main',
+              ':hover': {
+                bgcolor: 'rgba(255,255,255,0.3)',
+              },
+            }}
+            onClick={() => {
+              //Delete cache
+              deleteCache(state.user.name ?? '');
+              //Clear state
+              setState(initialState);
+              //Redirect to login
+              // window.location.href = "/aniCheck/";
+            }}
+            size="large"
+          >
+            <LogoutOutlined />
+          </IconButton>
+        </Tooltip>
       ) : undefined}
       <IconButton
         sx={{
