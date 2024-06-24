@@ -2,7 +2,7 @@ import {Box, BoxProps} from '@mui/material';
 import React, {FC} from 'react';
 
 import {random} from 'lodash';
-import {memo} from 'react-tracked';
+import {memo} from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import {FixedSizeGrid} from 'react-window';
 import SeriesListItemB from './SeriesListItemB';

@@ -20,7 +20,7 @@ const Header: FC = () => {
           position: 'relative',
           display: 'grid',
           gridTemplateRows: 'env(safe-area-inset-top) 50px 70px',
-          gridTemplateColumns: '50px 200px 1fr',
+          gridTemplateColumns: '50px 1fr 1fr',
           gridTemplateAreas:
             "'- - -' 'icon user head' 'statusTabs statusTabs statusTabs'",
           alignItems: 'end',

@@ -9,9 +9,8 @@ export const NavSlides: FC = () => {
   const [state, setState] = useSharedState();
   const [emblaRef, emblaApi] = useEmblaCarousel({
     startIndex: SERIE_STATUS.indexOf(
-      getUntrackedObject(state.userOptions.statusSelect) ?? 'NOT_COMPLETE'
+      getUntrackedObject(state)?.userOptions.statusSelect ?? 'NOT_COMPLETE'
     ),
-    // startIndex: SERIE_STATUS.indexOf("NOT_COMPLETE"),
   });
 
   //Add listener for changing status on drag

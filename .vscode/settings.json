@@ -19,5 +19,15 @@
             "rule": "node/no-unpublished-import",
             "severity": "off"
         }
-    ]
+    ],
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#34baff",
+        "activityBar.background": "#34baff",
+        "activityBar.foreground": "#15202b",
+        "activityBar.inactiveForeground": "#15202b99",
+        "activityBarBadge.background": "#df0093",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "sash.hoverBorder": "#34baff"
+    },
+    "peacock.color": "#01A9FF"
 }

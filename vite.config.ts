@@ -1,7 +1,6 @@
 import react from '@vitejs/plugin-react';
 import {defineConfig} from 'vite';
 import {ViteAliases} from 'vite-aliases';
-import {comlink} from 'vite-plugin-comlink';
 import {VitePWA} from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
@@ -12,7 +11,7 @@ export default defineConfig({
   plugins: [
     react(),
     ViteAliases({
-      
+      depth: 1,
       // useAbsolute: true,
     }),
     // mkcert({
@@ -30,6 +29,7 @@ export default defineConfig({
         description: 'Check you Anime/Manga completion status',
         display: 'standalone',
         start_url: '/?standalone=true',
+        theme_color: '#000000',
         icons: [
           {
             src: 'pwaicon.png',
@@ -46,7 +46,7 @@ export default defineConfig({
         enabled: true,
       },
     }),
-    comlink(),
+    // comlink(),
   ],
   // base: "/aniCheck/",
   base: '/',
@@ -56,7 +56,9 @@ export default defineConfig({
   //   },
   // },
   worker: {
-    plugins: [comlink()],
+    plugins: () => [
+      // comlink()
+    ],
   },
 
   build: {

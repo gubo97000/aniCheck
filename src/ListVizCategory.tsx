@@ -3,8 +3,9 @@ import {useSharedState} from './Store';
 import {formatsBulkTermsType} from './Types';
 
 // import elk from "cytoscape-elk";
-import {Typography} from '@mui/material';
+import {Typography, useMediaQuery} from '@mui/material';
 import Box, {BoxProps} from '@mui/material/Box';
+import CardItemMobile from '~/CardItemMobile';
 import CardItemA from './CardItemA';
 import {convertBulkTerm} from './Utils';
 type props = {
@@ -13,6 +14,7 @@ type props = {
 const ListVizCategory: FC<props & BoxProps> = ({category, ...boxProps}) => {
   // const graphBox = useRef(null)
   const [state, setState] = useSharedState();
+  const isMobile = useMediaQuery('(max-width: 600px)');
   const nodes = state.seriesSelected?.series.nodes.filter(node => {
     return convertBulkTerm(category, {
       ...state.userOptions,
@@ -50,19 +52,39 @@ const ListVizCategory: FC<props & BoxProps> = ({category, ...boxProps}) => {
       >
         {category.toUpperCase()}
       </Typography>
-      <Box
-        gridArea="eles"
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'flex-start',
-          alignContent: 'flex-start',
-        }}
-      >
-        {nodes.map(node => {
-          return <CardItemA key={node.id} node={node} />;
-        })}
-      </Box>
+      {isMobile ? (
+        <>
+          <Box
+            gridArea="eles"
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'flex-start',
+              alignContent: 'flex-start',
+            }}
+          >
+            {nodes.map(node => {
+              return <CardItemMobile key={node.id} node={node} />;
+            })}
+          </Box>
+        </>
+      ) : (
+        <>
+          <Box
+            gridArea="eles"
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'flex-start',
+              alignContent: 'flex-start',
+            }}
+          >
+            {nodes.map(node => {
+              return <CardItemA key={node.id} node={node} />;
+            })}
+          </Box>
+        </>
+      )}
     </Box>
   ) : (
     <Box />

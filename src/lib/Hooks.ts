@@ -1,11 +1,5 @@
-import {useLazyQuery} from '@apollo/client';
 import {useCallback, useEffect, useState} from 'react';
-import {problematicNodes} from '../ProblematicNodes';
-import * as Queries from '../Queries';
-import {useSharedState} from '../Store';
-import {globalStateType} from '../Types';
-import {COLOR_CODES, relationPriority, updateCompletion} from '../Utils';
-import {workerInstance} from './WebWorkersInterfaces';
+// import {workerInstance} from './WebWorkersInterfaces';
 
 /// HOOKS
 //Local storage hook
@@ -148,113 +142,113 @@ export const useMediaQuery = (query: string) => {
 };
 
 //
-export const useAPIs = () => {
-  const [state, setState] = useSharedState();
-  const wComputeData = useCallback(
-    async (
-      data: any[],
-      relationPriority: {
-        [key: string]: number;
-      },
-      problematicEles: string[]
-    ) => {
-      console.log('ComputeData');
-      return await workerInstance.wComputeData(
-        data,
-        relationPriority,
-        problematicEles
-      );
-    },
-    []
-  );
-  const computeUser = () => {
-    setState(state => {
-      return {
-        ...state,
-        user: {
-          name: statusUser.data.User.name,
-          color:
-            COLOR_CODES[statusUser.data.User.options.profileColor] ??
-            statusUser.data.User.options.profileColor,
-          avatar: statusUser.data.User.avatar.medium,
-          cover: statusUser.data.User.bannerImage,
-        },
-      };
-    });
-  };
-  const asyncCompute = async () => {
-    const seriesDict = await wComputeData(
-      [
-        ...statusAnime.data.MediaListCollection.lists,
-        ...statusManga.data.MediaListCollection.lists,
-      ],
-      relationPriority,
-      problematicNodes
-    );
-    // setState(state => { return { ...state, seriesDict: seriesDict, } })
-    setState(state => updateCompletion({...state, seriesDict: seriesDict}));
-  };
-  //Apollo queries creation
-  const [getUser, statusUser] = useLazyQuery(Queries.GET_USER, {
-    notifyOnNetworkStatusChange: true,
-    onCompleted: () => {
-      computeUser();
-      getAnimeLists({
-        variables: {user: state.user.name, type: 'ANIME'},
-      });
-    },
-  });
-  const [getAnimeLists, statusAnime] = useLazyQuery(Queries.GET_LISTS, {
-    notifyOnNetworkStatusChange: true,
-    onCompleted: () => {
-      getMangaLists({
-        variables: {user: state.user.name, type: 'MANGA'},
-      });
-    },
-  });
-  const [getMangaLists, statusManga] = useLazyQuery(Queries.GET_LISTS, {
-    notifyOnNetworkStatusChange: true,
-    onCompleted: asyncCompute,
-    // onCompleted: syncCompute,
-  });
-  useEffect(() => {
-    let status: globalStateType['status'][0] = 'success';
-    let log: globalStateType['status'][1] = ' ';
-    if (statusUser.loading) {
-      status = 'loading';
-      log = 'Loading User Info';
-    } else if (statusAnime.loading) {
-      status = 'loading';
-      log = 'Loading your Anime List';
-    } else if (statusManga.loading) {
-      status = 'loading';
-      log = 'Loading your Manga List';
-      // } else if (statusWorker == "RUNNING") {
-      //   status = "loading";
-      //   log = "Computing received data";
-    } else if (statusUser.error) {
-      status = 'error';
-      log = statusUser.error.message;
-    } else if (statusAnime.error) {
-      status = 'error';
-      log = statusAnime.error.message;
-    } else if (statusManga.error) {
-      status = 'error';
-      log = statusManga.error.message;
-    }
-    setState(state => {
-      return {...state, status: [status, log]};
-    });
-  }, [statusUser, statusAnime, statusManga]);
-  const startQuery = () => {
-    setState(state => {
-      return {...state, status: ['ok', ' ']};
-    });
-    getUser({variables: {user: state.user.name}});
-  };
-  const getLists = () => {
-    startQuery();
-  };
+// export const useAPIs = () => {
+//   const [state, setState] = useSharedState();
+//   const wComputeData = useCallback(
+//     async (
+//       data: any[],
+//       relationPriority: {
+//         [key: string]: number;
+//       },
+//       problematicEles: string[]
+//     ) => {
+//       console.log('ComputeData');
+//       return await workerInstance.wComputeData(
+//         data,
+//         relationPriority,
+//         problematicEles
+//       );
+//     },
+//     []
+//   );
+//   const computeUser = () => {
+//     setState(state => {
+//       return {
+//         ...state,
+//         user: {
+//           name: statusUser.data.User.name,
+//           color:
+//             COLOR_CODES[statusUser.data.User.options.profileColor] ??
+//             statusUser.data.User.options.profileColor,
+//           avatar: statusUser.data.User.avatar.medium,
+//           cover: statusUser.data.User.bannerImage,
+//         },
+//       };
+//     });
+//   };
+//   const asyncCompute = async () => {
+//     const seriesDict = await wComputeData(
+//       [
+//         ...statusAnime.data.MediaListCollection.lists,
+//         ...statusManga.data.MediaListCollection.lists,
+//       ],
+//       relationPriority,
+//       problematicNodes
+//     );
+//     // setState(state => { return { ...state, seriesDict: seriesDict, } })
+//     setState(state => updateCompletion({...state, seriesDict: seriesDict}));
+//   };
+//   //Apollo queries creation
+//   const [getUser, statusUser] = useLazyQuery(Queries.GET_USER, {
+//     notifyOnNetworkStatusChange: true,
+//     onCompleted: () => {
+//       computeUser();
+//       getAnimeLists({
+//         variables: {user: state.user.name, type: 'ANIME'},
+//       });
+//     },
+//   });
+//   const [getAnimeLists, statusAnime] = useLazyQuery(Queries.GET_LISTS, {
+//     notifyOnNetworkStatusChange: true,
+//     onCompleted: () => {
+//       getMangaLists({
+//         variables: {user: state.user.name, type: 'MANGA'},
+//       });
+//     },
+//   });
+//   const [getMangaLists, statusManga] = useLazyQuery(Queries.GET_LISTS, {
+//     notifyOnNetworkStatusChange: true,
+//     onCompleted: asyncCompute,
+//     // onCompleted: syncCompute,
+//   });
+//   useEffect(() => {
+//     let status: globalStateType['status'][0] = 'success';
+//     let log: globalStateType['status'][1] = ' ';
+//     if (statusUser.loading) {
+//       status = 'loading';
+//       log = 'Loading User Info';
+//     } else if (statusAnime.loading) {
+//       status = 'loading';
+//       log = 'Loading your Anime List';
+//     } else if (statusManga.loading) {
+//       status = 'loading';
+//       log = 'Loading your Manga List';
+//       // } else if (statusWorker == "RUNNING") {
+//       //   status = "loading";
+//       //   log = "Computing received data";
+//     } else if (statusUser.error) {
+//       status = 'error';
+//       log = statusUser.error.message;
+//     } else if (statusAnime.error) {
+//       status = 'error';
+//       log = statusAnime.error.message;
+//     } else if (statusManga.error) {
+//       status = 'error';
+//       log = statusManga.error.message;
+//     }
+//     setState(state => {
+//       return {...state, status: [status, log]};
+//     });
+//   }, [statusUser, statusAnime, statusManga]);
+//   const startQuery = () => {
+//     setState(state => {
+//       return {...state, status: ['ok', ' ']};
+//     });
+//     getUser({variables: {user: state.user.name}});
+//   };
+//   const getLists = () => {
+//     startQuery();
+//   };
 
-  return {getLists};
-};
+//   return {getLists};
+// };

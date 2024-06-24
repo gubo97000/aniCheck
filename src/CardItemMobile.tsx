@@ -4,41 +4,43 @@ import {NodeType} from './Types';
 
 // import elk from "cytoscape-elk";
 import HighlightOffRounded from '@mui/icons-material/HighlightOffRounded';
-import {Chip, Typography} from '@mui/material';
+import {Chip, Typography, useTheme} from '@mui/material';
 import Box, {BoxProps} from '@mui/material/Box';
-import {FORMATS, RELEASE_STATUS, STATUSES} from './Utils';
+import {RELEASE_STATUS, STATUSES} from './Utils';
 
 type props = {
   node: NodeType;
 };
 
-const CardItemA: FC<props & BoxProps> = ({node, ...boxProps}) => {
+const CardItemMobile: FC<props & BoxProps> = ({node, ...boxProps}) => {
   // const graphBox = useRef(null)
   const [state, setState] = useSharedState();
-
+  const theme = useTheme();
   return (
     <Box
       {...boxProps}
       sx={{
         display: 'grid',
-        gridTemplateColumns: '130px 25vw',
-        gridTemplateRows: '170px',
+        gridTemplateColumns: '100px auto',
+        gridTemplateRows: '100px',
         gridTemplateAreas: "'cover content'",
         // overflow: "hidden",
         // border: '1px solid',
-        backgroundColor: 'rgba(255,255,255,0.3)',
         // borderColor: 'grey.300',
+        backgroundColor: 'rgba(255,255,255,0.3)',
         borderRadius: '10px',
-        // width: '100%',
-        // minWidth: '100%',
-        m: 2,
+        // width: '400px',
+        width: '100%',
+        boxSizing: 'border-box',
+        mx: 1,
+        mt: 2,
         opacity: state.seriesSelected?.formatsIncluded?.includes(node.format)
           ? '1'
           : '0.2',
         ':hover': {
           opacity: '1',
         },
-        // boxShadow: 1,
+        // boxShadow:1,
         ...boxProps.sx,
       }}
     >
@@ -50,15 +52,16 @@ const CardItemA: FC<props & BoxProps> = ({node, ...boxProps}) => {
           backgroundImage: `url(${node.cover})`,
           backgroundSize: 'cover',
           borderRadius: '10px',
-          border: '1px solid',
+          border: node.status !== 'NO' ? '4px solid' : 'none',
           borderColor: STATUSES[node.status].color
             ? `${STATUSES[node.status].color}.main`
             : 'grey.500',
-          boxShadow: 2,
-          width: '108%',
-          height: '108%',
+          // boxShadow: 2,
+          width: 'calc(100% - 8px)',
+          height: 'calc(100% - 8px)',
           //   overflow: "hidden",
           cursor: 'pointer',
+          boxSizing: 'border-box',
         }}
         // onClick={() => {
         //   window.open(node.siteUrl, "_blank");
@@ -67,15 +70,47 @@ const CardItemA: FC<props & BoxProps> = ({node, ...boxProps}) => {
         href={node.siteUrl}
         target="_blank"
       >
+        {node.status !== 'NO' && (
+          <Box
+            sx={{
+              // backgroundColor: `color.palette.${STATUSES[node.status].color}.main`,
+              color: 'black',
+              backgroundColor: `rgba(
+               ${
+                 //TODO: This is shit a better way needs to be found
+                 theme.vars.palette[
+                   STATUSES[node.status].color === 'primary'
+                     ? 'primary'
+                     : STATUSES[node.status].color === 'secondary'
+                       ? 'secondary'
+                       : 'info'
+                 ].mainChannel
+               } / 1)`,
+              width: '28px',
+              // backdropFilter: 'blur(10px)',
+              borderEndEndRadius: '16px',
+              borderStartStartRadius: '16px',
+              pt: '2px',
+              pl: '2px',
+              position: 'absolute',
+              top: '-4px',
+              left: '-4px',
+              fontSize: '0.5em',
+              // borderRadius: '16px',
+            }}
+          >
+            {STATUSES[node.status].icon}
+          </Box>
+        )}
         <Box
           sx={{
             position: 'absolute',
-            top: '87%',
-            left: '80%',
+            top: '70%',
+            left: '-5%',
             display: 'flex',
           }}
         >
-          <Chip
+          {/* <Chip
             color={STATUSES[node.status].color}
             variant="filled"
             label={(() => {
@@ -95,7 +130,8 @@ const CardItemA: FC<props & BoxProps> = ({node, ...boxProps}) => {
               // placeSelf: "start start",
               mx: 0.5,
               my: 0.5,
-              boxShadow: 1,
+              // boxShadow: 1,
+              backdropFilter: 'blur(10px)',
               '&.MuiChip-filledDefault': {
                 bgcolor: 'grey.600',
                 color: 'white',
@@ -105,7 +141,7 @@ const CardItemA: FC<props & BoxProps> = ({node, ...boxProps}) => {
                 color: 'white',
               },
             }}
-          />
+          /> */}
           {state.seriesSelected?.formatsIncluded?.includes(
             node.format
           ) ? undefined : (
@@ -142,29 +178,45 @@ const CardItemA: FC<props & BoxProps> = ({node, ...boxProps}) => {
           position: 'relative',
           gridArea: 'content',
           display: 'grid',
-          height: '170px',
-          gridTemplateRows: '30px auto auto 20px',
+          height: '100%',
+          gridTemplateRows: '10px auto auto 0px',
           gridTemplateColumns: '1fr auto',
           gridTemplateAreas: "'format link' 'title .' 'date .' 'status .'",
+          p: 1,
+          boxSizing: 'border-box',
         }}
       >
         {/* <IconButton sx={{ gridArea: "link", overflow: "hidden" }}><OpenInNewRoundedIcon/></IconButton> */}
-        <Box sx={{gridArea: 'title', mx: 2, my: 0, overflow: 'hidden'}}>
+        <Box
+          sx={{
+            gridArea: 'title',
+            // mx: 2,
+            my: 0,
+            overflow: 'hidden',
+            height: '100%',
+          }}
+        >
           <Typography
             // sx={{ color: "text.primary" }}
-            variant="h6"
+            variant="body1"
             color="text.primary"
+            sx={{
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}
           >
             {node.title}
           </Typography>
         </Box>
-        <Box sx={{gridArea: 'date', mx: 2}}>
+        <Box sx={{gridArea: 'date', mx: 0}}>
           <Typography variant="subtitle2" color="text.secondary">
             {node.startDate ? `${node.startDate} · ` : ''}
             {RELEASE_STATUS[node.airStatus].label}
           </Typography>
         </Box>
-        <Box sx={{position: 'relative', gridArea: 'format', mx: 0, mt: 0.9}}>
+        {/* <Box sx={{position: 'relative', gridArea: 'format', mx: 0.9, mt: 0.9}}>
           <Box
             sx={{
               position: 'absolute',
@@ -194,9 +246,9 @@ const CardItemA: FC<props & BoxProps> = ({node, ...boxProps}) => {
               {FORMATS[node.format].label}
             </Box>
           </Box>
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );
 };
-export default memo(CardItemA);
+export default memo(CardItemMobile);

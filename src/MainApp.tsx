@@ -38,7 +38,7 @@ const MainApp: FC<BoxProps> = boxProps => {
               />
             )
           ) : (
-            <Nav sx={{height: '100vh'}}></Nav>
+            <Nav sx={{height: '100vh'}} />
           )}
 
           {/* <Box

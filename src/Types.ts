@@ -127,6 +127,7 @@ export type NodeType = {
   siteUrl: any;
   bannerImage: string;
   cover: string;
+  coverColor: string;
   popularity: any;
   compWeight: number;
   startDate: string;

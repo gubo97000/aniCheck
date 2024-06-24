@@ -6,23 +6,17 @@ import {
   Input,
   InputAdornment,
 } from '@mui/material';
-import React, {FC, useCallback} from 'react';
+import React, {FC} from 'react';
 
 import {useLazyQuery} from '@apollo/client';
 import EastRounded from '@mui/icons-material/EastRounded';
 import Box, {BoxProps} from '@mui/material/Box';
 import {useNavigate} from 'react-router-dom';
-import {problematicNodes} from './ProblematicNodes';
 import * as Queries from './Queries';
 import {useSharedState} from './Store';
-import {
-  COLOR_CODES,
-  computeData,
-  relationPriority,
-  updateCompletion,
-} from './Utils';
+import {COLOR_CODES} from './Utils';
 import {useStateWithLocalStorage} from './lib/Hooks';
-import {workerInstance} from './lib/WebWorkersInterfaces';
+// import {workerInstance} from './lib/WebWorkersInterfaces';
 import {useUpdateWorker} from './lib/useUpdateWorker';
 
 const LoaderInput: FC<BoxProps> = ({...boxProps}) => {
@@ -32,23 +26,23 @@ const LoaderInput: FC<BoxProps> = ({...boxProps}) => {
   const {run, result} = useUpdateWorker();
   const statusWorker = 'FINISHED'; // TODO: delete this line
 
-  const wComputeData = useCallback(
-    async (
-      data: any[],
-      relationPriority: {
-        [key: string]: number;
-      },
-      problematicEles: string[]
-    ) => {
-      console.log('ComputeData');
-      return await workerInstance.wComputeData(
-        data,
-        relationPriority,
-        problematicEles
-      );
-    },
-    []
-  );
+  // const wComputeData = useCallback(
+  //   async (
+  //     data: any[],
+  //     relationPriority: {
+  //       [key: string]: number;
+  //     },
+  //     problematicEles: string[]
+  //   ) => {
+  //     console.log('ComputeData');
+  //     return await workerInstance.wComputeData(
+  //       data,
+  //       relationPriority,
+  //       problematicEles
+  //     );
+  //   },
+  //   []
+  // );
   // useEffect(() => {
   //   if (!result) return;
   //   setState((state) =>
@@ -77,43 +71,43 @@ const LoaderInput: FC<BoxProps> = ({...boxProps}) => {
     getUser({variables: {user: usr}});
   };
 
-  const asyncCompute = async () => {
-    // let seriesDict = await workerFn(
-    //   [
-    //     ...statusAnime.data.MediaListCollection.lists,
-    //     ...statusManga.data.MediaListCollection.lists,
-    //   ],
-    //   relationPriority,
-    //   problematicNodes
-    // );
-    const seriesDict = await wComputeData(
-      [
-        ...statusAnime.data.MediaListCollection.lists,
-        ...statusManga.data.MediaListCollection.lists,
-      ],
-      relationPriority,
-      problematicNodes
-    );
+  // const asyncCompute = async () => {
+  //   // let seriesDict = await workerFn(
+  //   //   [
+  //   //     ...statusAnime.data.MediaListCollection.lists,
+  //   //     ...statusManga.data.MediaListCollection.lists,
+  //   //   ],
+  //   //   relationPriority,
+  //   //   problematicNodes
+  //   // );
+  //   const seriesDict = await wComputeData(
+  //     [
+  //       ...statusAnime.data.MediaListCollection.lists,
+  //       ...statusManga.data.MediaListCollection.lists,
+  //     ],
+  //     relationPriority,
+  //     problematicNodes
+  //   );
 
-    // setState(state => { return { ...state, seriesDict: seriesDict, } })
-    setState(state => updateCompletion({...state, seriesDict: seriesDict}));
-  };
+  //   // setState(state => { return { ...state, seriesDict: seriesDict, } })
+  //   setState(state => updateCompletion({...state, seriesDict: seriesDict}));
+  // };
 
-  const syncCompute = () => {
-    const seriesDict = computeData(
-      [
-        ...statusAnime.data.MediaListCollection.lists,
-        ...statusManga.data.MediaListCollection.lists,
-      ],
-      relationPriority,
-      problematicNodes
-    );
-    // setState(state => { return updateCompletion({ ...state, seriesDict: seriesDict, }) })
-    setState(state => {
-      return {...updateCompletion({...state, seriesDict: seriesDict})};
-    });
-    // setState(state => { return { ...state, seriesDict: seriesDict, } })
-  };
+  // const syncCompute = () => {
+  //   const seriesDict = computeData(
+  //     [
+  //       ...statusAnime.data.MediaListCollection.lists,
+  //       ...statusManga.data.MediaListCollection.lists,
+  //     ],
+  //     relationPriority,
+  //     problematicNodes
+  //   );
+  //   // setState(state => { return updateCompletion({ ...state, seriesDict: seriesDict, }) })
+  //   setState(state => {
+  //     return {...updateCompletion({...state, seriesDict: seriesDict})};
+  //   });
+  //   // setState(state => { return { ...state, seriesDict: seriesDict, } })
+  // };
 
   const computeUser = () => {
     setState(state => {
@@ -142,19 +136,19 @@ const LoaderInput: FC<BoxProps> = ({...boxProps}) => {
       // });
     },
   });
-  const [getAnimeLists, statusAnime] = useLazyQuery(Queries.GET_LISTS, {
-    notifyOnNetworkStatusChange: true,
-    onCompleted: () => {
-      getMangaLists({
-        variables: {user: usr, type: 'MANGA'},
-      });
-    },
-  });
-  const [getMangaLists, statusManga] = useLazyQuery(Queries.GET_LISTS, {
-    notifyOnNetworkStatusChange: true,
-    onCompleted: asyncCompute,
-    // onCompleted: syncCompute,
-  });
+  // const [getAnimeLists, statusAnime] = useLazyQuery(Queries.GET_LISTS, {
+  //   notifyOnNetworkStatusChange: true,
+  //   onCompleted: () => {
+  //     getMangaLists({
+  //       variables: {user: usr, type: 'MANGA'},
+  //     });
+  //   },
+  // });
+  // const [getMangaLists, statusManga] = useLazyQuery(Queries.GET_LISTS, {
+  //   notifyOnNetworkStatusChange: true,
+  //   onCompleted: asyncCompute,
+  //   // onCompleted: syncCompute,
+  // });
 
   // useEffect(() => {
   //   let status: globalStateType['status'][0] = 'ok';

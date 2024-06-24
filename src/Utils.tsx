@@ -17,6 +17,7 @@ import {
   formatsBulkTermsType,
   formatsType,
   globalStateType,
+  NodeType,
   relationsType,
   releaseStatusType,
   seriesListElementType,
@@ -416,7 +417,7 @@ export function getBulkStat(formatArr: formatsType[], stats: statsType) {
  * @param state
  * @returns A state to set
  */
-export const updateCompletion = (state: globalStateType) => {
+export function updateCompletion(state: globalStateType) {
   const globalStats: globalStateType['globalStats'] = {
     tot: Object.keys(state.seriesDict).length,
     got: 0,
@@ -561,7 +562,7 @@ export const updateCompletion = (state: globalStateType) => {
     globalStats: globalStats,
     seriesDictFlag: random(100000000000),
   };
-};
+}
 
 /// Data Manipulations
 /**
@@ -572,11 +573,11 @@ export const updateCompletion = (state: globalStateType) => {
  * @param problematicNodes
  * @returns seriesDict
  */
-export const computeData = (
+export function computeData(
   data: any[],
   relationPriority: {[key: string]: number},
   problematicEles: string[]
-) => {
+) {
   console.log('ComputeData');
   const cy = cytoscape({headless: true});
 
@@ -587,7 +588,7 @@ export const computeData = (
       })
       .join(', ');
   };
-  const parseNode = (node: any) => {
+  const parseNode = (node: any): NodeType => {
     // node.nextAiringEpisode ? console.log(node) : null
     const compWeight = (node: any) => {
       //Calculating the weight of the element
@@ -625,6 +626,7 @@ export const computeData = (
       bannerImage: node.bannerImage,
       popularity: node.popularity,
       cover: node.coverImage.extraLarge,
+      coverColor: node.coverImage.color,
       // ch: node.chapters,
       // ep: node.episodes,
       // ce: node.nextAiringEpisode?.episode,
@@ -856,7 +858,7 @@ export const computeData = (
   });
   console.log(Object.values(seriesDict).length);
   return seriesDict;
-};
+}
 
 /**
  * Transform serie {edge, node} format to array [{data: ___ },...] for cytoscape
